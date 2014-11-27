@@ -31,7 +31,7 @@ public class MessageParserJson implements MessageParser {
             {
                 ret = mapper.readValue(data, Hello.class);
             } else {
-                ret = mapper.readValue(data, Message.class);
+                throw new MessageException("Impossible de parser le JSON - attribut 'type' invalide");
             }
         } catch (IOException e) {
             throw new MessageException("Impossible de parser le JSON - message invalide");
