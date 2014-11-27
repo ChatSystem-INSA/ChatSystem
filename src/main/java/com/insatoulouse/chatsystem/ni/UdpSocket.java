@@ -1,24 +1,16 @@
 package com.insatoulouse.chatsystem.ni;
 
-import java.net.DatagramSocket;
+import java.io.IOException;
+import java.net.MulticastSocket;
 import java.net.SocketException;
 
 /**
  * Created by tlk on 27/11/14.
  */
-public class UdpSocket extends DatagramSocket {
+public class UdpSocket extends MulticastSocket {
 
-    private static UdpSocket instance = null;
 
-    private UdpSocket() throws SocketException {
+    public UdpSocket(int port) throws IOException {
+        super(port);
     }
-
-    public static synchronized UdpSocket getInstance() throws SocketException
-    {
-        if(instance == null) {
-             instance = new UdpSocket();
-        }
-        return instance;
-    }
-
 }
