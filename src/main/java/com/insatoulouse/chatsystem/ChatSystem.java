@@ -1,5 +1,6 @@
 package com.insatoulouse.chatsystem;
 
+import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ public class ChatSystem {
 
     public ChatSystem()
     {
+        ChatGUI gui = new ChatGUI();
         try {
             ChatNI ni = new ChatNI(1337);
         } catch (IOException e) {
