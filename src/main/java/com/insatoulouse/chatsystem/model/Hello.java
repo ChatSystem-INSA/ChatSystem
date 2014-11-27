@@ -1,5 +1,5 @@
 package com.insatoulouse.chatsystem.model;
 
 
-public class Hello {
+public class Hello extends Message {
 }
