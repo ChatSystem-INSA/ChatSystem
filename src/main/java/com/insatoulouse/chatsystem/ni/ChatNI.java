@@ -4,6 +4,8 @@ import com.insatoulouse.chatsystem.model.AbstractFactory;
 import com.insatoulouse.chatsystem.model.Message;
 import com.insatoulouse.chatsystem.model.MessageException;
 import com.insatoulouse.chatsystem.model.MessageParser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -17,6 +19,8 @@ public class ChatNI {
     private TcpListener tcpListener;
     private UdpListener udpListener;
     private NetworkInvoker invoker;
+
+    private static final Logger l = LogManager.getLogger(ChatNI.class.getName());
 
     public ChatNI(int port) throws IOException {
         this.port = port;
@@ -32,7 +36,7 @@ public class ChatNI {
         try {
             Message message = parser.read(s);
         } catch (MessageException e) {
-            System.out.println("ChatNI : message JSON non valide : " + s);
+            l.debug("message JSON non valide : "+s+" ("+e.getMessage()+")");
         }
     }
 }
