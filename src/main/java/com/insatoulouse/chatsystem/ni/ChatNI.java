@@ -7,11 +7,13 @@ public class ChatNI {
 
     private TCPListener tcpListener;
     private UDPListener udpListener;
+    private NetworkInvoker invoker;
 
     public ChatNI()
     {
         this.tcpListener = new TCPListener(this);
         this.udpListener = new UDPListener(this);
+        this.invoker = new NetworkInvoker();
     }
 
 }
