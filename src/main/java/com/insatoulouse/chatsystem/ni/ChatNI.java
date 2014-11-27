@@ -1,29 +1,23 @@
 package com.insatoulouse.chatsystem.ni;
 
+import java.io.IOException;
+import java.net.SocketException;
+
 /**
  * Created by tlk on 27/11/14.
  */
 public class ChatNI {
 
-    private static ChatNI instance;
-    private TCPListener tcpListener;
-    private UDPListener udpListener;
+    private int port;
+    private TcpListener tcpListener;
+    private UdpListener udpListener;
     private NetworkInvoker invoker;
 
-    private ChatNI()
-    {
-        this.tcpListener = new TCPListener();
-        this.udpListener = new UDPListener();
+    public ChatNI(int port) throws IOException {
+        this.port = port;
+        this.tcpListener = new TcpListener();
+        this.udpListener = new UdpListener();
         this.invoker = new NetworkInvoker();
-    }
-
-    public static synchronized ChatNI getInstance()
-    {
-        if(instance == null)
-        {
-            instance = new ChatNI();
-        }
-        return instance;
     }
 
 }
