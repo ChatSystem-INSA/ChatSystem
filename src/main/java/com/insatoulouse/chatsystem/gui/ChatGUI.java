@@ -1,7 +1,12 @@
 package com.insatoulouse.chatsystem.gui;
 
-/**
- * Created by david on 27/11/14.
- */
 public class ChatGUI {
+
+    public ChatGUI() {
+        new ChatFrame(this);
+    }
+
+    public void executeCommand(String text) {
+        System.out.println("Command "+ text);
+    }
 }
