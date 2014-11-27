@@ -8,17 +8,17 @@ import java.net.SocketException;
  */
 public class UDPSocket extends DatagramSocket {
 
-    private UDPSocket instance;
+    private static UDPSocket instance = null;
 
     private UDPSocket() throws SocketException {
     }
 
-    public UDPSocket getInstance() throws SocketException
+    public static synchronized UDPSocket getInstance() throws SocketException
     {
-        if(instance != null) {
-            return this.instance;
+        if(instance == null) {
+             instance = new UDPSocket();
         }
-        return new UDPSocket();
+        return instance;
     }
 
 }
