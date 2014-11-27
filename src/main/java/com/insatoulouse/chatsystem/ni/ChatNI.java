@@ -5,15 +5,25 @@ package com.insatoulouse.chatsystem.ni;
  */
 public class ChatNI {
 
+    private static ChatNI instance;
     private TCPListener tcpListener;
     private UDPListener udpListener;
     private NetworkInvoker invoker;
 
-    public ChatNI()
+    private ChatNI()
     {
-        this.tcpListener = new TCPListener(this);
-        this.udpListener = new UDPListener(this);
+        this.tcpListener = new TCPListener();
+        this.udpListener = new UDPListener();
         this.invoker = new NetworkInvoker();
+    }
+
+    public static synchronized ChatNI getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new ChatNI();
+        }
+        return instance;
     }
 
 }

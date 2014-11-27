@@ -5,11 +5,4 @@ package com.insatoulouse.chatsystem.ni;
  */
 public class UDPListener {
 
-    private ChatNI chatNI;
-
-    public UDPListener(ChatNI n)
-    {
-        this.chatNI = n;
-    }
-
 }

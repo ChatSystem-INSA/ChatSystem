@@ -5,11 +5,5 @@ package com.insatoulouse.chatsystem.ni;
  */
 public class TCPListener {
 
-    private ChatNI chatNI;
-
-    public TCPListener(ChatNI n)
-    {
-        this.chatNI = n;
-    }
 
 }
