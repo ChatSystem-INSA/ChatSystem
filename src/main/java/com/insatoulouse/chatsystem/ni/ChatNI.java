@@ -1,12 +1,14 @@
 package com.insatoulouse.chatsystem.ni;
 
 import com.insatoulouse.chatsystem.Controller;
+import com.insatoulouse.chatsystem.exception.PacketException;
 import com.insatoulouse.chatsystem.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.SocketException;
 
 /**
  * Created by tlk on 27/11/14.
@@ -41,12 +43,8 @@ public class ChatNI {
         String data = new String(packet.getData(), packet.getOffset(), packet.getLength());
 
         try {
-            Packet p = parser.read(data);
-            if(p instanceof Hello)
-            {
-                this.controller.processHello((Hello) p, packet.getAddress());
-            }
-        } catch (MessageException e) {
+            Packet message = parser.read(data);
+        } catch (PacketException e) {
             l.debug("message JSON non valide : "+data,e);
         }
 
