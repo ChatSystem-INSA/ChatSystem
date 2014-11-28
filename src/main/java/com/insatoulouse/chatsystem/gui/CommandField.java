@@ -18,8 +18,22 @@ public class CommandField extends JTextField {
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                chatGUI.executeCommand(CommandField.this.getText());
-                CommandField.this.setText("");
+                CommandField.this.setEditable(false);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!CommandField.this.getText().isEmpty()) {
+                            chatGUI.executeCommand(CommandField.this.getText());
+                        }
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                CommandField.this.setText("");
+                                CommandField.this.setEditable(true);
+                            }
+                        });
+                    }
+                }).start();
             }
         });
     }
