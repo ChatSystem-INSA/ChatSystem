@@ -88,6 +88,23 @@ public class Controller {
         }
     }
 
+    public void processGoodBye(){
+        if(isConnected())
+        {
+            try {
+                this.users = new ArrayList<User>();
+                this.chatNI.sendGoodbye();
+                chatGUI.addMessage(new Message("Disconnected."));
+                chatGUI.setLocalUser(null);
+            } catch (TechnicalException e) {
+                l.error("Impossible de lancer le goodbye", e);
+            }
+        }
+        else{
+            l.debug("already not connected");
+        }
+    }
+
     private void addUser(User u)
     {
         this.users.add(u);

@@ -32,8 +32,14 @@ public class InfoBarPanel extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                name.setText(user.getName());
-                ip.setText(user.getIp().toString());
+                if(user != null){
+                    name.setText(user.getName());
+                    ip.setText(user.getIp().toString());
+                }
+                else {
+                    name.setText("Not connected");
+                    ip.setText("");
+                }
             }
         });
     }

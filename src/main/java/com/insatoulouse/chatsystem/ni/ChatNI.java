@@ -73,6 +73,12 @@ public class ChatNI {
         sendUnicast(p, to.getIp());
     }
 
+    public void sendGoodbye() throws TechnicalException
+    {
+        Packet p = new Goodbye();
+        sendBroadcast(p);
+    }
+
     private void sendUnicast(Packet p, InetAddress addr) throws TechnicalException
     {
         PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();

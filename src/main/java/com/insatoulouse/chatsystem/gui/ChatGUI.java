@@ -15,6 +15,7 @@ public class ChatGUI {
     private static final Logger l = LogManager.getLogger(ChatGUI.class.getName());
     public static final String COMMAND_HELLO = "connect";
     public static final String COMMAND_EXIT = "exit";
+    private static final String COMMAND_QUIT = "quit";
     private final ChatFrame chatFrame;
     private Controller controller;
     private DefaultListModel<Message> listMessage = new DefaultListModel<Message>();
@@ -41,6 +42,9 @@ public class ChatGUI {
         }
         else if(COMMAND_EXIT.equals(command) && args.length == 0){
             this.sendExit();
+        }
+        else if(COMMAND_QUIT.equals(command) && args.length == 0){
+            controller.processGoodBye();
         }
         else{
             addMessage(new Message("Command "+command + " is invalid. Try again or try help."));
