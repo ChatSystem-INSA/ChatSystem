@@ -29,7 +29,7 @@ public class ChatNI {
         try {
             this.tcpListener = new TcpListener();
             this.udpListener = new UdpListener(this, port);
-            this.udpListener.run();
+            this.udpListener.start();
             this.invoker = new NetworkInvoker();
         } catch (IOException e) {
             l.error("Network connection error",e);

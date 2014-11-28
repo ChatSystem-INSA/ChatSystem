@@ -32,7 +32,6 @@ public class Controller {
 
     public void processConnection(String username)
     {
-        l.debug("je suis ici");
         if(isConnected())
         {
             l.error("Déjà connecté.");
