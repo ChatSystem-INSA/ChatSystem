@@ -33,7 +33,8 @@ public class UdpListener extends Thread {
         while(true){
             try {
                 this.socket.receive(packet);
-                chatNI.processPacket(new String(packet.getData(), packet.getOffset(), packet.getLength()));
+                chatNI.processPacket(packet);
+                // chatNI.processPacket(new String(packet.getData(), packet.getOffset(), packet.getLength()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
