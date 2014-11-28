@@ -44,6 +44,8 @@ public class ChatNI {
         PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
         String data = new String(packet.getData(), packet.getOffset(), packet.getLength());
 
+        l.debug("processing incomming packet : " + data);
+
         try {
             Packet message = parser.read(data);
             if(message instanceof Hello)
