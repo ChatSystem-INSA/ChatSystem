@@ -27,15 +27,17 @@ public class PacketParserJson implements PacketParser {
 
         String type = root.get("type").asText();
 
-        try {
-            if(type.equals("hello"))
+        if(type.equals(Hello.type))
+        {
+            if(root.get("username") != null)
             {
-                ret = mapper.readValue(data, Hello.class);
+                ret = new Hello(root.get("username").asText());
             } else {
-                throw new PacketException("Impossible de parser le JSON - attribut 'type' invalide");
+                throw new PacketException("Message hello invalide : manque le suername");
             }
-        } catch (IOException e) {
-            throw new PacketException("Impossible de parser le JSON - message invalide");
+
+        } else {
+            throw new PacketException("Impossible de parser le JSON - attribut 'type' invalide");
         }
 
         return ret;

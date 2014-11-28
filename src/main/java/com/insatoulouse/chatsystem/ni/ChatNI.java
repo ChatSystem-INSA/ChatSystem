@@ -44,6 +44,10 @@ public class ChatNI {
 
         try {
             Packet message = parser.read(data);
+            if(message instanceof Hello)
+            {
+                this.controller.processHello((Hello) message, packet.getAddress());
+            }
         } catch (PacketException e) {
             l.debug("message JSON non valide : "+data,e);
         }
