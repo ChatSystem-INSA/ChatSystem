@@ -1,6 +1,7 @@
 package com.insatoulouse.chatsystem;
 
 
+import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.model.Hello;
 import com.insatoulouse.chatsystem.model.Packet;
@@ -45,7 +46,11 @@ public class Controller {
 
         l.debug("Connection de l'utilisateur local : " + username);
         Packet p = new Hello(this.localuser.getName());
-        this.chatNI.sendBroadcast(p);
+        try {
+            this.chatNI.sendBroadcast(p);
+        } catch (TechnicalException e) {
+            e.printStackTrace();
+        }
 
     }
 
