@@ -53,7 +53,7 @@ public class ChatNI {
                 this.controller.processHello((Hello) message, packet.getAddress());
             } else if(message instanceof HelloAck)
             {
-                l.debug("ici");
+                this.controller.processHelloAck((HelloAck) message, packet.getAddress());
             }
         } catch (PacketException e) {
             l.debug("message JSON non valide : "+data,e);

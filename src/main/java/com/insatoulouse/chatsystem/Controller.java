@@ -3,10 +3,7 @@ package com.insatoulouse.chatsystem;
 
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.gui.ChatGUI;
-import com.insatoulouse.chatsystem.model.Hello;
-import com.insatoulouse.chatsystem.model.Message;
-import com.insatoulouse.chatsystem.model.Packet;
-import com.insatoulouse.chatsystem.model.User;
+import com.insatoulouse.chatsystem.model.*;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,7 +59,18 @@ public class Controller {
         User u = new User(false, messHello.getUserName(), addr);
         this.users.add(u);
         l.debug("New user : " + u.toString());
-        chatGUI.addMessage(new Message("Hello "+u.getName()));
+        chatGUI.addMessage(new Message("New user : "+u.getName()));
+    }
+
+    public void processHelloAck(HelloAck mess, InetAddress addr)
+    {
+        if(isConnected())
+        {
+            User n = new User(false, mess.getUserName(), addr);
+            this.users.add(n);
+            l.debug("New user : " + n.toString());
+            chatGUI.addMessage(new Message("New user : " + n.getName()));
+        }
     }
 
     private User getUserByAddr(InetAddress addr)
