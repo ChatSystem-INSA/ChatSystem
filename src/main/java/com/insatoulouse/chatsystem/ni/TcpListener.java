@@ -8,6 +8,7 @@ import java.io.IOException;
 public class TcpListener extends Thread {
 
     private TcpSocket socket;
+    private Boolean isRunning;
 
     public TcpListener() throws IOException {
         this.socket = TcpSocket.getInstance();
@@ -15,7 +16,15 @@ public class TcpListener extends Thread {
 
     public void run()
     {
-        while(true){}
+        while(isRunning){}
     }
 
+
+    public synchronized void close() {
+        isRunning = false;
+        this.interrupt();
+        try {
+            this.socket.close();
+        } catch (IOException ignored) {}
+    }
 }

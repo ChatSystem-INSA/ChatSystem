@@ -48,7 +48,7 @@ public class Controller {
         Packet p = new Hello(this.localuser.getName());
         try {
             this.chatNI.sendBroadcast(p);
-            chatGUI.addMessage(new Message(username+ " connected ! "));
+            chatGUI.addMessage(new Message(username + " connected ! "));
         } catch (TechnicalException e) {
             e.printStackTrace();
         }
@@ -95,5 +95,10 @@ public class Controller {
 
     public void setChatGUI(ChatGUI chatGUI) {
         this.chatGUI = chatGUI;
+    }
+
+    public void processExit() {
+        chatNI.exit();
+        System.exit(0);
     }
 }

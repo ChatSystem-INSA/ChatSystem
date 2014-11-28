@@ -81,4 +81,9 @@ public class ChatNI {
         }
     }
 
+    public void exit() {
+        tcpListener.close();
+        udpListener.close();
+        invoker.close();
+    }
 }
