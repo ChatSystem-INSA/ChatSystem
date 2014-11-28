@@ -3,18 +3,14 @@ package com.insatoulouse.chatsystem.model;
 /**
  * Created by tlk on 27/11/14.
  */
-public class Message {
+public class Message extends Packet {
 
-    private String type;
+    public static final String type = "message";
 
     private String data;
 
     public Message(String data) {
         this.data = data;
-    }
-
-    public Message() {
-        this.data = "";
     }
 
     public String getData() {

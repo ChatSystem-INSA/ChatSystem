@@ -6,11 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class MessageParserJson implements MessageParser {
+public class PacketParserJson implements PacketParser {
     private ObjectMapper mapper = new ObjectMapper();
 
-    public Message read(String data) throws MessageException {
-        Message ret = null;
+    public Packet read(String data) throws MessageException {
+        Packet ret = null;
         JsonNode root = null;
 
         try {
@@ -27,13 +27,14 @@ public class MessageParserJson implements MessageParser {
         String type = root.get("type").asText();
 
         try {
-            if(type.equals(Hello.type))
+            if(type.equals("hello"))
             {
                 ret = mapper.readValue(data, Hello.class);
             } else {
                 throw new MessageException("Impossible de parser le JSON - attribut 'type' invalide");
             }
         } catch (IOException e) {
+            e.printStackTrace();
             throw new MessageException("Impossible de parser le JSON - message invalide");
         }
 
@@ -41,7 +42,7 @@ public class MessageParserJson implements MessageParser {
     }
 
     @Override
-    public void write(OutputStream out, Message data)throws IOException {
+    public void write(OutputStream out, Packet data)throws IOException {
         mapper.writeValue(out, data);
     }
 

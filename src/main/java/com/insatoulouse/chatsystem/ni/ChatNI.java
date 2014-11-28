@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.SocketException;
 
 /**
  * Created by tlk on 27/11/14.
@@ -38,14 +37,14 @@ public class ChatNI {
 
     public void processPacket(DatagramPacket packet) {
 
-        MessageParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getMessageParser();
+        PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getMessageParser();
         String data = new String(packet.getData(), packet.getOffset(), packet.getLength());
 
         try {
-            Message message = parser.read(data);
-            if(message instanceof Hello)
+            Packet p = parser.read(data);
+            if(p instanceof Hello)
             {
-                this.controller.processHello((Hello) message, packet.getAddress());
+                this.controller.processHello((Hello) p, packet.getAddress());
             }
         } catch (MessageException e) {
             l.debug("message JSON non valide : "+data,e);
