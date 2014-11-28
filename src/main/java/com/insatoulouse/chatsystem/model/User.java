@@ -11,12 +11,22 @@ public class User {
     private String name;
     private InetAddress ip;
 
-    public User(boolean isLocalUser, String name) {
+    public User(boolean isLocalUser, String name, InetAddress ip) {
         this.isLocalUser = isLocalUser;
         this.name = name;
+        this.ip = ip;
     }
 
-    public void setLocalUser(boolean v)
+    @Override
+    public String toString() {
+        return "User{" +
+                "isLocalUser=" + isLocalUser +
+                ", name='" + name + '\'' +
+                ", ip=" + ip +
+                '}';
+    }
+
+    public void setIsLocalUser(boolean v)
     {
         this.isLocalUser = v;
     }
@@ -33,4 +43,9 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    public InetAddress getIp() {
+        return ip;
+    }
+
 }

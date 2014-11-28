@@ -12,6 +12,8 @@ public class ChatSystem {
         Controller c = new Controller();
         ChatGUI gui = new ChatGUI(c);
         ChatNI ni = new ChatNI(c,1337);
+        c.setChatGUI(gui);
+        c.setChatNI(ni);
     }
 
 }
