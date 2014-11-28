@@ -9,8 +9,10 @@ import java.awt.event.WindowListener;
 
 public class ChatFrame extends JFrame{
 
+    private JPanel mainPanel;
     private ChatGUI chatgui;
     private ChatPanel chatPanel;
+    private UserlistPanel userlistPanel;
     private CommandField commandField;
     private InfoBarPanel infoBarPanel;
 
@@ -19,10 +21,11 @@ public class ChatFrame extends JFrame{
 
         this.chatgui = chatgui;
         this.chatPanel = new ChatPanel(chatgui);
+        this.userlistPanel = new UserlistPanel(chatgui);
         this.commandField = new CommandField(chatgui);
         this.infoBarPanel = new InfoBarPanel();
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(chatPanel, BorderLayout.CENTER);
         mainPanel.add(commandField, BorderLayout.SOUTH);
         mainPanel.add(infoBarPanel, BorderLayout.NORTH);
@@ -74,4 +77,11 @@ public class ChatFrame extends JFrame{
     public void onLocalUserChange(User u){
         this.infoBarPanel.setUser(u);
     }
+
+    public void switchUserlistPanel()
+    {
+        this.mainPanel.add(userlistPanel, BorderLayout.CENTER);
+        this.mainPanel.revalidate();
+    }
+
 }

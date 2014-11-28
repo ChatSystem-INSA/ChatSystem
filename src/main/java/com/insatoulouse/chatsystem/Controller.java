@@ -109,7 +109,7 @@ public class Controller {
     {
         this.users.add(u);
         l.debug("New user : " + u.toString());
-        chatGUI.addMessage(new Message("New user : " + u.getName()));
+        chatGUI.addUser(u);
     }
 
     private boolean userExists(String username)
@@ -185,6 +185,10 @@ public class Controller {
 
     public void setChatGUI(ChatGUI chatGUI) {
         this.chatGUI = chatGUI;
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
     }
 
     public void processExit() {
