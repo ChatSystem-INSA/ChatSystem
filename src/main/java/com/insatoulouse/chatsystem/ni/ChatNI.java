@@ -51,6 +51,9 @@ public class ChatNI {
             if(message instanceof Hello)
             {
                 this.controller.processHello((Hello) message, packet.getAddress());
+            } else if(message instanceof HelloAck)
+            {
+                this.controller.processHelloAck((HelloAck) message, packet.getAddress());
             }
         } catch (PacketException e) {
             l.debug("message JSON non valide : "+data,e);
@@ -58,26 +61,40 @@ public class ChatNI {
 
     }
 
-    public void sendBroadcast(Packet p) throws TechnicalException
+    public void sendHello(User u) throws TechnicalException
+    {
+        Packet p = new Hello(u.getName());
+        sendBroadcast(p);
+    }
+
+    public void sendHelloAck(User from, User to) throws TechnicalException
+    {
+        Packet p = new HelloAck(from.getName());
+        sendUnicast(p, to.getIp());
+    }
+
+    private void sendUnicast(Packet p, InetAddress addr) throws TechnicalException
     {
         PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
-        try {
-            String data = parser.write(p);
-            if(data != null)
-            {
-                DatagramPacket dp = new DatagramPacket(data.getBytes(), data.length());
-                dp.setAddress(InetAddress.getByName(Config.getInstance().getProperties(Config.CONFIG_ADDRESS)));
-                dp.setPort(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
-                UdpSenderCommand cmd = new UdpSenderCommand(dp);
-                this.invoker.addCommand(cmd);
-            } else {
-                l.error("impossible de lancer le pacjet ehn briad");
-            }
+        String data = parser.write(p);
+        if(data != null)
+        {
+            DatagramPacket dp = new DatagramPacket(data.getBytes(), data.length());
+            dp.setAddress(addr);
+            dp.setPort(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
+            UdpSenderCommand cmd = new UdpSenderCommand(dp);
+            this.invoker.addCommand(cmd);
+        } else {
+            l.error("Impossible de générer le JSON : " + p);
+        }
+    }
 
-        } catch (PacketException e) {
-            l.error("sendBroadcast : "+p, e);
+    private void sendBroadcast(Packet p) throws TechnicalException
+    {
+        try {
+            this.sendUnicast(p, InetAddress.getByName(Config.getInstance().getProperties(Config.CONFIG_ADDRESS)));
         } catch (UnknownHostException e) {
-            l.error("impossible' de toper l'adresse de broadcast");
+            throw new TechnicalException("impossible de toper l'adresse de broadcast");
         }
     }
 
