@@ -4,7 +4,7 @@ public abstract class AbstractFactory {
 
     public enum Type {JSON}
 
-    public abstract PacketParser getMessageParser();
+    public abstract PacketParser getPacketParser();
 
     public static AbstractFactory getFactory(Type choice) {
         switch (choice) {
