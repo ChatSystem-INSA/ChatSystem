@@ -19,6 +19,7 @@ public class CommandField extends JTextField {
                 this.getBorder(),
                 BorderFactory.createEmptyBorder(10, 5, 10, 5)));
         this.setFont(new Font("Sans serif",Font.PLAIN,20));
+        this.requestFocusInWindow();
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
