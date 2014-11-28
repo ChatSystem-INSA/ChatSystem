@@ -104,6 +104,22 @@ public class Controller {
             l.debug("already not connected");
         }
     }
+    public void processRemoteGoodBye(InetAddress addr){
+        if(isConnected())
+        {
+            User u = getUserByAddr(addr);
+            if(u != null){
+                this.users.remove(u);
+                chatGUI.addMessage(new Message("Goodbye "+u.getName()));
+            }
+            else{
+                l.debug("Unknown "+addr.toString());
+            }
+        }
+        else{
+            l.debug("do nothing, not connected");
+        }
+    }
 
     private void addUser(User u)
     {
@@ -192,6 +208,7 @@ public class Controller {
     }
 
     public void processExit() {
+        processGoodBye();
         chatNI.exit();
         System.exit(0);
     }

@@ -41,6 +41,8 @@ public class PacketParserJson implements PacketParser {
             } else {
                 throw new PacketException("Message helloAck invalide : manque le username");
             }
+        } else if (type.equals(Packet.TYPE_GOODBYE)) {
+            ret = new Goodbye();
         } else {
             throw new PacketException("Impossible de parser le JSON - attribut 'type' invalide");
         }
