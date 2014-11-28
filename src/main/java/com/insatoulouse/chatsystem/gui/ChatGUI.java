@@ -3,7 +3,6 @@ package com.insatoulouse.chatsystem.gui;
 import com.insatoulouse.chatsystem.Controller;
 import com.insatoulouse.chatsystem.model.Message;
 import com.insatoulouse.chatsystem.model.User;
-import com.insatoulouse.chatsystem.model.Users;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,12 +15,13 @@ public class ChatGUI {
     private static final Logger l = LogManager.getLogger(ChatGUI.class.getName());
     public static final String COMMAND_HELLO = "connect";
     public static final String COMMAND_EXIT = "exit";
+    private final ChatFrame chatFrame;
     private Controller controller;
     private DefaultListModel<Message> listMessage = new DefaultListModel<Message>();
 
     public ChatGUI(Controller c) {
         this.controller = c;
-        new ChatFrame(this);
+        chatFrame = new ChatFrame(this);
     }
 
     public void executeCommand(String text) {
@@ -43,7 +43,8 @@ public class ChatGUI {
             this.sendExit();
         }
         else{
-            l.debug("Bad command "+command);
+            addMessage(new Message("Command "+command + " is invalid. Try again or try help."));
+            l.debug("Bad command " + command);
         }
     }
 
@@ -64,5 +65,9 @@ public class ChatGUI {
      */
     public void sendExit(){
         controller.processExit();
+    }
+
+    public void setLocalUser(User u){
+        chatFrame.onLocalUserChange(u);
     }
 }

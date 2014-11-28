@@ -1,5 +1,7 @@
 package com.insatoulouse.chatsystem.gui;
 
+import com.insatoulouse.chatsystem.model.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -10,6 +12,7 @@ public class ChatFrame extends JFrame{
     private ChatGUI chatgui;
     private ChatPanel chatPanel;
     private CommandField commandField;
+    private InfoBarPanel infoBarPanel;
 
     public ChatFrame(final ChatGUI chatgui) throws HeadlessException {
         super("ChatSystem");
@@ -17,10 +20,13 @@ public class ChatFrame extends JFrame{
         this.chatgui = chatgui;
         this.chatPanel = new ChatPanel(chatgui);
         this.commandField = new CommandField(chatgui);
+        this.infoBarPanel = new InfoBarPanel();
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(chatPanel, BorderLayout.CENTER);
         mainPanel.add(commandField, BorderLayout.SOUTH);
+        mainPanel.add(infoBarPanel, BorderLayout.NORTH);
+
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle("ChatSystem");
@@ -63,5 +69,9 @@ public class ChatFrame extends JFrame{
 
             }
         });
+    }
+
+    public void onLocalUserChange(User u){
+        this.infoBarPanel.setUser(u);
     }
 }
