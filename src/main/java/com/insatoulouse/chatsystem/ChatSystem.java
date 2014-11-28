@@ -19,8 +19,7 @@ public class ChatSystem {
         ChatGUI gui = new ChatGUI(c);
         try {
             ChatNI ni = new ChatNI(c);
-            throw new TechnicalException();
-            //c.setChatNI(ni);
+            c.setChatNI(ni);
         } catch (TechnicalException e) {
             String[] nom = {"Mickael", "Hugo", "Jérémie","David","Alfred","Mr Exposito","ta maman"};
             Random r = new Random();
