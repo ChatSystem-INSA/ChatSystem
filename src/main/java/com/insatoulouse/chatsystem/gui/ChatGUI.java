@@ -1,9 +1,13 @@
 package com.insatoulouse.chatsystem.gui;
 
 import com.insatoulouse.chatsystem.Controller;
+import com.insatoulouse.chatsystem.model.Message;
+import com.insatoulouse.chatsystem.model.User;
+import com.insatoulouse.chatsystem.model.Users;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,6 +16,7 @@ public class ChatGUI {
     private static final Logger l = LogManager.getLogger(ChatGUI.class.getName());
     public static final String COMMAND_HELLO = "connect";
     private Controller controller;
+    private DefaultListModel<Message> listMessage = new DefaultListModel<Message>();
 
     public ChatGUI(Controller c) {
         this.controller = c;
@@ -25,7 +30,7 @@ public class ChatGUI {
             commandToController(s[0], Arrays.copyOfRange(s, 1, s.length));
         }
         else{
-            l.debug("Bad command "+text);
+            l.debug("Bad command " + text);
         }
     }
 
@@ -36,5 +41,17 @@ public class ChatGUI {
         else{
             l.debug("Bad command "+command);
         }
+    }
+
+    public void addMessage(Message m){
+        listMessage.addElement(m);
+    }
+
+    public void removeMessage(Message m){
+        listMessage.removeElement(m);
+    }
+
+    public DefaultListModel<Message> getListMessage(){
+        return listMessage;
     }
 }

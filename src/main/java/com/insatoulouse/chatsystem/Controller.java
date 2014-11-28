@@ -4,6 +4,7 @@ package com.insatoulouse.chatsystem;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.model.Hello;
+import com.insatoulouse.chatsystem.model.Message;
 import com.insatoulouse.chatsystem.model.Packet;
 import com.insatoulouse.chatsystem.model.User;
 import com.insatoulouse.chatsystem.ni.ChatNI;
@@ -22,11 +23,10 @@ public class Controller {
     private ChatNI chatNI;
 
     private User localuser;
-    private ArrayList<User> users;
+    private ArrayList<User> users = new ArrayList<User>();
 
     public Controller()
     {
-        this.users = new ArrayList<User>();
         this.localuser = null;
     }
 
@@ -52,6 +52,7 @@ public class Controller {
             e.printStackTrace();
         }
 
+
     }
 
     public void processHello(Hello messHello, InetAddress addr)
@@ -65,13 +66,13 @@ public class Controller {
         User u = new User(false, messHello.getUserName(), addr);
         this.users.add(u);
         l.debug("New user : " + u.toString());
-
+        chatGUI.addMessage(new Message("New user : "+u.getName()));
     }
 
     private User getUserByAddr(InetAddress addr)
     {
         User ret = null;
-        for(User u: this.users)
+        for(User u: users)
         {
             if(u.getIp().equals(addr))
             {
