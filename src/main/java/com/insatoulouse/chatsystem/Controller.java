@@ -61,6 +61,11 @@ public class Controller {
                 return;
             }
             this.addUser(u);
+            try {
+                this.chatNI.sendHelloAck(getLocalUser(), u);
+            } catch (TechnicalException e) {
+                l.error("Impossible de lancer le helloAck", e);
+            }
         } else {
             l.debug("do nothing not connected");
         }
