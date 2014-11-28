@@ -1,5 +1,8 @@
 package com.insatoulouse.chatsystem.ni;
 
+import com.insatoulouse.chatsystem.exception.TechnicalException;
+import com.insatoulouse.chatsystem.utils.Config;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.Inet4Address;
@@ -13,10 +16,10 @@ public class UdpListener extends Thread {
     private ChatNI chatNI;
     private UdpSocket socket;
 
-    public UdpListener(ChatNI chatNI, int port) throws IOException {
+    public UdpListener(ChatNI chatNI) throws IOException, TechnicalException {
         this.chatNI = chatNI;
-        this.socket = new UdpSocket(port);
-        this.socket.joinGroup(Inet4Address.getByName("224.1.2.3"));
+        this.socket = new UdpSocket(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
+        this.socket.joinGroup(Inet4Address.getByName(Config.getInstance().getProperties(Config.CONFIG_ADDRESS)));
     }
 
     public void run()

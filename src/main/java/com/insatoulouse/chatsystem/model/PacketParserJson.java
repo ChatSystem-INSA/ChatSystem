@@ -21,18 +21,18 @@ public class PacketParserJson implements PacketParser {
             throw new PacketException("Impossible de parser le JSON");
         }
 
-        if(root.get("type") == null)
+        if(root.get(Packet.FIELD_TYPE) == null)
         {
             throw new PacketException("Le message JSON ne contient pas d'attribut 'type'");
         }
 
-        String type = root.get("type").asText();
+        String type = root.get(Packet.FIELD_TYPE).asText();
 
-        if(type.equals(Hello.type))
+        if(type.equals(Packet.TYPE_HELLO))
         {
-            if(root.get("username") != null)
+            if(root.get(Packet.FIELD_USERNAME) != null)
             {
-                ret = new Hello(root.get("username").asText());
+                ret = new Hello(root.get(Packet.FIELD_USERNAME).asText());
             } else {
                 throw new PacketException("Message hello invalide : manque le suername");
             }

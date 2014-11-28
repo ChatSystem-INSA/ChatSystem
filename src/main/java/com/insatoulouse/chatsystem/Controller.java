@@ -1,8 +1,12 @@
 package com.insatoulouse.chatsystem;
 
 
+import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.gui.ChatGUI;
-import com.insatoulouse.chatsystem.model.*;
+import com.insatoulouse.chatsystem.model.Hello;
+import com.insatoulouse.chatsystem.model.Message;
+import com.insatoulouse.chatsystem.model.Packet;
+import com.insatoulouse.chatsystem.model.User;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,11 +23,10 @@ public class Controller {
     private ChatNI chatNI;
 
     private User localuser;
-    private Users users;
+    private ArrayList<User> users = new ArrayList<User>();
 
     public Controller()
     {
-        this.users = new Users();
         this.localuser = null;
     }
 
@@ -43,7 +46,12 @@ public class Controller {
 
         l.debug("Connection de l'utilisateur local : " + username);
         Packet p = new Hello(this.localuser.getName());
-        this.chatNI.sendBroadcast(p);
+        try {
+            this.chatNI.sendBroadcast(p);
+        } catch (TechnicalException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -55,8 +63,8 @@ public class Controller {
             return;
         }
 
-        User u = new User(false, messHello.getUsername(), addr);
-        this.users.addUser(u);
+        User u = new User(false, messHello.getUserName(), addr);
+        this.users.add(u);
         l.debug("New user : " + u.toString());
         chatGUI.addMessage(new Message("New user : "+u.getName()));
     }
@@ -64,7 +72,7 @@ public class Controller {
     private User getUserByAddr(InetAddress addr)
     {
         User ret = null;
-        for(User u: users.getUsers())
+        for(User u: users)
         {
             if(u.getIp().equals(addr))
             {

@@ -5,11 +5,10 @@ package com.insatoulouse.chatsystem.model;
  */
 public class Message extends Packet {
 
-    public static final String type = "message";
-
     private String data;
 
     public Message(String data) {
+        super(Packet.TYPE_MESSAGE);
         this.data = data;
     }
 
