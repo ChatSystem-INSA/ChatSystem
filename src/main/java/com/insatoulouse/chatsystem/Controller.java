@@ -22,12 +22,10 @@ public class Controller {
     private ChatGUI chatGUI;
     private ChatNI chatNI;
 
-    private User localuser;
     private ArrayList<User> users = new ArrayList<User>();
 
     public Controller()
     {
-        this.localuser = null;
     }
 
     public void processConnection(String username)
@@ -39,28 +37,25 @@ public class Controller {
         }
 
         try {
-            this.localuser = new User(true, username, InetAddress.getLocalHost());
+            User local = new User(true, username, InetAddress.getLocalHost());
+            l.debug("Connection de l'utilisateur local : " + local);
+            this.users.add(local);
+            Packet p = new Hello(local.getName());
+            this.chatNI.sendBroadcast(p);
+            chatGUI.addMessage(new Message("Now connected as " + username + " !"));
         } catch (UnknownHostException e) {
             l.error("Impossible d'obtenir l'adresse locale");
-        }
-
-        l.debug("Connection de l'utilisateur local : " + username);
-        Packet p = new Hello(this.localuser.getName());
-        try {
-            this.chatNI.sendBroadcast(p);
-            chatGUI.addMessage(new Message(username+ " connected ! "));
         } catch (TechnicalException e) {
-            e.printStackTrace();
+            l.error("Probleme technique.");
         }
-
 
     }
 
     public void processHello(Hello messHello, InetAddress addr)
     {
-        if(getUserByAddr(addr) != null)
+        if(getUserByAddr(addr) != null || getUserByUsername(messHello.getUserName()) != null)
         {
-            l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString());
+            l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + messHello.getUserName());
             return;
         }
 
@@ -84,9 +79,37 @@ public class Controller {
         return ret;
     }
 
-    public boolean isConnected()
+    private User getUserByUsername(String username)
     {
-        return this.localuser != null;
+        User ret = null;
+        for(User u: users)
+        {
+            if(u.getName().equals(username))
+            {
+                ret = u;
+                break;
+            }
+        }
+        return ret;
+    }
+
+    private User getLocalUser()
+    {
+        User ret = null;
+        for(User u : users)
+        {
+            if(u.isLocalUser())
+            {
+                ret = u;
+                break;
+            }
+        }
+        return ret;
+    }
+
+    private boolean isConnected()
+    {
+        return this.getLocalUser() != null;
     }
 
     public void setChatNI(ChatNI chatNI) {
