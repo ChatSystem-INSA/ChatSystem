@@ -1,14 +1,8 @@
 package com.insatoulouse.chatsystem.ni;
 
-import com.insatoulouse.chatsystem.model.AbstractFactory;
-import com.insatoulouse.chatsystem.model.JsonFactory;
-import com.insatoulouse.chatsystem.model.MessageParser;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
 
 
 /**
@@ -33,7 +27,8 @@ public class UdpListener extends Thread {
         while(true){
             try {
                 this.socket.receive(packet);
-                chatNI.processPacket(new String(packet.getData(), packet.getOffset(), packet.getLength()));
+                chatNI.processPacket(packet);
+                // chatNI.processPacket(new String(packet.getData(), packet.getOffset(), packet.getLength()));
             } catch (IOException e) {
                 e.printStackTrace();
             }

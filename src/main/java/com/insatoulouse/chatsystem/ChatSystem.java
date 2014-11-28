@@ -16,9 +16,7 @@ public class ChatSystem {
         Controller c = new Controller();
         ChatGUI gui = new ChatGUI(c);
         try {
-            Config config = Config.getInstance();
-            String port = config.getProperties("port");
-            ChatNI ni = new ChatNI(c,Integer.parseInt(port));
+            ChatNI ni = new ChatNI(c,Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
         } catch (TechnicalException e) {
             //TODO informer le GUI du problème
         }

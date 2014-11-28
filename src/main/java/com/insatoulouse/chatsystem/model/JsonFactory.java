@@ -11,7 +11,7 @@ public class JsonFactory extends AbstractFactory {
         return instance;
     }
 
-    public MessageParser getMessageParser() {
-        return new MessageParserJson();
+    public PacketParser getMessageParser() {
+        return new PacketParserJson();
     }
 }

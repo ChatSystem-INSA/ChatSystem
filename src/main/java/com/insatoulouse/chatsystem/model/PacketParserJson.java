@@ -7,11 +7,11 @@ import com.insatoulouse.chatsystem.exception.PacketException;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class MessageParserJson implements MessageParser {
+public class PacketParserJson implements PacketParser {
     private ObjectMapper mapper = new ObjectMapper();
 
-    public Message read(String data) throws PacketException {
-        Message ret = null;
+    public Packet read(String data) throws PacketException {
+        Packet ret = null;
         JsonNode root = null;
 
         try {
@@ -28,7 +28,7 @@ public class MessageParserJson implements MessageParser {
         String type = root.get("type").asText();
 
         try {
-            if(type.equals(Hello.type))
+            if(type.equals("hello"))
             {
                 ret = mapper.readValue(data, Hello.class);
             } else {
@@ -42,7 +42,7 @@ public class MessageParserJson implements MessageParser {
     }
 
     @Override
-    public void write(OutputStream out, Message data)throws IOException {
+    public void write(OutputStream out, Packet data)throws IOException {
         mapper.writeValue(out, data);
     }
 
