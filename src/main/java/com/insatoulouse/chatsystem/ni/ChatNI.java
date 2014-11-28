@@ -51,6 +51,9 @@ public class ChatNI {
             if(message instanceof Hello)
             {
                 this.controller.processHello((Hello) message, packet.getAddress());
+            } else if(message instanceof HelloAck)
+            {
+                l.debug("ici");
             }
         } catch (PacketException e) {
             l.debug("message JSON non valide : "+data,e);
@@ -58,7 +61,13 @@ public class ChatNI {
 
     }
 
-    public void sendBroadcast(Packet p) throws TechnicalException
+    public void sendHello(User u) throws TechnicalException
+    {
+        Packet p = new Hello(u.getName());
+        sendBroadcast(p);
+    }
+
+    private void sendBroadcast(Packet p) throws TechnicalException
     {
         PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
         try {

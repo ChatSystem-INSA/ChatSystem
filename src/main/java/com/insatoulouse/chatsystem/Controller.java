@@ -39,14 +39,14 @@ public class Controller {
         try {
             User local = new User(true, username, InetAddress.getLocalHost());
             l.debug("Connection de l'utilisateur local : " + local);
+            this.chatNI.sendHello(local);
             this.users.add(local);
-            Packet p = new Hello(local.getName());
-            this.chatNI.sendBroadcast(p);
             chatGUI.addMessage(new Message("Now connected as " + username + " !"));
         } catch (UnknownHostException e) {
             l.error("Impossible d'obtenir l'adresse locale");
         } catch (TechnicalException e) {
-            l.error("Probleme technique.");
+            chatGUI.addMessage(new Message("Unable to connect ..."));
+            l.error("unable to connect", e);
         }
 
     }
