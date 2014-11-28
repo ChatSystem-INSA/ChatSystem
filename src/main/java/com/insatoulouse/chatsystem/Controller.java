@@ -119,4 +119,9 @@ public class Controller {
     public void setChatGUI(ChatGUI chatGUI) {
         this.chatGUI = chatGUI;
     }
+
+    public void processExit() {
+        chatNI.exit();
+        System.exit(0);
+    }
 }

@@ -2,6 +2,8 @@ package com.insatoulouse.chatsystem.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 public class ChatFrame extends JFrame{
 
@@ -9,7 +11,7 @@ public class ChatFrame extends JFrame{
     private ChatPanel chatPanel;
     private CommandField commandField;
 
-    public ChatFrame(ChatGUI chatgui) throws HeadlessException {
+    public ChatFrame(final ChatGUI chatgui) throws HeadlessException {
         super("ChatSystem");
 
         this.chatgui = chatgui;
@@ -25,5 +27,41 @@ public class ChatFrame extends JFrame{
         this.setSize(600,400);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                chatgui.sendExit();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
     }
 }

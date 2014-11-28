@@ -12,13 +12,14 @@ public class NetworkInvoker extends Thread {
 
     private Integer onRun = 0;
     private LinkedBlockingQueue<NetworkCommand> commands = new LinkedBlockingQueue<NetworkCommand>();
+    private Boolean isRunning = true;
 
     public NetworkInvoker() {
     }
 
     public void run()
     {
-        while(true)
+        while(isRunning)
         {
             try {
                 final NetworkCommand cmd = commands.peek();
@@ -44,7 +45,7 @@ public class NetworkInvoker extends Thread {
                         }
                     }
                 }
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException ignored) {}
         }
     }
 
@@ -58,4 +59,8 @@ public class NetworkInvoker extends Thread {
         this.interrupt();
     }
 
+    public synchronized void close() {
+        isRunning = false;
+        this.interrupt();
+    }
 }

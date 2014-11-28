@@ -15,6 +15,7 @@ public class ChatGUI {
 
     private static final Logger l = LogManager.getLogger(ChatGUI.class.getName());
     public static final String COMMAND_HELLO = "connect";
+    public static final String COMMAND_EXIT = "exit";
     private Controller controller;
     private DefaultListModel<Message> listMessage = new DefaultListModel<Message>();
 
@@ -38,6 +39,9 @@ public class ChatGUI {
         if(COMMAND_HELLO.equals(command) && args.length == 1){
             controller.processConnection(args[0]);
         }
+        else if(COMMAND_EXIT.equals(command) && args.length == 0){
+            this.sendExit();
+        }
         else{
             l.debug("Bad command "+command);
         }
@@ -53,5 +57,12 @@ public class ChatGUI {
 
     public DefaultListModel<Message> getListMessage(){
         return listMessage;
+    }
+
+    /**
+     * Send exit to controller
+     */
+    public void sendExit(){
+        controller.processExit();
     }
 }
