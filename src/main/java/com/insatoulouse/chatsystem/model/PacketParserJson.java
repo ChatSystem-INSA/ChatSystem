@@ -28,7 +28,7 @@ public class PacketParserJson implements PacketParser {
 
         String type = root.get("type").asText();
 
-        if(type.equals(Hello.type))
+        if(type.equals(Packet.TYPE_HELLO))
         {
             if(root.get("username") != null)
             {

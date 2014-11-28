@@ -3,19 +3,21 @@ package com.insatoulouse.chatsystem.model;
 
 public class Hello extends Packet {
 
-    public static final String type = "hello";
+    // public static final String type = "hello";
 
-    private String username;
+    private String userName;
 
     public Hello(String data) {
-        this.username = data;
+        super(Packet.TYPE_HELLO);
+        this.userName = data;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
+
 }

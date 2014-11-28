@@ -3,7 +3,6 @@ package com.insatoulouse.chatsystem;
 
 import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.model.Hello;
-import com.insatoulouse.chatsystem.model.Message;
 import com.insatoulouse.chatsystem.model.Packet;
 import com.insatoulouse.chatsystem.model.User;
 import com.insatoulouse.chatsystem.ni.ChatNI;
@@ -58,7 +57,7 @@ public class Controller {
             return;
         }
 
-        User u = new User(false, messHello.getUsername(), addr);
+        User u = new User(false, messHello.getUserName(), addr);
         this.users.add(u);
         l.debug("New user : " + u.toString());
 
