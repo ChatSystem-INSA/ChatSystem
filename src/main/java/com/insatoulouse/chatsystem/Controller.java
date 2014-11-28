@@ -50,16 +50,20 @@ public class Controller {
 
     public void processHello(Hello messHello, InetAddress addr)
     {
-        if(getUserByAddr(addr) != null || getUserByUsername(messHello.getUserName()) != null)
-        {
-            l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + messHello.getUserName());
-            return;
-        }
 
         User u = new User(false, messHello.getUserName(), addr);
-        this.users.add(u);
-        l.debug("New user : " + u.toString());
-        chatGUI.addMessage(new Message("New user : "+u.getName()));
+
+        if(isConnected())
+        {
+            if(userExists(u))
+            {
+                l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + messHello.getUserName());
+                return;
+            }
+            this.addUser(u);
+        } else {
+            l.debug("do nothing not connected");
+        }
     }
 
     public void processHelloAck(HelloAck mess, InetAddress addr)
@@ -67,10 +71,42 @@ public class Controller {
         if(isConnected())
         {
             User n = new User(false, mess.getUserName(), addr);
-            this.users.add(n);
-            l.debug("New user : " + n.toString());
-            chatGUI.addMessage(new Message("New user : " + n.getName()));
+            if(userExists(n))
+            {
+                l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + mess.getUserName());
+                return;
+            }
+            this.addUser(n);
+        } else {
+            l.debug("do nothing, not connected");
         }
+    }
+
+    private void addUser(User u)
+    {
+        this.users.add(u);
+        l.debug("New user : " + u.toString());
+        chatGUI.addMessage(new Message("New user : " + u.getName()));
+    }
+
+    private boolean userExists(String username)
+    {
+        return getUserByUsername(username) != null;
+    }
+
+    private boolean userExists(InetAddress addr)
+    {
+        return getUserByAddr(addr) != null;
+    }
+
+    private boolean userExists(String username, InetAddress addr)
+    {
+        return getUserByAddr(addr) != null || getUserByUsername(username) != null;
+    }
+
+    private boolean userExists(User u)
+    {
+        return this.userExists(u.getName(), u.getIp());
     }
 
     private User getUserByAddr(InetAddress addr)
