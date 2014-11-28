@@ -2,10 +2,7 @@ package com.insatoulouse.chatsystem;
 
 
 import com.insatoulouse.chatsystem.gui.ChatGUI;
-import com.insatoulouse.chatsystem.model.Hello;
-import com.insatoulouse.chatsystem.model.Message;
-import com.insatoulouse.chatsystem.model.Packet;
-import com.insatoulouse.chatsystem.model.User;
+import com.insatoulouse.chatsystem.model.*;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,11 +19,11 @@ public class Controller {
     private ChatNI chatNI;
 
     private User localuser;
-    private ArrayList<User> users;
+    private Users users;
 
     public Controller()
     {
-        this.users = new ArrayList<User>();
+        this.users = new Users();
         this.localuser = null;
     }
 
@@ -59,15 +56,15 @@ public class Controller {
         }
 
         User u = new User(false, messHello.getUsername(), addr);
-        this.users.add(u);
+        this.users.addUser(u);
         l.debug("New user : " + u.toString());
-
+        chatGUI.addMessage(new Message("New user : "+u.getName()));
     }
 
     private User getUserByAddr(InetAddress addr)
     {
         User ret = null;
-        for(User u: this.users)
+        for(User u: users.getUsers())
         {
             if(u.getIp().equals(addr))
             {

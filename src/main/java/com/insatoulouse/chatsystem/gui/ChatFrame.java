@@ -13,7 +13,7 @@ public class ChatFrame extends JFrame{
         super("ChatSystem");
 
         this.chatgui = chatgui;
-        this.chatPanel = new ChatPanel();
+        this.chatPanel = new ChatPanel(chatgui);
         this.commandField = new CommandField(chatgui);
 
         JPanel mainPanel = new JPanel(new BorderLayout());

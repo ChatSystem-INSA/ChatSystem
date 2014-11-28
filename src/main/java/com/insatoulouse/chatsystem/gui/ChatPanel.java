@@ -7,16 +7,9 @@ import java.awt.*;
 
 public class ChatPanel extends JScrollPane {
 
-    public ChatPanel() {
-        Message test1 = new Message("toto");
-        Message test2 = new Message("tata");
+    public ChatPanel(ChatGUI chatGUI) {
 
-        DefaultListModel<Message> list = new DefaultListModel<Message>();
-        list.add(0,test1);
-        list.add(0,test2);
-
-
-        JList<Message> messageList = new JList<Message>(list);
+        JList<Message> messageList = new JList<Message>(chatGUI.getListMessage());
         messageList.setLayoutOrientation(JList.VERTICAL);
         messageList.setCellRenderer(new MessageLabel());
 
