@@ -17,9 +17,11 @@ public class ChatSystem {
         ChatGUI gui = new ChatGUI(c);
         try {
             ChatNI ni = new ChatNI(c,Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
+            c.setChatNI(ni);
         } catch (TechnicalException e) {
             //TODO informer le GUI du problème
         }
+        c.setChatGUI(gui);
     }
 
 }

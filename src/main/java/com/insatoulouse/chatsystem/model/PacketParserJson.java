@@ -1,5 +1,6 @@
 package com.insatoulouse.chatsystem.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insatoulouse.chatsystem.exception.PacketException;
@@ -44,8 +45,14 @@ public class PacketParserJson implements PacketParser {
     }
 
     @Override
-    public void write(OutputStream out, Packet data)throws IOException {
-        mapper.writeValue(out, data);
+    public String write(Packet p)throws PacketException {
+        String ret = null;
+        try {
+            ret = mapper.writeValueAsString(p);
+        } catch (JsonProcessingException e) {
+            throw new PacketException("Impossible de mettre le Packet en json");
+        }
+        return ret;
     }
 
 }

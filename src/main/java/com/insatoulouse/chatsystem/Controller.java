@@ -32,6 +32,7 @@ public class Controller {
 
     public void processConnection(String username)
     {
+        l.debug("je suis ici");
         if(isConnected())
         {
             l.error("Déjà connecté.");
@@ -44,6 +45,7 @@ public class Controller {
             l.error("Impossible d'obtenir l'adresse locale");
         }
 
+        l.debug("Connection de l'utilisateur local : " + username);
         Packet p = new Hello(this.localuser.getName());
         this.chatNI.sendBroadcast(p);
 

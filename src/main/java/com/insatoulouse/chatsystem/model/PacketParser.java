@@ -7,5 +7,5 @@ import java.io.OutputStream;
 
 public interface PacketParser {
     public Packet read(String data) throws PacketException;
-    public void write(OutputStream out, Packet data) throws IOException;
+    public String write(Packet data) throws PacketException;
 }

@@ -56,6 +56,11 @@ public class ChatNI {
     public void sendBroadcast(Packet p)
     {
         PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
+        try {
+            String data = parser.write(p);
+        } catch (PacketException e) {
+            l.error("sendBroadcast : "+p, e);
+        }
     }
 
 }
