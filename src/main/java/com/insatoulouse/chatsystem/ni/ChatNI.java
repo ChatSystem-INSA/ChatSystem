@@ -1,15 +1,14 @@
 package com.insatoulouse.chatsystem.ni;
 
 import com.insatoulouse.chatsystem.Controller;
+import com.insatoulouse.chatsystem.exception.PacketException;
 import com.insatoulouse.chatsystem.model.AbstractFactory;
 import com.insatoulouse.chatsystem.model.Message;
-import com.insatoulouse.chatsystem.model.MessageException;
 import com.insatoulouse.chatsystem.model.MessageParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.net.SocketException;
 
 /**
  * Created by tlk on 27/11/14.
@@ -42,7 +41,7 @@ public class ChatNI {
         MessageParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getMessageParser();
         try {
             Message message = parser.read(s);
-        } catch (MessageException e) {
+        } catch (PacketException e) {
             l.debug("message JSON non valide : "+s,e);
         }
     }
