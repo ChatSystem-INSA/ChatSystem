@@ -48,6 +48,7 @@ public class Controller {
         Packet p = new Hello(this.localuser.getName());
         try {
             this.chatNI.sendBroadcast(p);
+            chatGUI.addMessage(new Message(username+ " connected ! "));
         } catch (TechnicalException e) {
             e.printStackTrace();
         }
@@ -66,7 +67,7 @@ public class Controller {
         User u = new User(false, messHello.getUserName(), addr);
         this.users.add(u);
         l.debug("New user : " + u.toString());
-        chatGUI.addMessage(new Message("New user : "+u.getName()));
+        chatGUI.addMessage(new Message("Hello "+u.getName()));
     }
 
     private User getUserByAddr(InetAddress addr)
