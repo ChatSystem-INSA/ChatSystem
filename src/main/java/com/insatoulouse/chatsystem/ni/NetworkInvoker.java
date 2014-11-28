@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class NetworkInvoker extends Thread {
 
-    private static final Logger l = LogManager.getLogger(ChatNI.class.getName());
+    private static final Logger l = LogManager.getLogger(NetworkInvoker.class.getName());
     private static final Integer MAX_COMMAND = 5;
 
     private Integer onRun = 0;
@@ -36,7 +36,7 @@ public class NetworkInvoker extends Thread {
                                 cmd.execute();
                                 NetworkInvoker.this.endOfCommand();
                             }
-                        });
+                        }).start();
                     } else {
                         synchronized (this)
                         {

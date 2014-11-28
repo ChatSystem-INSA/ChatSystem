@@ -8,7 +8,7 @@ import java.net.InetAddress;
 
 public class UdpSender {
 
-    private static final Logger l = LogManager.getLogger(ChatNI.class.getName());
+    private static final Logger l = LogManager.getLogger(UdpSender.class.getName());
 
     private String data;
     private InetAddress addr;
