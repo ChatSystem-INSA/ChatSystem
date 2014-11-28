@@ -36,10 +36,9 @@ public class ChatNI {
         }
     }
 
-
     public void processPacket(DatagramPacket packet) {
 
-        PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getMessageParser();
+        PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
         String data = new String(packet.getData(), packet.getOffset(), packet.getLength());
 
         try {
@@ -53,4 +52,10 @@ public class ChatNI {
         }
 
     }
+
+    public void sendBroadcast(Packet p)
+    {
+        PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
+    }
+
 }
