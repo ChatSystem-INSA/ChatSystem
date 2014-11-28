@@ -63,7 +63,10 @@ public class ChatNI {
             String data = parser.write(p);
             if(data != null)
             {
-                UdpSenderCommand cmd = new UdpSenderCommand(data, InetAddress.getByName(Config.getInstance().getProperties(Config.CONFIG_ADDRESS)));
+                DatagramPacket dp = new DatagramPacket(data.getBytes(), data.length());
+                dp.setAddress(InetAddress.getByName(Config.getInstance().getProperties(Config.CONFIG_ADDRESS)));
+                dp.setPort(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
+                UdpSenderCommand cmd = new UdpSenderCommand(dp);
                 this.invoker.addCommand(cmd);
             } else {
                 l.error("impossible de lancer le pacjet ehn briad");
