@@ -2,6 +2,7 @@ package com.insatoulouse.chatsystem.ni;
 
 import com.insatoulouse.chatsystem.Controller;
 import com.insatoulouse.chatsystem.exception.PacketException;
+import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,12 +24,12 @@ public class ChatNI {
 
     private static final Logger l = LogManager.getLogger(ChatNI.class.getName());
 
-    public ChatNI(Controller c, int port) {
+    public ChatNI(Controller c) throws TechnicalException {
         this.controller = c;
         this.port = port;
         try {
             this.tcpListener = new TcpListener();
-            this.udpListener = new UdpListener(this, port);
+            this.udpListener = new UdpListener(this);
             this.udpListener.start();
             this.invoker = new NetworkInvoker();
         } catch (IOException e) {

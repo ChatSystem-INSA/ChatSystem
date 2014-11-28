@@ -19,6 +19,7 @@ public class Config {
 
     private static final String FILE_CONFIG = "/config.properties";
     public static final String CONFIG_PORT = "port";
+    public static final String CONFIG_ADDRESS = "address";
     private static Logger logger = LogManager.getLogger(Config.class.getName());
     private Properties properties;
 
