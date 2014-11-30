@@ -40,6 +40,7 @@ public class Controller {
             this.users.add(local);
             chatGUI.addMessage(new Message("Now connected as " + username + " !"));
             chatGUI.setLocalUser(local);
+            chatGUI.addUser(local);
         } catch (UnknownHostException e) {
             l.error("Impossible d'obtenir l'adresse locale");
         } catch (TechnicalException e) {
@@ -96,6 +97,7 @@ public class Controller {
                 this.chatNI.sendGoodbye();
                 chatGUI.addMessage(new Message("Disconnected."));
                 chatGUI.setLocalUser(null);
+                chatGUI.removeAllUser();
             } catch (TechnicalException e) {
                 l.error("Impossible de lancer le goodbye", e);
             }
@@ -110,6 +112,7 @@ public class Controller {
             User u = getUserByAddr(addr);
             if(u != null){
                 this.users.remove(u);
+                chatGUI.removeUser(u);
                 chatGUI.addMessage(new Message("Goodbye "+u.getName()));
             }
             else{

@@ -16,41 +16,9 @@ public class ChatPanel extends JScrollPane {
         final JList<Message> messageList = new JList<Message>(chatGUI.getListMessage());
         messageList.setLayoutOrientation(JList.VERTICAL);
         messageList.setCellRenderer(new MessageLabel());
-        messageList.getModel().addListDataListener(new ListDataListener() {
-            @Override
-            public void intervalAdded(ListDataEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        ChatPanel.this.getVerticalScrollBar().setValue(ChatPanel.this.getMaximumSize().height);
-
-                    }
-                });
-            }
-
-            @Override
-            public void intervalRemoved(ListDataEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        ChatPanel.this.getVerticalScrollBar().setValue(ChatPanel.this.getMaximumSize().height);
-
-                    }
-                });
-            }
-
-            @Override
-            public void contentsChanged(ListDataEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        ChatPanel.this.getVerticalScrollBar().setValue(ChatPanel.this.getMaximumSize().height);
-
-                    }
-                });
-            }
-        });
+        messageList.setFocusable(false);
         this.setViewportView(messageList);
+        this.setFocusable(false);
 
 
     }

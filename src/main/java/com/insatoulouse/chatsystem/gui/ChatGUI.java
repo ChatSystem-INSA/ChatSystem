@@ -40,12 +40,14 @@ public class ChatGUI {
 
     private void commandToController(String command, String [] args){
         if(COMMAND_HELLO.equals(command) && args.length == 1){
+            this.chatFrame.switchChatPanel();
             controller.processConnection(args[0]);
         }
         else if(COMMAND_EXIT.equals(command) && args.length == 0){
             this.sendExit();
         }
         else if(COMMAND_QUIT.equals(command) && args.length == 0){
+            this.chatFrame.switchChatPanel();
             controller.processGoodBye();
         }
         else if(COMMAND_LIST.equals(command) && args.length == 0) {
@@ -61,6 +63,15 @@ public class ChatGUI {
     {
         listUser.addElement(u);
         this.addMessage(new Message("New user : " + u.getName()));
+    }
+    public void removeUser(User u)
+    {
+        listUser.removeElement(u);
+    }
+
+    public void removeAllUser()
+    {
+        listUser.removeAllElements();
     }
 
     public void addMessage(Message m){

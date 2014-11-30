@@ -16,13 +16,10 @@ public class UserlistPanel extends JScrollPane {
         JList<User> userList = new JList<User>(chatGUI.getListUser());
         userList.setLayoutOrientation(JList.VERTICAL);
         userList.setCellRenderer(new UserLabel());
+        userList.setFocusable(false);
 
         this.setViewportView(userList);
         this.setPreferredSize(new Dimension(600, 350));
-        this.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener(){
-            public void adjustmentValueChanged(AdjustmentEvent e){
-                e.getAdjustable().setValue(e.getAdjustable().getMaximum());
-            }
-        });
+
     }
 }
