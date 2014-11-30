@@ -48,7 +48,7 @@ public class ChatGUI {
         }
         else if(COMMAND_QUIT.equals(command) && args.length == 0){
             this.chatFrame.switchChatPanel();
-            controller.processGoodBye();
+            controller.processDisconnect();
         }
         else if(COMMAND_LIST.equals(command) && args.length == 0) {
             this.chatFrame.switchUserlistPanel();

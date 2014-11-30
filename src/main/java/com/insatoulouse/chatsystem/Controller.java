@@ -47,26 +47,38 @@ public class Controller {
             chatGUI.addMessage(new Message("Unable to connect ..."));
             l.error("unable to connect", e);
         }
+    }
 
+    public void processDisconnect(){
+        if(isConnected())
+        {
+            try {
+                this.chatNI.sendGoodbye();
+                this.chatGUI.removeAllUser();
+            } catch (TechnicalException e) {
+                l.error("Impossible de lancer le goodbye", e);
+            }
+        }
+        else{
+            l.debug("not already connected");
+        }
     }
 
     public void processHello(Hello messHello, InetAddress addr)
     {
-
-        User u = new User(false, messHello.getUserName(), addr);
-
         if(isConnected())
         {
-            if(userExists(u))
+            User u = new User(false, messHello.getUserName(), addr);
+            if(!userExists(u))
             {
+                this.addUser(u);
+                try {
+                    this.chatNI.sendHelloAck(getLocalUser(), u);
+                } catch (TechnicalException e) {
+                    l.error("Impossible de lancer le helloAck", e);
+                }
+            } else {
                 l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + messHello.getUserName());
-                return;
-            }
-            this.addUser(u);
-            try {
-                this.chatNI.sendHelloAck(getLocalUser(), u);
-            } catch (TechnicalException e) {
-                l.error("Impossible de lancer le helloAck", e);
             }
         } else {
             l.debug("do nothing not connected");
@@ -78,34 +90,18 @@ public class Controller {
         if(isConnected())
         {
             User n = new User(false, mess.getUserName(), addr);
-            if(userExists(n))
+            if(!userExists(n))
             {
+                this.addUser(n);
+            } else {
                 l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + mess.getUserName());
-                return;
+
             }
-            this.addUser(n);
         } else {
             l.debug("do nothing, not connected");
         }
     }
 
-    public void processGoodBye(){
-        if(isConnected())
-        {
-            try {
-                this.users = new ArrayList<User>();
-                this.chatNI.sendGoodbye();
-                chatGUI.addMessage(new Message("Disconnected."));
-                chatGUI.setLocalUser(null);
-                chatGUI.removeAllUser();
-            } catch (TechnicalException e) {
-                l.error("Impossible de lancer le goodbye", e);
-            }
-        }
-        else{
-            l.debug("already not connected");
-        }
-    }
     public void processRemoteGoodBye(InetAddress addr){
         if(isConnected())
         {
@@ -129,6 +125,13 @@ public class Controller {
         this.users.add(u);
         l.debug("New user : " + u.toString());
         chatGUI.addUser(u);
+    }
+
+    private void removeUser(User u)
+    {
+        this.users.remove(u);
+        l.debug("Remove user : " + u.toString());
+        chatGUI.removeUser(u);
     }
 
     private boolean userExists(String username)
@@ -211,7 +214,7 @@ public class Controller {
     }
 
     public void processExit() {
-        processGoodBye();
+        processDisconnect();
         chatNI.exit();
         System.exit(0);
     }
