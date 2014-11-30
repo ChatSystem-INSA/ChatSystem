@@ -67,21 +67,19 @@ public class Controller {
 
     public void processHello(Hello messHello, InetAddress addr)
     {
-
-        User u = new User(false, messHello.getUserName(), addr);
-
         if(isConnected())
         {
-            if(userExists(u))
+            User u = new User(false, messHello.getUserName(), addr);
+            if(!userExists(u))
             {
+                this.addUser(u);
+                try {
+                    this.chatNI.sendHelloAck(getLocalUser(), u);
+                } catch (TechnicalException e) {
+                    l.error("Impossible de lancer le helloAck", e);
+                }
+            } else {
                 l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + messHello.getUserName());
-                return;
-            }
-            this.addUser(u);
-            try {
-                this.chatNI.sendHelloAck(getLocalUser(), u);
-            } catch (TechnicalException e) {
-                l.error("Impossible de lancer le helloAck", e);
             }
         } else {
             l.debug("do nothing not connected");
@@ -93,12 +91,13 @@ public class Controller {
         if(isConnected())
         {
             User n = new User(false, mess.getUserName(), addr);
-            if(userExists(n))
+            if(!userExists(n))
             {
+                this.addUser(n);
+            } else {
                 l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + mess.getUserName());
-                return;
+
             }
-            this.addUser(n);
         } else {
             l.debug("do nothing, not connected");
         }
@@ -109,9 +108,7 @@ public class Controller {
         {
             User u = getUserByAddr(addr);
             if(u != null){
-                this.users.remove(u);
-                chatGUI.addMessage(new Message("Goodbye "+u.getName()));
-                l.debug("User disconnected " + u.getName());
+                this.removeUser(u);
             }
             else{
                 l.debug("Unknown "+addr.toString());
@@ -127,6 +124,13 @@ public class Controller {
         this.users.add(u);
         l.debug("New user : " + u.toString());
         chatGUI.addUser(u);
+    }
+
+    private void removeUser(User u)
+    {
+        this.users.remove(u);
+        l.debug("Remove user : " + u.toString());
+        chatGUI.removeUser(u);
     }
 
     private boolean userExists(String username)

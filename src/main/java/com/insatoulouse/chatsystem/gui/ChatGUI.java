@@ -62,6 +62,12 @@ public class ChatGUI {
         this.addMessage(new Message("New user : " + u.getName()));
     }
 
+    public void removeUser(User u)
+    {
+        listUser.removeElement(u);
+        this.addMessage(new Message("Goodbye "+u.getName()));
+    }
+
     public void addMessage(Message m){
         listMessage.addElement(m);
     }
