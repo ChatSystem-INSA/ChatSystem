@@ -46,7 +46,23 @@ public class Controller {
             chatGUI.addMessage(new Message("Unable to connect ..."));
             l.error("unable to connect", e);
         }
+    }
 
+    public void processDisconnect(){
+        if(isConnected())
+        {
+            try {
+                this.chatNI.sendGoodbye();
+                chatGUI.addMessage(new Message("Disconnected."));
+                chatGUI.setLocalUser(null);
+                this.users = new ArrayList<User>();
+            } catch (TechnicalException e) {
+                l.error("Impossible de lancer le goodbye", e);
+            }
+        }
+        else{
+            l.debug("not already connected");
+        }
     }
 
     public void processHello(Hello messHello, InetAddress addr)
@@ -88,22 +104,6 @@ public class Controller {
         }
     }
 
-    public void processGoodBye(){
-        if(isConnected())
-        {
-            try {
-                this.users = new ArrayList<User>();
-                this.chatNI.sendGoodbye();
-                chatGUI.addMessage(new Message("Disconnected."));
-                chatGUI.setLocalUser(null);
-            } catch (TechnicalException e) {
-                l.error("Impossible de lancer le goodbye", e);
-            }
-        }
-        else{
-            l.debug("already not connected");
-        }
-    }
     public void processRemoteGoodBye(InetAddress addr){
         if(isConnected())
         {
@@ -111,6 +111,7 @@ public class Controller {
             if(u != null){
                 this.users.remove(u);
                 chatGUI.addMessage(new Message("Goodbye "+u.getName()));
+                l.debug("User disconnected " + u.getName());
             }
             else{
                 l.debug("Unknown "+addr.toString());
@@ -208,7 +209,7 @@ public class Controller {
     }
 
     public void processExit() {
-        processGoodBye();
+        processDisconnect();
         chatNI.exit();
         System.exit(0);
     }

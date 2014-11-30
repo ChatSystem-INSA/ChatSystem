@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ChatGUI {
@@ -46,7 +45,7 @@ public class ChatGUI {
             this.sendExit();
         }
         else if(COMMAND_QUIT.equals(command) && args.length == 0){
-            controller.processGoodBye();
+            controller.processDisconnect();
         }
         else if(COMMAND_LIST.equals(command) && args.length == 0) {
             this.chatFrame.switchUserlistPanel();
@@ -65,10 +64,6 @@ public class ChatGUI {
 
     public void addMessage(Message m){
         listMessage.addElement(m);
-    }
-
-    public void removeMessage(Message m){
-        listMessage.removeElement(m);
     }
 
     public DefaultListModel<Message> getListMessage(){
