@@ -18,7 +18,7 @@ public class UserLabel extends JPanel implements ListCellRenderer<User> {
 
     public UserLabel() {
 
-        //this.setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout());
         // this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         // this.setAlignmentX(JPanel.LEFT_ALIGNMENT);
         this.setBackground(Color.WHITE);

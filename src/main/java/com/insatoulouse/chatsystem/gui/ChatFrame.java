@@ -83,12 +83,14 @@ public class ChatFrame extends JFrame{
         this.mainPanel.remove(chatPanel);
         this.mainPanel.add(userlistPanel, BorderLayout.CENTER);
         this.mainPanel.revalidate();
+        this.mainPanel.repaint();
     }
     public void switchChatPanel()
     {
         this.mainPanel.remove(userlistPanel);
         this.mainPanel.add(chatPanel, BorderLayout.CENTER);
         this.mainPanel.revalidate();
+        this.mainPanel.repaint();
     }
 
 }
