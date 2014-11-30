@@ -26,7 +26,7 @@ public class ChatFrame extends JFrame{
         this.infoBarPanel = new InfoBarPanel();
 
         mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(userlistPanel, BorderLayout.CENTER);
+        mainPanel.add(chatPanel, BorderLayout.CENTER);
         mainPanel.add(commandField, BorderLayout.SOUTH);
         mainPanel.add(infoBarPanel, BorderLayout.NORTH);
 

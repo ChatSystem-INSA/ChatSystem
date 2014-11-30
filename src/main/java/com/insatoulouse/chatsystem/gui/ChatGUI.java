@@ -13,10 +13,13 @@ import java.util.Arrays;
 public class ChatGUI {
 
     private static final Logger l = LogManager.getLogger(ChatGUI.class.getName());
+
     public static final String COMMAND_HELLO = "connect";
     public static final String COMMAND_EXIT = "exit";
     private static final String COMMAND_QUIT = "quit";
     public static final String COMMAND_LIST = "list";
+    public static final String COMMAND_HELP = "help";
+
     private final ChatFrame chatFrame;
     private Controller controller;
     private DefaultListModel<Message> listMessage = new DefaultListModel<Message>();
@@ -52,6 +55,14 @@ public class ChatGUI {
         }
         else if(COMMAND_LIST.equals(command) && args.length == 0) {
             this.chatFrame.switchUserlistPanel();
+        } else if(COMMAND_HELP.equals(command) && args.length == 0)
+        {
+            addMessage(new Message("List of commands :"));
+            addMessage(new Message("help - print this help"));
+            addMessage(new Message("exit - exit the program"));
+            addMessage(new Message("quit - disconnect of chat"));
+            addMessage(new Message("list - print list of connected users"));
+            this.chatFrame.switchChatPanel();
         }
         else{
             addMessage(new Message("Command "+command + " is invalid. Try again or try help."));
