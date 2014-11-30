@@ -19,10 +19,11 @@ public class ChatGUI {
     private final ChatFrame chatFrame;
     private Controller controller;
     private DefaultListModel<Message> listMessage = new DefaultListModel<Message>();
-    private DefaultListModel<User> listUser = new DefaultListModel<User>();
+    private DefaultListModel<User> listUser;
 
     public ChatGUI(Controller c) {
         this.controller = c;
+        this.listUser = new DefaultListModel<User>();
         chatFrame = new ChatFrame(this);
     }
 
@@ -68,6 +69,10 @@ public class ChatGUI {
         this.addMessage(new Message("Goodbye "+u.getName()));
     }
 
+    public void flushUsers() {
+        listUser = new DefaultListModel<User>();
+    }
+
     public void addMessage(Message m){
         listMessage.addElement(m);
     }
@@ -90,4 +95,5 @@ public class ChatGUI {
     public void setLocalUser(User u){
         chatFrame.onLocalUserChange(u);
     }
+
 }
