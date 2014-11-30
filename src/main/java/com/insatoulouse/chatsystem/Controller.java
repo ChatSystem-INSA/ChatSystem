@@ -54,7 +54,7 @@ public class Controller {
         {
             try {
                 this.chatNI.sendGoodbye();
-                this.chatGUI.removeAllUser();
+                this.flushUsers();
             } catch (TechnicalException e) {
                 l.error("Impossible de lancer le goodbye", e);
             }
@@ -107,9 +107,7 @@ public class Controller {
         {
             User u = getUserByAddr(addr);
             if(u != null){
-                this.users.remove(u);
-                chatGUI.removeUser(u);
-                chatGUI.addMessage(new Message("Goodbye "+u.getName()));
+                this.removeUser(u);
             }
             else{
                 l.debug("Unknown "+addr.toString());
@@ -132,6 +130,14 @@ public class Controller {
         this.users.remove(u);
         l.debug("Remove user : " + u.toString());
         chatGUI.removeUser(u);
+    }
+
+    private void flushUsers()
+    {
+        chatGUI.addMessage(new Message("Disconnected."));
+        chatGUI.setLocalUser(null);
+        chatGUI.removeAllUser();
+        this.users.clear();
     }
 
     private boolean userExists(String username)
