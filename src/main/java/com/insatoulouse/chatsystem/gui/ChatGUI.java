@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ChatGUI {
@@ -19,11 +20,10 @@ public class ChatGUI {
     private final ChatFrame chatFrame;
     private Controller controller;
     private DefaultListModel<Message> listMessage = new DefaultListModel<Message>();
-    private DefaultListModel<User> listUser;
+    private DefaultListModel<User> listUser = new DefaultListModel<User>();
 
     public ChatGUI(Controller c) {
         this.controller = c;
-        this.listUser = new DefaultListModel<User>();
         chatFrame = new ChatFrame(this);
     }
 
@@ -40,12 +40,14 @@ public class ChatGUI {
 
     private void commandToController(String command, String [] args){
         if(COMMAND_HELLO.equals(command) && args.length == 1){
+            this.chatFrame.switchChatPanel();
             controller.processConnection(args[0]);
         }
         else if(COMMAND_EXIT.equals(command) && args.length == 0){
             this.sendExit();
         }
         else if(COMMAND_QUIT.equals(command) && args.length == 0){
+            this.chatFrame.switchChatPanel();
             controller.processDisconnect();
         }
         else if(COMMAND_LIST.equals(command) && args.length == 0) {
@@ -62,19 +64,22 @@ public class ChatGUI {
         listUser.addElement(u);
         this.addMessage(new Message("New user : " + u.getName()));
     }
-
     public void removeUser(User u)
     {
         listUser.removeElement(u);
-        this.addMessage(new Message("Goodbye "+u.getName()));
     }
 
-    public void flushUsers() {
-        listUser = new DefaultListModel<User>();
+    public void removeAllUser()
+    {
+        listUser.removeAllElements();
     }
 
     public void addMessage(Message m){
         listMessage.addElement(m);
+    }
+
+    public void removeMessage(Message m){
+        listMessage.removeElement(m);
     }
 
     public DefaultListModel<Message> getListMessage(){
@@ -95,5 +100,4 @@ public class ChatGUI {
     public void setLocalUser(User u){
         chatFrame.onLocalUserChange(u);
     }
-
 }

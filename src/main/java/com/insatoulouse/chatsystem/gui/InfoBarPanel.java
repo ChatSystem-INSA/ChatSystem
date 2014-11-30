@@ -20,7 +20,7 @@ public class InfoBarPanel extends JPanel {
         name.setAlignmentX(JPanel.RIGHT_ALIGNMENT);
         name.setFont(new Font("Sans serif", Font.BOLD, 12));
         panel.add(name);
-        ip = new JLabel("");
+        ip = new JLabel(" ");
         ip.setAlignmentX(JPanel.RIGHT_ALIGNMENT);
         panel.add(ip);
 
@@ -38,7 +38,7 @@ public class InfoBarPanel extends JPanel {
                 }
                 else {
                     name.setText("Not connected");
-                    ip.setText("");
+                    ip.setText(" ");
                 }
             }
         });
