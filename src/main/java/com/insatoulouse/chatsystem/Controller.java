@@ -38,12 +38,12 @@ public class Controller {
             l.debug("Connection de l'utilisateur local : " + local);
             this.chatNI.sendHello(local);
             this.users.add(local);
-            chatGUI.addMessage(new Message("Now connected as " + username + " !"));
+            chatGUI.addMessage(new MessageSystem("Now connected as " + username + " !"));
             chatGUI.setLocalUser(local);
         } catch (UnknownHostException e) {
             l.error("Impossible d'obtenir l'adresse locale");
         } catch (TechnicalException e) {
-            chatGUI.addMessage(new Message("Unable to connect ..."));
+            chatGUI.addMessage(new MessageSystem("Unable to connect ..."));
             l.error("unable to connect", e);
         }
     }
@@ -133,7 +133,7 @@ public class Controller {
 
     private void flushUsers()
     {
-        chatGUI.addMessage(new Message("Disconnected."));
+        chatGUI.addMessage(new MessageSystem("Disconnected."));
         chatGUI.setLocalUser(null);
         chatGUI.removeAllUser();
         this.users.clear();

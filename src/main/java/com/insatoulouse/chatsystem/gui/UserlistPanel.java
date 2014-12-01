@@ -1,12 +1,9 @@
 package com.insatoulouse.chatsystem.gui;
 
-import com.insatoulouse.chatsystem.model.Message;
 import com.insatoulouse.chatsystem.model.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 
 /**
  * Created by rusty on 28/11/2014.

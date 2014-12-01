@@ -1,6 +1,6 @@
 package com.insatoulouse.chatsystem.gui;
 
-import com.insatoulouse.chatsystem.model.Message;
+import com.insatoulouse.chatsystem.model.MessageSystem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,9 +8,9 @@ import java.awt.*;
 /**
  * Created by david on 27/11/14.
  */
-public class MessageLabel extends JLabel implements ListCellRenderer<Message> {
+public class MessageLabel extends JLabel implements ListCellRenderer<MessageSystem> {
     @Override
-    public Component getListCellRendererComponent(JList<? extends Message> list, Message value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList<? extends MessageSystem> list, MessageSystem value, int index, boolean isSelected, boolean cellHasFocus) {
         this.setText(value.getData());
         this.setFont(new Font("Sans serif",Font.PLAIN, 15));
         this.setForeground(Color.GRAY);

@@ -1,13 +1,12 @@
 package com.insatoulouse.chatsystem.gui;
 
 import com.insatoulouse.chatsystem.Controller;
-import com.insatoulouse.chatsystem.model.Message;
+import com.insatoulouse.chatsystem.model.MessageSystem;
 import com.insatoulouse.chatsystem.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ChatGUI {
@@ -22,7 +21,7 @@ public class ChatGUI {
 
     private final ChatFrame chatFrame;
     private Controller controller;
-    private DefaultListModel<Message> listMessage = new DefaultListModel<Message>();
+    private DefaultListModel<MessageSystem> listMessage = new DefaultListModel<MessageSystem>();
     private DefaultListModel<User> listUser = new DefaultListModel<User>();
 
     public ChatGUI(Controller c) {
@@ -57,15 +56,15 @@ public class ChatGUI {
             this.chatFrame.switchUserlistPanel();
         } else if(COMMAND_HELP.equals(command) && args.length == 0)
         {
-            addMessage(new Message("List of commands :"));
-            addMessage(new Message("help - print this help"));
-            addMessage(new Message("exit - exit the program"));
-            addMessage(new Message("quit - disconnect of chat"));
-            addMessage(new Message("list - print list of connected users"));
+            addMessage(new MessageSystem("List of commands :"));
+            addMessage(new MessageSystem("help - print this help"));
+            addMessage(new MessageSystem("exit - exit the program"));
+            addMessage(new MessageSystem("quit - disconnect of chat"));
+            addMessage(new MessageSystem("list - print list of connected users"));
             this.chatFrame.switchChatPanel();
         }
         else{
-            addMessage(new Message("Command "+command + " is invalid. Try again or try help."));
+            addMessage(new MessageSystem("Command "+command + " is invalid. Try again or try help."));
             l.debug("Bad command " + command);
         }
     }
@@ -73,7 +72,7 @@ public class ChatGUI {
     public void addUser(User u)
     {
         listUser.addElement(u);
-        this.addMessage(new Message("New user : " + u.getName()));
+        this.addMessage(new MessageSystem("New user : " + u.getName()));
     }
     public void removeUser(User u)
     {
@@ -85,15 +84,15 @@ public class ChatGUI {
         listUser.removeAllElements();
     }
 
-    public void addMessage(Message m){
+    public void addMessage(MessageSystem m){
         listMessage.addElement(m);
     }
 
-    public void removeMessage(Message m){
+    public void removeMessage(MessageSystem m){
         listMessage.removeElement(m);
     }
 
-    public DefaultListModel<Message> getListMessage(){
+    public DefaultListModel<MessageSystem> getListMessage(){
         return listMessage;
     }
 
