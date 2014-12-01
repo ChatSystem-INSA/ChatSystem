@@ -13,7 +13,7 @@ public class ChatGUI {
 
     private static final Logger l = LogManager.getLogger(ChatGUI.class.getName());
 
-    public static final String COMMAND_HELLO = "connect";
+    public static final String COMMAND_CONNECT = "connect";
     public static final String COMMAND_EXIT = "exit";
     private static final String COMMAND_QUIT = "quit";
     public static final String COMMAND_LIST = "list";
@@ -41,7 +41,7 @@ public class ChatGUI {
     }
 
     private void commandToController(String command, String [] args){
-        if(COMMAND_HELLO.equals(command) && args.length == 1){
+        if(COMMAND_CONNECT.equals(command) && args.length == 1){
             this.chatFrame.switchChatPanel();
             controller.processConnection(args[0]);
         }
@@ -58,9 +58,10 @@ public class ChatGUI {
         {
             addMessage(new MessageSystem("List of commands :"));
             addMessage(new MessageSystem("help - print this help"));
-            addMessage(new MessageSystem("exit - exit the program"));
+            addMessage(new MessageSystem("connect <username> - connect to the chat with <username> as name"));
             addMessage(new MessageSystem("quit - disconnect of chat"));
             addMessage(new MessageSystem("list - print list of connected users"));
+            addMessage(new MessageSystem("exit - exit the program"));
             this.chatFrame.switchChatPanel();
         }
         else{
