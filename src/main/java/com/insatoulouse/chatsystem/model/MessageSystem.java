@@ -3,12 +3,11 @@ package com.insatoulouse.chatsystem.model;
 /**
  * Created by tlk on 27/11/14.
  */
-public class MessageSystem extends Packet {
+public class MessageSystem implements DisplayMessage {
 
     private String data;
 
     public MessageSystem(String data) {
-        super(Packet.TYPE_MESSAGE);
         this.data = data;
     }
 

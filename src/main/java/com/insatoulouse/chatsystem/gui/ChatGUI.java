@@ -1,6 +1,7 @@
 package com.insatoulouse.chatsystem.gui;
 
 import com.insatoulouse.chatsystem.Controller;
+import com.insatoulouse.chatsystem.model.DisplayMessage;
 import com.insatoulouse.chatsystem.model.MessageSystem;
 import com.insatoulouse.chatsystem.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +22,7 @@ public class ChatGUI {
 
     private final ChatFrame chatFrame;
     private Controller controller;
-    private DefaultListModel<MessageSystem> listMessage = new DefaultListModel<MessageSystem>();
+    private DefaultListModel<DisplayMessage> listMessage = new DefaultListModel<DisplayMessage>();
     private DefaultListModel<User> listUser = new DefaultListModel<User>();
 
     public ChatGUI(Controller c) {
@@ -93,7 +94,7 @@ public class ChatGUI {
         listMessage.removeElement(m);
     }
 
-    public DefaultListModel<MessageSystem> getListMessage(){
+    public DefaultListModel<DisplayMessage> getListMessage(){
         return listMessage;
     }
 
