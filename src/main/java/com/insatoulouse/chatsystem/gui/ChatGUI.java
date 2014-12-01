@@ -23,7 +23,6 @@ public class ChatGUI {
     private final ChatFrame chatFrame;
     private Controller controller;
     private DefaultListModel<DisplayMessage> listMessage = new DefaultListModel<DisplayMessage>();
-    private DefaultListModel<User> listUser = new DefaultListModel<User>();
 
     public ChatGUI(Controller c) {
         this.controller = c;
@@ -43,18 +42,20 @@ public class ChatGUI {
 
     private void commandToController(String command, String [] args){
         if(COMMAND_CONNECT.equals(command) && args.length == 1){
-            this.chatFrame.switchChatPanel();
             controller.processConnection(args[0]);
         }
         else if(COMMAND_EXIT.equals(command) && args.length == 0){
             this.sendExit();
         }
         else if(COMMAND_QUIT.equals(command) && args.length == 0){
-            this.chatFrame.switchChatPanel();
             controller.processDisconnect();
         }
         else if(COMMAND_LIST.equals(command) && args.length == 0) {
-            this.chatFrame.switchUserlistPanel();
+            addMessage(new MessageSystem("List of users :"));
+            for(User u : this.controller.getUsers())
+            {
+                addMessage(new MessageSystem(u.getName() + " - " + u.getIp().toString()));
+            }
         } else if(COMMAND_HELP.equals(command) && args.length == 0)
         {
             addMessage(new MessageSystem("List of commands :"));
@@ -63,7 +64,6 @@ public class ChatGUI {
             addMessage(new MessageSystem("quit - disconnect of chat"));
             addMessage(new MessageSystem("list - print list of connected users"));
             addMessage(new MessageSystem("exit - exit the program"));
-            this.chatFrame.switchChatPanel();
         }
         else{
             addMessage(new MessageSystem("Command "+command + " is invalid. Try again or try help."));
@@ -71,35 +71,16 @@ public class ChatGUI {
         }
     }
 
-    public void addUser(User u)
-    {
-        listUser.addElement(u);
-        this.addMessage(new MessageSystem("New user : " + u.getName()));
-    }
-    public void removeUser(User u)
-    {
-        listUser.removeElement(u);
-    }
-
-    public void removeAllUser()
-    {
-        listUser.removeAllElements();
-    }
-
-    public void addMessage(MessageSystem m){
+    public void addMessage(DisplayMessage m){
         listMessage.addElement(m);
     }
 
-    public void removeMessage(MessageSystem m){
+    public void removeMessage(DisplayMessage m){
         listMessage.removeElement(m);
     }
 
     public DefaultListModel<DisplayMessage> getListMessage(){
         return listMessage;
-    }
-
-    public DefaultListModel<User> getListUser() {
-        return listUser;
     }
 
     /**

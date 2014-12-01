@@ -121,21 +121,20 @@ public class Controller {
     {
         this.users.add(u);
         l.debug("New user : " + u.toString());
-        chatGUI.addUser(u);
+        chatGUI.addMessage(new MessageSystem(u.getName() + " connected !"));
     }
 
     private void removeUser(User u)
     {
         this.users.remove(u);
         l.debug("Remove user : " + u.toString());
-        chatGUI.removeUser(u);
+        chatGUI.addMessage(new MessageSystem(u.getName() + " disconnected."));
     }
 
     private void flushUsers()
     {
-        chatGUI.addMessage(new MessageSystem("Disconnected."));
+        chatGUI.addMessage(new MessageSystem("You're now disconnected."));
         chatGUI.setLocalUser(null);
-        chatGUI.removeAllUser();
         this.users.clear();
     }
 

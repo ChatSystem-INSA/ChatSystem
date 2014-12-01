@@ -12,7 +12,6 @@ public class ChatFrame extends JFrame{
     private JPanel mainPanel;
     private ChatGUI chatgui;
     private ChatPanel chatPanel;
-    private UserlistPanel userlistPanel;
     private CommandField commandField;
     private InfoBarPanel infoBarPanel;
 
@@ -21,7 +20,6 @@ public class ChatFrame extends JFrame{
 
         this.chatgui = chatgui;
         this.chatPanel = new ChatPanel(chatgui);
-        this.userlistPanel = new UserlistPanel(chatgui);
         this.commandField = new CommandField(chatgui);
         this.infoBarPanel = new InfoBarPanel();
 
@@ -76,21 +74,6 @@ public class ChatFrame extends JFrame{
 
     public void onLocalUserChange(User u){
         this.infoBarPanel.setUser(u);
-    }
-
-    public void switchUserlistPanel()
-    {
-        this.mainPanel.remove(chatPanel);
-        this.mainPanel.add(userlistPanel, BorderLayout.CENTER);
-        this.mainPanel.revalidate();
-        this.mainPanel.repaint();
-    }
-    public void switchChatPanel()
-    {
-        this.mainPanel.remove(userlistPanel);
-        this.mainPanel.add(chatPanel, BorderLayout.CENTER);
-        this.mainPanel.revalidate();
-        this.mainPanel.repaint();
     }
 
 }
