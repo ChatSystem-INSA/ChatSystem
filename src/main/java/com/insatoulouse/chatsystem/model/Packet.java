@@ -12,6 +12,8 @@ public class Packet {
 
     public static final String FIELD_USERNAME = "userName";
     public static final String FIELD_TYPE = "type";
+    public static final String FIELD_MESSAGE_NUMBER = "messageNumber";
+    public static final String FIELD_MESSAGE_DATA = "messageData";
 
     private String type;
 
