@@ -42,20 +42,36 @@ public class ChatGUI {
 
     private void commandToController(String command, String [] args){
         if(COMMAND_CONNECT.equals(command) && args.length == 1){
-            controller.processConnection(args[0]);
+            if(!this.controller.isConnected())
+            {
+                controller.processConnection(args[0]);
+            } else {
+                this.addMessage(new MessageSystem(MessageSystem.ERROR, "You're already connected"));
+            }
         }
         else if(COMMAND_EXIT.equals(command) && args.length == 0){
             this.sendExit();
         }
         else if(COMMAND_QUIT.equals(command) && args.length == 0){
-            controller.processDisconnect();
+            if(this.controller.isConnected())
+            {
+                controller.processDisconnect();
+            } else {
+                this.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected yet"));
+            }
         }
         else if(COMMAND_LIST.equals(command) && args.length == 0) {
-            addMessage(new MessageSystem("List of users :"));
-            for(User u : this.controller.getUsers())
+            if(this.controller.isConnected())
             {
-                addMessage(new MessageSystem("    - "+u.getName() + "@" + u.getIp().toString()));
+                addMessage(new MessageSystem("List of users :"));
+                for(User u : this.controller.getUsers())
+                {
+                    addMessage(new MessageSystem("    - "+u.getName() + "@" + u.getIp().toString()));
+                }
+            } else {
+                this.addMessage(new MessageSystem(MessageSystem.ERROR, "You-re not connected"));
             }
+
         } else if(COMMAND_HELP.equals(command) && args.length == 0)
         {
             addMessage(new MessageSystem("List of commands :"));
@@ -83,9 +99,6 @@ public class ChatGUI {
         return listMessage;
     }
 
-    /**
-     * Send exit to controller
-     */
     public void sendExit(){
         controller.processExit();
     }

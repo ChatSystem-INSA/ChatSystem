@@ -200,7 +200,7 @@ public class Controller {
         return ret;
     }
 
-    private boolean isConnected()
+    public boolean isConnected()
     {
         return this.getLocalUser() != null;
     }
