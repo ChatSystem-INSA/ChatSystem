@@ -5,9 +5,20 @@ package com.insatoulouse.chatsystem.model;
  */
 public class MessageSystem implements DisplayMessage {
 
+    public static final int INFO = 1;
+    public static final int ERROR = 2;
+
     private String data;
+    private int type;
 
     public MessageSystem(String data) {
+        this.data = data;
+        this.type = MessageSystem.INFO;
+    }
+
+    public MessageSystem(int type, String data)
+    {
+        this.type = type;
         this.data = data;
     }
 
@@ -19,5 +30,8 @@ public class MessageSystem implements DisplayMessage {
         this.data = data;
     }
 
+    public int getType() {
+        return type;
+    }
 
 }

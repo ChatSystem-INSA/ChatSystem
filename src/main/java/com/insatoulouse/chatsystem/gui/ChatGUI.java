@@ -59,14 +59,14 @@ public class ChatGUI {
         } else if(COMMAND_HELP.equals(command) && args.length == 0)
         {
             addMessage(new MessageSystem("List of commands :"));
-            addMessage(new MessageSystem("help - print this help"));
-            addMessage(new MessageSystem("connect <username> - connect to the chat with <username> as name"));
-            addMessage(new MessageSystem("quit - disconnect of chat"));
-            addMessage(new MessageSystem("list - print list of connected users"));
-            addMessage(new MessageSystem("exit - exit the program"));
+            addMessage(new MessageSystem("   help - print this help"));
+            addMessage(new MessageSystem("   connect <username> - connect to the chat with <username> as name"));
+            addMessage(new MessageSystem("   quit - disconnect of chat"));
+            addMessage(new MessageSystem("   list - print list of connected users"));
+            addMessage(new MessageSystem("   exit - exit the program"));
         }
         else{
-            addMessage(new MessageSystem("Command "+command + " is invalid. Try again or try help."));
+            addMessage(new MessageSystem(MessageSystem.ERROR, "Command "+command + " is invalid. Try again or try help."));
             l.debug("Bad command " + command);
         }
     }

@@ -17,7 +17,13 @@ public class MessageLabel extends JLabel implements ListCellRenderer<DisplayMess
             MessageSystem m = (MessageSystem) value;
             this.setText(m.getData());
             this.setFont(new Font("Sans serif",Font.ITALIC, 15));
-            this.setForeground(Color.GRAY);
+            if(m.getType() == MessageSystem.INFO)
+            {
+                this.setForeground(Color.GRAY);
+            } else {
+                this.setForeground(Color.RED);
+            }
+
             this.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 10));
         }
         return this;
