@@ -43,6 +43,15 @@ public class PacketParserJson implements PacketParser {
             }
         } else if (type.equals(Packet.TYPE_GOODBYE)) {
             ret = new Goodbye();
+        } else if(type.equals(Packet.TYPE_MESSAGE)) {
+
+            if(root.get(Packet.FIELD_MESSAGE_NUMBER) != null && root.get(Packet.FIELD_MESSAGE_DATA) != null)
+            {
+                ret = new Message(root.get(Packet.FIELD_MESSAGE_NUMBER).asInt(), root.get(Packet.FIELD_MESSAGE_DATA).asText());
+            } else {
+                throw new PacketException("Message message invalide.");
+            }
+
         } else {
             throw new PacketException("Impossible de parser le JSON - attribut 'type' invalide");
         }

@@ -57,6 +57,9 @@ public class ChatNI {
             }else if(message instanceof Goodbye)
             {
                 this.controller.processRemoteGoodBye(packet.getAddress());
+            } else if(message instanceof Message)
+            {
+                this.controller.processMessage((Message) message, packet.getAddress());
             }
         } catch (PacketException e) {
             l.debug("message JSON non valide : "+data,e);

@@ -117,6 +117,22 @@ public class Controller {
         }
     }
 
+    public void processMessage(Message message, InetAddress addr) {
+        if(isConnected())
+        {
+            User u = getUserByAddr(addr);
+            if(u != null)
+            {
+                this.chatGUI.addMessage(new MessageNetwork(u, message.getMessageData()));
+                // TODO: send messageAck
+            } else {
+                l.debug("Unknow "+addr.toString());
+            }
+        } else {
+            l.debug("not connected, do nothing");
+        }
+    }
+
     private void addUser(User u)
     {
         this.users.add(u);
@@ -222,4 +238,5 @@ public class Controller {
         chatNI.exit();
         System.exit(0);
     }
+
 }
