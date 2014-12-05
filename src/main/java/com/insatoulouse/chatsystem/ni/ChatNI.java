@@ -19,6 +19,7 @@ import java.net.UnknownHostException;
  */
 public class ChatNI {
 
+    private static int message_id = 0;
     private Controller controller;
     private TcpListener tcpListener;
     private UdpListener udpListener;
@@ -83,6 +84,13 @@ public class ChatNI {
     {
         Packet p = new Goodbye();
         sendBroadcast(p);
+    }
+
+    public void sendMessage(User u, String message) throws TechnicalException
+    {
+        Packet p = new Message(ChatNI.message_id, message);
+        ChatNI.message_id += 1;
+        sendUnicast(p, u.getIp());
     }
 
     private void sendUnicast(Packet p, InetAddress addr) throws TechnicalException

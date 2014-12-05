@@ -16,9 +16,10 @@ public class ChatGUI {
 
     public static final String COMMAND_CONNECT = "connect";
     public static final String COMMAND_EXIT = "exit";
-    private static final String COMMAND_QUIT = "quit";
+    public static final String COMMAND_QUIT = "quit";
     public static final String COMMAND_LIST = "list";
     public static final String COMMAND_HELP = "help";
+    public static final String COMMAND_SEND = "message";
 
     private final ChatFrame chatFrame;
     private Controller controller;
@@ -40,43 +41,37 @@ public class ChatGUI {
         }
     }
 
-    private void commandToController(String command, String [] args){
-        if(COMMAND_CONNECT.equals(command) && args.length == 1){
-            if(!this.controller.isConnected())
-            {
-                controller.processConnection(args[0]);
-            } else {
-                this.addMessage(new MessageSystem(MessageSystem.ERROR, "You're already connected"));
-            }
-        }
-        else if(COMMAND_EXIT.equals(command) && args.length == 0){
+    private void commandToController(String command, String [] args) {
+        if (COMMAND_CONNECT.equals(command) && args.length == 1) {
+            this.controller.processConnection(args[0]);
+        } else if (COMMAND_EXIT.equals(command) && args.length == 0) {
             this.sendExit();
-        }
-        else if(COMMAND_QUIT.equals(command) && args.length == 0){
-            if(this.controller.isConnected())
-            {
-                controller.processDisconnect();
-            } else {
-                this.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected yet"));
-            }
-        }
-        else if(COMMAND_LIST.equals(command) && args.length == 0) {
-            if(this.controller.isConnected())
-            {
+        } else if (COMMAND_QUIT.equals(command) && args.length == 0) {
+            this.controller.processDisconnect();
+        } else if (COMMAND_LIST.equals(command) && args.length == 0) {
+            if (this.controller.isConnected()) {
                 addMessage(new MessageSystem("List of users :"));
-                for(User u : this.controller.getUsers())
-                {
-                    addMessage(new MessageSystem("    - "+u.getName() + "@" + u.getIp().toString()));
+                for (User u : this.controller.getUsers()) {
+                    addMessage(new MessageSystem("    - " + u.getName() + "@" + u.getIp().toString()));
                 }
             } else {
-                this.addMessage(new MessageSystem(MessageSystem.ERROR, "You-re not connected"));
+                this.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
             }
+        } else if (COMMAND_SEND.equals(command) && args.length >= 2) {
 
+            String mess = args[1];
+            String[] messRaw = Arrays.copyOfRange(args, 2, args.length);
+            for(String s : messRaw)
+            {
+                mess += " " + s;
+            }
+            this.controller.processSendMessage(args[0], mess);
         } else if(COMMAND_HELP.equals(command) && args.length == 0)
         {
             addMessage(new MessageSystem("List of commands :"));
             addMessage(new MessageSystem("   help - print this help"));
             addMessage(new MessageSystem("   connect <username> - connect to the chat with <username> as name"));
+            addMessage(new MessageSystem("   message <username> <message>"));
             addMessage(new MessageSystem("   quit - disconnect of chat"));
             addMessage(new MessageSystem("   list - print list of connected users"));
             addMessage(new MessageSystem("   exit - exit the program"));

@@ -5,10 +5,23 @@ package com.insatoulouse.chatsystem.model;
  */
 public class MessageNetwork implements DisplayMessage {
 
+
+    public static final int IN = 1;
+    public static final int OUT = 2;
+
+    private int type;
     private User user;
     private String message;
 
-    public MessageNetwork(User u, String message) {
+    public MessageNetwork(User u, String message)
+    {
+        this.type = MessageNetwork.IN;
+        this.user = u;
+        this.message = message;
+    }
+
+    public MessageNetwork(int type, User u, String message) {
+        this.type = type;
         this.user = u;
         this.message = message;
     }
@@ -27,5 +40,13 @@ public class MessageNetwork implements DisplayMessage {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

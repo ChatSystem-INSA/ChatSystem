@@ -25,27 +25,28 @@ public class Controller {
     {
     }
 
+    /*
+    * From GUI
+    * */
     public void processConnection(String username)
     {
-        if(isConnected())
+        if(!isConnected())
         {
-            l.error("Déjà connecté.");
-            return;
+            try {
+                User local = new User(true, username, InetAddress.getLocalHost());
+                this.chatNI.sendHello(local);
+                this.users.add(local);
+                chatGUI.addMessage(new MessageSystem("Now connected as " + username + " !"));
+                chatGUI.setLocalUser(local);
+            } catch (Exception e) {
+                l.error("unable to connect", e);
+                chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "Unable to connect ..."));
+            }
+        } else {
+            l.debug("already connected");
+            this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're already connected"));
         }
 
-        try {
-            User local = new User(true, username, InetAddress.getLocalHost());
-            l.debug("Connection de l'utilisateur local : " + local);
-            this.chatNI.sendHello(local);
-            this.users.add(local);
-            chatGUI.addMessage(new MessageSystem("Now connected as " + username + " !"));
-            chatGUI.setLocalUser(local);
-        } catch (UnknownHostException e) {
-            l.error("Impossible d'obtenir l'adresse locale");
-        } catch (TechnicalException e) {
-            chatGUI.addMessage(new MessageSystem("Unable to connect ..."));
-            l.error("unable to connect", e);
-        }
     }
 
     public void processDisconnect(){
@@ -60,9 +61,33 @@ public class Controller {
         }
         else{
             l.debug("not already connected");
+            this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
         }
     }
 
+    public void processSendMessage(String user, String mess) {
+        if(isConnected())
+        {
+            User u = getUserByUsername(user);
+            if(u != null)
+            {
+                try {
+                    this.chatNI.sendMessage(u, mess);
+                    this.chatGUI.addMessage(new MessageNetwork(MessageNetwork.OUT, u, mess));
+                } catch (TechnicalException e) {
+                    this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "Unable to send message, please retry"));
+                }
+            } else {
+                this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "User not existing - try 'list'"));
+            }
+        } else {
+            l.debug("not connected.");
+            this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
+        }
+    }
+
+    /*
+    * From ChatNI*/
     public void processHello(Hello messHello, InetAddress addr)
     {
         if(isConnected())
@@ -121,12 +146,12 @@ public class Controller {
         if(isConnected())
         {
             User u = getUserByAddr(addr);
-            if(u != null)
+            if(u != null && !u.equals(getLocalUser()))
             {
                 this.chatGUI.addMessage(new MessageNetwork(u, message.getMessageData()));
                 // TODO: send messageAck
             } else {
-                l.debug("Unknow "+addr.toString());
+                l.debug("uknown user or local user : " + addr.toString());
             }
         } else {
             l.debug("not connected, do nothing");
