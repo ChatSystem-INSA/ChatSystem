@@ -54,7 +54,7 @@ public class ChatGUI {
             addMessage(new MessageSystem("List of users :"));
             for(User u : this.controller.getUsers())
             {
-                addMessage(new MessageSystem(u.getName() + " - " + u.getIp().toString()));
+                addMessage(new MessageSystem("    - "+u.getName() + "@" + u.getIp().toString()));
             }
         } else if(COMMAND_HELP.equals(command) && args.length == 0)
         {
