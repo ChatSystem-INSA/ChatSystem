@@ -17,7 +17,6 @@ public class UdpListener extends Thread {
     public UdpListener(ChatNI chatNI) throws IOException, TechnicalException {
         this.chatNI = chatNI;
         this.socket = new UdpSocket(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
-        this.socket.joinGroup(Inet4Address.getByName(Config.getInstance().getProperties(Config.CONFIG_ADDRESS)));
     }
 
     public void run()
