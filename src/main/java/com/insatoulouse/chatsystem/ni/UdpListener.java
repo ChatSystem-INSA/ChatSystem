@@ -14,9 +14,13 @@ public class UdpListener extends Thread {
     private UdpSocket socket;
     private Boolean isRunning = true;
 
-    public UdpListener(ChatNI chatNI) throws IOException, TechnicalException {
+    public UdpListener(ChatNI chatNI) throws TechnicalException {
         this.chatNI = chatNI;
-        this.socket = new UdpSocket(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
+        try {
+            this.socket = new UdpSocket(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
+        } catch (IOException e) {
+            throw new TechnicalException("Impossible de lancer le UDPListener : " + e.getMessage());
+        }
     }
 
     public void run()

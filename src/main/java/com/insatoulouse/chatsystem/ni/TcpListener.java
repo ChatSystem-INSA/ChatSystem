@@ -1,5 +1,7 @@
 package com.insatoulouse.chatsystem.ni;
 
+import com.insatoulouse.chatsystem.exception.TechnicalException;
+
 import java.io.IOException;
 
 /**
@@ -10,8 +12,12 @@ public class TcpListener extends Thread {
     private TcpSocket socket;
     private Boolean isRunning;
 
-    public TcpListener() throws IOException {
-        this.socket = TcpSocket.getInstance();
+    public TcpListener() throws TechnicalException {
+        try {
+            this.socket = TcpSocket.getInstance();
+        } catch (IOException e) {
+            throw new TechnicalException("Impossible de démarrer le TCPListener : " + e.getMessage());
+        }
     }
 
     public void run()

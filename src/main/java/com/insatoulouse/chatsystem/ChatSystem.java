@@ -14,16 +14,14 @@ public class ChatSystem {
     {
 
         Controller c = new Controller();
-        ChatGUI gui = new ChatGUI(c);
         try {
             ChatNI ni = new ChatNI(c);
+            ChatGUI gui = new ChatGUI(c);
             c.setChatNI(ni);
+            c.setChatGUI(gui);
         } catch (TechnicalException e) {
-            String[] nom = {"Mickael", "Hugo", "Jérémie","David","Alfred","Mr Exposito","ta maman"};
-            Random r = new Random();
-            gui.addMessage(new MessageSystem("Une erreur fortuite vient de se produire par la faute de "+nom[r.nextInt(nom.length)]+". Merci de lui réserver le châtiment à la mesure de votre déconvenue."));
+            e.printStackTrace();
         }
-        c.setChatGUI(gui);
     }
 
 }
