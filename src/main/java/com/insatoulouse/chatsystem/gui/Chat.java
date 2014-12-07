@@ -4,6 +4,8 @@ import com.insatoulouse.chatsystem.model.Message;
 import com.insatoulouse.chatsystem.model.MessageNetwork;
 import com.insatoulouse.chatsystem.model.RemoteUser;
 import com.insatoulouse.chatsystem.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
@@ -17,23 +19,66 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Created by david on 06/12/14.
+ * Main chat panel
  */
 public class Chat {
 
-    private JPanel panel1;
-    private JList<MessageNetwork> messagelist;
-    private JList<RemoteUser> userlist;
-    private JTextField messageField;
-    private JButton logOutButton;
-    private JLabel nbUser;
-    private JLabel to;
-    private JLabel username;
-    private DefaultListModel<RemoteUser> users = new DefaultListModel<RemoteUser>();
-    private DefaultListModel<MessageNetwork> messages = new DefaultListModel<MessageNetwork>();
-    private RemoteUser currentChatuser;
+    /**
+     * Logger
+     */
+    private static final Logger l = LogManager.getLogger(Chat.class.getName());
+
+    /**
+     * Facade to communicate with controller
+     */
     private ChatGUI chatGUI;
 
+    /**
+     * Current conversation user
+     * Can be null
+     */
+    private RemoteUser currentChatuser;
+
+    /**
+     * Main panel
+     */
+    private JPanel panel1;
+
+    /**
+     * On right side : message list
+     */
+    private JList<MessageNetwork> messagelist;
+
+    /**
+     * ListModel of messagelist
+     * @see this.messagelist
+     */
+    private DefaultListModel<MessageNetwork> messages = new DefaultListModel<MessageNetwork>();
+
+    private JTextField messageField;
+    private JLabel to;
+
+    /**
+     * On left side : user list
+     */
+    private JList<RemoteUser> userlist;
+
+    /**
+     * ListModel of userlist
+     * @see this.userlist
+     */
+    private DefaultListModel<RemoteUser> users = new DefaultListModel<RemoteUser>();
+
+    private JButton logOutButton;
+    private JLabel nbUser;
+    private JLabel username;
+
+    /**
+     * Initialize default view of chat panel
+     *
+     * @param chatGUI facade to communicate with controller
+     * @param localUser current local user
+     */
     public Chat(ChatGUI chatGUI, User localUser) {
         this.chatGUI = chatGUI;
 
@@ -82,16 +127,18 @@ public class Chat {
 
         logOutButton.setBorder(null);
         logOutButton.addMouseListener(new MouseAdapter() {
+            public final Color NORMAL = new Color(235, 235, 237);
+            public final Color HOVER = new Color(213, 213, 215);
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                logOutButton.setBackground(new Color(213, 213, 215));
+                logOutButton.setBackground(HOVER);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                logOutButton.setBackground(new Color(235, 235, 237));
+                logOutButton.setBackground(NORMAL);
             }
         });
         logOutButton.addActionListener(new ActionListener() {
@@ -120,32 +167,16 @@ public class Chat {
         });
     }
 
-    public void addUser(RemoteUser u){
-        users.addElement(u);
-        if(currentChatuser == null){
-            switchCurrentChatUser(u);
-        }
-    }
-
-    public void removeUser(RemoteUser u){
-        users.removeElement(u);
-        if(!users.isEmpty()){
-            switchCurrentChatUser(users.get(0));
-        }
-    }
-
-    public void newMessage(MessageNetwork m ){
-        if(m.getUser().equals(currentChatuser)){
-            messages.addElement(m);
-        }
-        userlist.repaint();
-    }
-    public JPanel getPanel() {
-        return panel1;
-    }
-
+    /**
+     * To switch message in messagelist when currentChatuser change
+     *
+     * @see this.currentChatuser
+     * @param u new user
+     */
     private void switchCurrentChatUser(RemoteUser u){
         if(!u.equals(currentChatuser)){
+            l.trace("Switch chat to "+u.getName());
+
             currentChatuser = u;
             messages.removeAllElements();
             for(MessageNetwork m : u.getMessages()){
@@ -157,15 +188,61 @@ public class Chat {
 
     }
 
+    /**
+     * Actualize number of connected user
+     */
     private void refreshNbUser(){
         nbUser.setText(users.getSize()+" users connected");
     }
 
+    /**
+     * Format string for JLabel To
+     * @see this.to
+     * @param u string
+     */
     private void setTo(String u ){
         to.setText("To: "+u);
     }
 
-    public static void main(String[] args) {
-
+    /**
+     * New user in userlist
+     * @param u user added
+     */
+    public void addUser(RemoteUser u){
+        users.addElement(u);
+        if(currentChatuser == null){
+            switchCurrentChatUser(u);
+        }
     }
+
+    /**
+     * Remove user in userlist
+     * @param u user deleted
+     */
+    public void removeUser(RemoteUser u){
+        users.removeElement(u);
+        if(!users.isEmpty()){
+            switchCurrentChatUser(users.get(0));
+        }
+    }
+
+    /**
+     * New incoming message
+     * @param m incoming message
+     */
+    public void newMessage(MessageNetwork m ){
+        if(m.getUser().equals(currentChatuser)){
+            messages.addElement(m);
+        }
+        userlist.repaint();
+    }
+
+    /**
+     * Get MainPanel
+     * @return JPanel
+     */
+    public JPanel getPanel() {
+        return panel1;
+    }
+
 }

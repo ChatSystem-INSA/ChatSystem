@@ -266,7 +266,8 @@ public class Controller {
 
     public void processExit() {
         processDisconnect();
-        chatNI.exit();
+        if(chatNI != null)
+            chatNI.exit();
         System.exit(0);
     }
 
