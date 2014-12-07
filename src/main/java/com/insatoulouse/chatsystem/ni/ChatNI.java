@@ -29,15 +29,11 @@ public class ChatNI {
 
     public ChatNI(Controller c) throws TechnicalException {
         this.controller = c;
-        try {
-            this.tcpListener = new TcpListener();
-            this.udpListener = new UdpListener(this);
-            this.udpListener.start();
-            this.invoker = new NetworkInvoker();
-            this.invoker.start();
-        } catch (IOException e) {
-            l.error("Network connection error",e);
-        }
+        this.tcpListener = new TcpListener();
+        this.udpListener = new UdpListener(this);
+        this.udpListener.start();
+        this.invoker = new NetworkInvoker();
+        this.invoker.start();
     }
 
     public void processPacket(DatagramPacket packet) {
