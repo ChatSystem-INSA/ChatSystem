@@ -2,15 +2,21 @@ package com.insatoulouse.chatsystem;
 
 
 import com.insatoulouse.chatsystem.exception.TechnicalException;
+import com.insatoulouse.chatsystem.gui.Chat;
 import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.model.*;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
+import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Controller {
 
@@ -36,15 +42,14 @@ public class Controller {
                 User local = new User(true, username, InetAddress.getLocalHost());
                 this.chatNI.sendHello(local);
                 this.users.add(local);
-                chatGUI.addMessage(new MessageSystem("Now connected as " + username + " !"));
                 chatGUI.setLocalUser(local);
             } catch (Exception e) {
                 l.error("unable to connect", e);
-                chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "Unable to connect ..."));
+                //chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "Unable to connect ..."));
             }
         } else {
             l.debug("already connected");
-            this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're already connected"));
+            //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're already connected"));
         }
 
     }
@@ -61,28 +66,27 @@ public class Controller {
         }
         else{
             l.debug("not already connected");
-            this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
+            //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
         }
     }
 
-    public void processSendMessage(String user, String mess) {
+    public void processSendMessage(RemoteUser u, String mess) {
         if(isConnected())
         {
-            User u = getUserByUsername(user);
-            if(u != null)
+            if(u != null )
             {
                 try {
                     this.chatNI.sendMessage(u, mess);
-                    this.chatGUI.addMessage(new MessageNetwork(MessageNetwork.OUT, u, mess));
+                    this.chatGUI.newMessage(new MessageNetwork(MessageNetwork.OUT, u, mess));
                 } catch (TechnicalException e) {
-                    this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "Unable to send message, please retry"));
+                    //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "Unable to send message, please retry"));
                 }
             } else {
-                this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "User not existing - try 'list'"));
+                //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "User not existing - try 'list'"));
             }
         } else {
             l.debug("not connected.");
-            this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
+            //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
         }
     }
 
@@ -92,7 +96,7 @@ public class Controller {
     {
         if(isConnected())
         {
-            User u = new User(false, messHello.getUserName(), addr);
+            RemoteUser u = new RemoteUser(false, messHello.getUserName(), addr);
             if(!userExists(u))
             {
                 this.addUser(u);
@@ -113,12 +117,12 @@ public class Controller {
     {
         if(isConnected())
         {
-            User n = new User(false, mess.getUserName(), addr);
+            RemoteUser n = new RemoteUser(false, mess.getUserName(), addr);
             if(!userExists(n))
             {
                 this.addUser(n);
             } else {
-                l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + mess.getUserName());
+                l.error("Un utilisateur existe déjà avec cette adresse IP : " + addr.toString() + " ou le pseudo : " + mess.getUserName());
 
             }
         } else {
@@ -130,8 +134,8 @@ public class Controller {
         if(isConnected())
         {
             User u = getUserByAddr(addr);
-            if(u != null){
-                this.removeUser(u);
+            if(u != null && u instanceof RemoteUser){
+                this.removeUser((RemoteUser) u);
             }
             else{
                 l.debug("Unknown "+addr.toString());
@@ -146,36 +150,38 @@ public class Controller {
         if(isConnected())
         {
             User u = getUserByAddr(addr);
-            if(u != null && !u.equals(getLocalUser()))
+            if(u != null && u instanceof RemoteUser)
             {
-                this.chatGUI.addMessage(new MessageNetwork(u, message.getMessageData()));
+                this.chatGUI.newMessage(new MessageNetwork((RemoteUser)u, message.getMessageData()));
                 // TODO: send messageAck
             } else {
-                l.debug("uknown user or local user : " + addr.toString());
+                l.debug("unknown user or local user : " + addr.toString());
             }
         } else {
             l.debug("not connected, do nothing");
         }
     }
 
-    private void addUser(User u)
+    private void addUser(RemoteUser u)
     {
         this.users.add(u);
         l.debug("New user : " + u.toString());
-        chatGUI.addMessage(new MessageSystem(u.getName() + " connected !"));
+        chatGUI.addUser(u);
+        //chatGUI.addMessage(new MessageSystem(u.getName() + " connected !"));
     }
 
-    private void removeUser(User u)
+    private void removeUser(RemoteUser u)
     {
         this.users.remove(u);
+        chatGUI.removeUser(u);
         l.debug("Remove user : " + u.toString());
-        chatGUI.addMessage(new MessageSystem(u.getName() + " disconnected."));
+        //chatGUI.addMessage(new MessageSystem(u.getName() + " disconnected."));
     }
 
     private void flushUsers()
     {
-        chatGUI.addMessage(new MessageSystem("You're now disconnected."));
-        chatGUI.setLocalUser(null);
+        //chatGUI.addMessage(new MessageSystem("You're now disconnected."));
+        //chatGUI.setLocalUser(null);
         this.users.clear();
     }
 

@@ -1,9 +1,7 @@
 package com.insatoulouse.chatsystem.gui;
 
 import com.insatoulouse.chatsystem.Controller;
-import com.insatoulouse.chatsystem.model.DisplayMessage;
-import com.insatoulouse.chatsystem.model.MessageSystem;
-import com.insatoulouse.chatsystem.model.User;
+import com.insatoulouse.chatsystem.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,93 +10,61 @@ import java.util.Arrays;
 
 public class ChatGUI {
 
-    private static final Logger l = LogManager.getLogger(ChatGUI.class.getName());
-
-    public static final String COMMAND_CONNECT = "connect";
-    public static final String COMMAND_EXIT = "exit";
-    public static final String COMMAND_QUIT = "quit";
-    public static final String COMMAND_LIST = "list";
-    public static final String COMMAND_HELP = "help";
-    public static final String COMMAND_SEND = "message";
-
-    private final ChatFrame chatFrame;
     private Controller controller;
-    private DefaultListModel<DisplayMessage> listMessage = new DefaultListModel<DisplayMessage>();
+    private Chat chat;
+    private Login dialog = new Login(this);
+    private JFrame frame;
 
-    public ChatGUI(Controller c) {
-        this.controller = c;
-        chatFrame = new ChatFrame(this);
+    public ChatGUI(Controller controller) {
+        this.controller = controller;
+        controller.setChatGUI(this);
+        dialog.pack();
+        dialog.setVisible(true);
     }
 
-    public void executeCommand(String text) {
-        l.debug("Command " + text);
-        String[] s = text.split(" ");
-        if(s.length > 0){
-            commandToController(s[0], Arrays.copyOfRange(s, 1, s.length));
-        }
-        else{
-            l.debug("Bad command " + text);
-        }
+
+    public void sendMessage(RemoteUser currentChatuser, String text) {
+        controller.processSendMessage(currentChatuser,text);
     }
 
-    private void commandToController(String command, String [] args) {
-        if (COMMAND_CONNECT.equals(command) && args.length == 1) {
-            this.controller.processConnection(args[0]);
-        } else if (COMMAND_EXIT.equals(command) && args.length == 0) {
-            this.sendExit();
-        } else if (COMMAND_QUIT.equals(command) && args.length == 0) {
-            this.controller.processDisconnect();
-        } else if (COMMAND_LIST.equals(command) && args.length == 0) {
-            if (this.controller.isConnected()) {
-                addMessage(new MessageSystem("List of users :"));
-                for (User u : this.controller.getUsers()) {
-                    addMessage(new MessageSystem("    - " + u.getName() + "@" + u.getIp().toString()));
-                }
-            } else {
-                this.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
-            }
-        } else if (COMMAND_SEND.equals(command) && args.length >= 2) {
+    public void sendUsername(String text) {
+        controller.processConnection(text);
+    }
 
-            String mess = args[1];
-            String[] messRaw = Arrays.copyOfRange(args, 2, args.length);
-            for(String s : messRaw)
-            {
-                mess += " " + s;
-            }
-            this.controller.processSendMessage(args[0], mess);
-        } else if(COMMAND_HELP.equals(command) && args.length == 0)
-        {
-            addMessage(new MessageSystem("List of commands :"));
-            addMessage(new MessageSystem("   help - print this help"));
-            addMessage(new MessageSystem("   connect <username> - connect to the chat with <username> as name"));
-            addMessage(new MessageSystem("   message <username> <message>"));
-            addMessage(new MessageSystem("   quit - disconnect of chat"));
-            addMessage(new MessageSystem("   list - print list of connected users"));
-            addMessage(new MessageSystem("   exit - exit the program"));
-        }
-        else{
-            addMessage(new MessageSystem(MessageSystem.ERROR, "Command "+command + " is invalid. Try again or try help."));
-            l.debug("Bad command " + command);
+    public void sendLogout() {
+        controller.processDisconnect();
+        frame.dispose();
+
+        dialog = new Login(this);
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+
+    public void newMessage(MessageNetwork messageNetwork) {
+        if(chat != null){
+            chat.newMessage(messageNetwork);
         }
     }
 
-    public void addMessage(DisplayMessage m){
-        listMessage.addElement(m);
+    public void setLocalUser(User local) {
+        chat = new Chat(this,local);
+        frame = new JFrame("Chat");
+        frame.setContentPane(this.chat.getPanel());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+
     }
 
-    public void removeMessage(DisplayMessage m){
-        listMessage.removeElement(m);
+    public void addUser(RemoteUser u) {
+        if(chat != null){
+            chat.addUser(u);
+        }
     }
 
-    public DefaultListModel<DisplayMessage> getListMessage(){
-        return listMessage;
-    }
-
-    public void sendExit(){
-        controller.processExit();
-    }
-
-    public void setLocalUser(User u){
-        chatFrame.onLocalUserChange(u);
+    public void removeUser(RemoteUser u) {
+        if(chat != null){
+            chat.removeUser(u);
+        }
     }
 }

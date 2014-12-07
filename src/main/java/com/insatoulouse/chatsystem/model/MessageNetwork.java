@@ -10,19 +10,21 @@ public class MessageNetwork implements DisplayMessage {
     public static final int OUT = 2;
 
     private int type;
-    private User user;
+    private RemoteUser user;
     private String message;
 
-    public MessageNetwork(User u, String message)
+    public MessageNetwork(RemoteUser u, String message)
     {
         this.type = MessageNetwork.IN;
         this.user = u;
+        u.addMessage(this);
         this.message = message;
     }
 
-    public MessageNetwork(int type, User u, String message) {
+    public MessageNetwork(int type, RemoteUser u, String message) {
         this.type = type;
         this.user = u;
+        u.addMessage(this);
         this.message = message;
     }
 
@@ -30,7 +32,7 @@ public class MessageNetwork implements DisplayMessage {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(RemoteUser user) {
         this.user = user;
     }
 
@@ -48,5 +50,12 @@ public class MessageNetwork implements DisplayMessage {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageNetwork{" +
+                "message='" + message + '\'' +
+                '}';
     }
 }
