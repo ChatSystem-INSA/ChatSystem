@@ -36,11 +36,12 @@ public class Controller {
     /*
     * From GUI
     * */
-    public void processConnection(String username)
+    public void processConnection(String username, InetAddress addr)
     {
         if(!isConnected())
         {
             try {
+                this.chatNI.start(addr);
                 User local = new User(true, username, InetAddress.getLocalHost());
                 this.chatNI.sendHello(local);
                 synchronized(users){

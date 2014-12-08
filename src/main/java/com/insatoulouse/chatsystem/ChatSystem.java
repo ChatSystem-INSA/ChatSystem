@@ -13,13 +13,9 @@ public class ChatSystem {
     public ChatSystem()
     {
         Controller c = new Controller();
-        try {
-            ChatNI ni = new ChatNI(c);
-            c.setChatNI(ni);
-            new ChatGUI(c);
-        } catch (TechnicalException e) {
-            e.printStackTrace();
-        }
+        ChatNI ni = new ChatNI(c);
+        c.setChatNI(ni);
+        new ChatGUI(c);
     }
 
 }

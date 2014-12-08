@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class ChatGUI implements WindowListener{
@@ -42,9 +43,9 @@ public class ChatGUI implements WindowListener{
         controller.processSendMessage(currentChatuser,text);
     }
 
-    public void sendUsername(String text) {
+    public void sendUsername(String text, InetAddress addr) {
         l.trace("Send username connection : "+text);
-        controller.processConnection(text);
+        controller.processConnection(text,addr);
     }
 
     public void sendLogout() {

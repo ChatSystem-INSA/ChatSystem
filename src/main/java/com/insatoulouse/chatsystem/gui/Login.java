@@ -39,7 +39,7 @@ public class Login extends JDialog {
     }
 
     private void onOK() {
-        chatGUI.sendUsername(textField1.getText());
+        chatGUI.sendUsername(textField1.getText(), (InetAddress)comboBox1.getSelectedItem());
         l.trace("Dispose dialog connection");
         dispose();
     }
