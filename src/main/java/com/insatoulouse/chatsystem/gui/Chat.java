@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
  * Main chat panel
@@ -77,15 +78,21 @@ public class Chat {
      * Initialize default view of chat panel
      *
      * @param chatGUI facade to communicate with controller
-     * @param localUser current local user
+     * @param lastusers current users
      */
-    public Chat(ChatGUI chatGUI, User localUser) {
+    public Chat(ChatGUI chatGUI, ArrayList<User> lastusers) {
         this.chatGUI = chatGUI;
 
         disableChat();
         setTo("");
-        username.setText(localUser.getName());
-
+        for(User u : lastusers){
+            if(u instanceof RemoteUser){
+                users.addElement((RemoteUser)u);
+            }
+            else{
+                username.setText(u.getName());
+            }
+        }
         users.addListDataListener(new ListDataListener() {
             @Override
             public void intervalAdded(ListDataEvent e) {

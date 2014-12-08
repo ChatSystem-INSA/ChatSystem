@@ -41,8 +41,10 @@ public class Controller {
             try {
                 User local = new User(true, username, InetAddress.getLocalHost());
                 this.chatNI.sendHello(local);
-                this.users.add(local);
-                chatGUI.setLocalUser(local);
+                synchronized(users){
+                    this.users.add(local);
+                }
+                chatGUI.startChat(getUsers());
             } catch (Exception e) {
                 l.error("unable to connect", e);
                 //chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "Unable to connect ..."));
@@ -162,7 +164,7 @@ public class Controller {
         }
     }
 
-    private void addUser(RemoteUser u)
+    private synchronized void addUser(RemoteUser u)
     {
         this.users.add(u);
         l.debug("New user : " + u.toString());
@@ -170,7 +172,7 @@ public class Controller {
         //chatGUI.addMessage(new MessageSystem(u.getName() + " connected !"));
     }
 
-    private void removeUser(RemoteUser u)
+    private synchronized void removeUser(RemoteUser u)
     {
         this.users.remove(u);
         chatGUI.removeUser(u);
@@ -178,7 +180,7 @@ public class Controller {
         //chatGUI.addMessage(new MessageSystem(u.getName() + " disconnected."));
     }
 
-    private void flushUsers()
+    private synchronized void flushUsers()
     {
         //chatGUI.addMessage(new MessageSystem("You're now disconnected."));
         //chatGUI.setLocalUser(null);
@@ -205,7 +207,7 @@ public class Controller {
         return this.userExists(u.getName(), u.getIp());
     }
 
-    private User getUserByAddr(InetAddress addr)
+    private synchronized User getUserByAddr(InetAddress addr)
     {
         User ret = null;
         for(User u: users)
@@ -219,7 +221,7 @@ public class Controller {
         return ret;
     }
 
-    private User getUserByUsername(String username)
+    private synchronized User getUserByUsername(String username)
     {
         User ret = null;
         for(User u: users)
@@ -233,7 +235,7 @@ public class Controller {
         return ret;
     }
 
-    private User getLocalUser()
+    private synchronized User getLocalUser()
     {
         User ret = null;
         for(User u : users)
@@ -260,7 +262,7 @@ public class Controller {
         this.chatGUI = chatGUI;
     }
 
-    public ArrayList<User> getUsers() {
+    public synchronized ArrayList<User> getUsers() {
         return users;
     }
 
