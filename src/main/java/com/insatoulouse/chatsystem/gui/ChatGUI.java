@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ChatGUI implements WindowListener{
@@ -64,8 +65,8 @@ public class ChatGUI implements WindowListener{
         }
     }
 
-    public void setLocalUser(User local) {
-        chat = new Chat(this,local);
+    public void startChat(ArrayList<User> users) {
+        chat = new Chat(this,users);
         frame = new JFrame("Chat");
         frame.setContentPane(this.chat.getPanel());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
