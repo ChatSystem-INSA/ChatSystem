@@ -16,10 +16,10 @@ public class ChatSystem {
         try {
             ChatNI ni = new ChatNI(c);
             c.setChatNI(ni);
+            new ChatGUI(c);
         } catch (TechnicalException e) {
             e.printStackTrace();
         }
-        new ChatGUI(c);
     }
 
 }
