@@ -1,6 +1,7 @@
 package com.insatoulouse.chatsystem.gui;
 
 import com.insatoulouse.chatsystem.Controller;
+import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +10,6 @@ import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ChatGUI implements WindowListener{
 
@@ -26,10 +26,14 @@ public class ChatGUI implements WindowListener{
         controller.setChatGUI(this);
 
         // Show dialog connection
-        dialog = new Login(this);
-        dialog.pack();
-        dialog.setTitle(TITLE);
-        dialog.setVisible(true);
+        try {
+            dialog = new Login(this, controller.getNetworkBroadcastAddresses());
+            dialog.pack();
+            dialog.setTitle(TITLE);
+            dialog.setVisible(true);
+        } catch (TechnicalException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -50,10 +54,14 @@ public class ChatGUI implements WindowListener{
         frame.dispose();
 
         // Show dialog connection
-        dialog = new Login(this);
-        dialog.pack();
-        dialog.setTitle(TITLE);
-        dialog.setVisible(true);
+        try {
+            dialog = new Login(this, controller.getNetworkBroadcastAddresses());
+            dialog.pack();
+            dialog.setTitle(TITLE);
+            dialog.setVisible(true);
+        } catch (TechnicalException e) {
+            e.printStackTrace();
+        }
     }
 
     public void newMessage(MessageNetwork messageNetwork) {

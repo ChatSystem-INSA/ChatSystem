@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.net.InetAddress;
+import java.util.ArrayList;
 
 public class Login extends JDialog {
 
@@ -13,9 +15,10 @@ public class Login extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JTextField textField1;
+    private JComboBox<InetAddress> comboBox1;
     private ChatGUI chatGUI;
 
-    public Login(ChatGUI chatGUI) {
+    public Login(ChatGUI chatGUI, ArrayList<InetAddress> networkBroadcastAddresses) {
         l.trace("Open dialog connection");
 
         this.chatGUI = chatGUI;
@@ -27,6 +30,11 @@ public class Login extends JDialog {
                 onOK();
             }
         });
+        DefaultComboBoxModel<InetAddress> model = new DefaultComboBoxModel<InetAddress>();
+        for(InetAddress addr : networkBroadcastAddresses) {
+            model.addElement(addr);
+        }
+        comboBox1.setModel(model);
         this.addWindowListener(chatGUI);
     }
 
@@ -35,5 +43,7 @@ public class Login extends JDialog {
         l.trace("Dispose dialog connection");
         dispose();
     }
+
+
 
 }
