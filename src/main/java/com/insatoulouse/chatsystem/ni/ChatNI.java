@@ -44,9 +44,12 @@ public class ChatNI {
     }
 
     public void exit() {
-        tcpListener.close();
-        udpListener.close();
-        invoker.close();
+        if(tcpListener != null)
+            tcpListener.close();
+        if(udpListener != null)
+            udpListener.close();
+        if(udpListener != null)
+            invoker.close();
     }
 
     public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException
