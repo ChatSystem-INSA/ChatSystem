@@ -169,6 +169,11 @@ public class Controller {
         }
     }
 
+    public void processMessageAck(MessageAck mess, InetAddress addr)
+    {
+        l.debug("not implemented");
+    }
+
     public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException
     {
         return this.chatNI.getNetworkBroadcastAddresses();

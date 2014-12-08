@@ -112,6 +112,9 @@ public class ChatNI {
             } else if(message instanceof Message)
             {
                 this.controller.processMessage((Message) message, packet.getAddress());
+            } else if(message instanceof MessageAck)
+            {
+                this.controller.processMessageAck((MessageAck) message, packet.getAddress());
             }
         } catch (PacketException e) {
             l.debug("message JSON non valide : "+data,e);
