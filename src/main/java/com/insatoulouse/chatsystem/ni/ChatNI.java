@@ -9,10 +9,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.lang.reflect.Array;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 /**
  * Created by tlk on 27/11/14.
@@ -34,6 +35,48 @@ public class ChatNI {
         this.udpListener.start();
         this.invoker = new NetworkInvoker();
         this.invoker.start();
+    }
+
+    public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException
+    {
+        ArrayList<InetAddress> ret = new ArrayList<InetAddress>();
+        try {
+            Enumeration list;
+            list = NetworkInterface.getNetworkInterfaces();
+
+            while(list.hasMoreElements())
+            {
+                NetworkInterface iface = (NetworkInterface) list.nextElement();
+                if(iface == null)
+                {
+                    continue;
+                }
+
+                if(!iface.isLoopback() && iface.isUp())
+                {
+                    Iterator it = iface.getInterfaceAddresses().iterator();
+                    while(it.hasNext())
+                    {
+                        InterfaceAddress address = (InterfaceAddress) it.next();
+                        if(address == null)
+                        {
+                            continue;
+                        }
+
+                        InetAddress broadcast = (InetAddress) address.getBroadcast();
+                        if(broadcast != null)
+                        {
+                            ret.add(broadcast);
+                        }
+
+                    }
+                }
+            }
+
+        } catch (SocketException e) {
+            throw new TechnicalException("Impossible de récuperer la liste des interfaces");
+        }
+        return ret;
     }
 
     public void processPacket(DatagramPacket packet) {

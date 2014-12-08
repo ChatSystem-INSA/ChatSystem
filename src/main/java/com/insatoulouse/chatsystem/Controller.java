@@ -6,12 +6,14 @@ import com.insatoulouse.chatsystem.gui.Chat;
 import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.model.*;
 import com.insatoulouse.chatsystem.ni.ChatNI;
+import com.insatoulouse.chatsystem.ni.NetworkInvoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.lang.reflect.Array;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -160,6 +162,11 @@ public class Controller {
         } else {
             l.debug("not connected, do nothing");
         }
+    }
+
+    public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException
+    {
+        return this.chatNI.getNetworkBroadcastAddresses();
     }
 
     private void addUser(RemoteUser u)
