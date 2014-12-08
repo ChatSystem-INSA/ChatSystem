@@ -82,6 +82,7 @@ public class Chat {
     public Chat(ChatGUI chatGUI, User localUser) {
         this.chatGUI = chatGUI;
 
+        disableChat();
         setTo("");
         username.setText(localUser.getName());
 
@@ -175,6 +176,7 @@ public class Chat {
      */
     private void switchCurrentChatUser(RemoteUser u){
         if(!u.equals(currentChatuser)){
+            messageField.setEnabled(true);
             l.trace("Switch chat to "+u.getName());
 
             currentChatuser = u;
@@ -186,6 +188,16 @@ public class Chat {
             userlist.setSelectedValue(u, true);
         }
 
+    }
+
+    /**
+     * Disable chat when we have no remote user
+     */
+    private void disableChat(){
+        currentChatuser = null;
+        messageField.setEnabled(false);
+        setTo("");
+        messages.removeAllElements();
     }
 
     /**
@@ -223,6 +235,9 @@ public class Chat {
         users.removeElement(u);
         if(!users.isEmpty()){
             switchCurrentChatUser(users.get(0));
+        }
+        else{
+            disableChat();
         }
     }
 

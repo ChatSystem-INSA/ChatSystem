@@ -86,6 +86,7 @@ public class ChatGUI implements WindowListener{
     public void removeUser(RemoteUser u) {
         if(chat != null){
             chat.removeUser(u);
+            l.trace("Remove user "+ u.getName() );
         }
         else{
             l.error("Invalid state, chat panel is null.");
