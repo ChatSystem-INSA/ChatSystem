@@ -7,6 +7,7 @@ import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.model.*;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 import com.insatoulouse.chatsystem.ni.NetworkInvoker;
+import com.insatoulouse.chatsystem.utils.Sound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -157,6 +158,7 @@ public class Controller {
             User u = getUserByAddr(addr);
             if(u != null && u instanceof RemoteUser)
             {
+                Sound.playSound(Sound.URL_SOUND_MSG);
                 this.chatGUI.newMessage(new MessageNetwork((RemoteUser) u, message.getMessageData()));
                 try {
                     this.chatNI.sendMessageAck(u, message.getMessageNumber());
