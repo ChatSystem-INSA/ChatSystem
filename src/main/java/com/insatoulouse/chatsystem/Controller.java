@@ -160,7 +160,11 @@ public class Controller {
             {
                 Sound.playSound(Sound.URL_SOUND_MSG);
                 this.chatGUI.newMessage(new MessageNetwork((RemoteUser) u, message.getMessageData()));
-                // TODO: send messageAck
+                try {
+                    this.chatNI.sendMessageAck(u, message.getMessageNumber());
+                } catch (TechnicalException e) {
+                    l.error("unable to send messageAck");
+                }
             } else {
                 l.debug("unknown user or local user : " + addr.toString());
             }

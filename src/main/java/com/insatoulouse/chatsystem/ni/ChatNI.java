@@ -147,6 +147,12 @@ public class ChatNI {
         sendUnicast(p, u.getIp());
     }
 
+    public void sendMessageAck(User u, int message_id) throws  TechnicalException
+    {
+        Packet p = new MessageAck(message_id);
+        sendUnicast(p, u.getIp());
+    }
+
     private void sendUnicast(Packet p, InetAddress addr) throws TechnicalException
     {
         PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
