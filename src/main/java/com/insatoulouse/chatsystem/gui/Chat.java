@@ -73,6 +73,7 @@ public class Chat {
     private JButton logOutButton;
     private JLabel nbUser;
     private JLabel username;
+    private JScrollPane userlistScrollPane;
 
     /**
      * Initialize default view of chat panel
@@ -159,6 +160,7 @@ public class Chat {
         messagelist.setModel(messages);
         messagelist.setCellRenderer(new ListCellRenderer<MessageNetwork>() {
             private MessageRow row = new MessageRow();
+
             @Override
             public Component getListCellRendererComponent(JList<? extends MessageNetwork> list, MessageNetwork value, int index, boolean isSelected, boolean cellHasFocus) {
                 row.setTextMessage(value);
@@ -257,6 +259,10 @@ public class Chat {
             messages.addElement(m);
         }
         userlist.repaint();
+        int lastIndex = messages.getSize() - 1;
+        if (lastIndex >= 0) {
+            messagelist.ensureIndexIsVisible(lastIndex);
+        }
     }
 
     /**

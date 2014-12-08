@@ -9,7 +9,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <scrollpane id="c5f7a">
+      <scrollpane id="c5f7a" binding="userlistScrollPane">
         <constraints border-constraint="West"/>
         <properties>
           <focusable value="false"/>
