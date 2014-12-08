@@ -5,8 +5,8 @@
       <xy x="48" y="54" width="436" height="297"/>
     </constraints>
     <properties>
-      <minimumSize width="200" height="119"/>
-      <preferredSize width="200" height="119"/>
+      <minimumSize width="300" height="119"/>
+      <preferredSize width="300" height="119"/>
     </properties>
     <border type="none"/>
     <children>
@@ -16,7 +16,10 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <gridbag weightx="1.0" weighty="0.0"/>
         </constraints>
-        <properties/>
+        <properties>
+          <minimumSize width="200" height="40"/>
+          <preferredSize width="200" height="40"/>
+        </properties>
         <border type="none"/>
         <children>
           <hspacer id="98af6">
@@ -49,7 +52,10 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="1.0"/>
         </constraints>
-        <properties/>
+        <properties>
+          <minimumSize width="200" height="70"/>
+          <preferredSize width="200" height="70"/>
+        </properties>
         <border type="empty">
           <size top="10" left="10" bottom="10" right="10"/>
         </border>
