@@ -143,7 +143,7 @@ public class Controller {
                 this.removeUser((RemoteUser) u);
             }
             else{
-                l.debug("Unknown "+addr.toString());
+                l.debug("Unknown " + addr.toString());
             }
         }
         else{
@@ -157,7 +157,7 @@ public class Controller {
             User u = getUserByAddr(addr);
             if(u != null && u instanceof RemoteUser)
             {
-                this.chatGUI.newMessage(new MessageNetwork((RemoteUser)u, message.getMessageData()));
+                this.chatGUI.newMessage(new MessageNetwork((RemoteUser) u, message.getMessageData()));
                 // TODO: send messageAck
             } else {
                 l.debug("unknown user or local user : " + addr.toString());
@@ -165,6 +165,11 @@ public class Controller {
         } else {
             l.debug("not connected, do nothing");
         }
+    }
+
+    public void processMessageAck(MessageAck mess, InetAddress addr)
+    {
+        l.debug("not implemented");
     }
 
     public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException
