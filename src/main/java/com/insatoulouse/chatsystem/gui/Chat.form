@@ -9,26 +9,6 @@
     </properties>
     <border type="none"/>
     <children>
-      <scrollpane id="4e7c">
-        <constraints border-constraint="Center"/>
-        <properties>
-          <focusable value="false"/>
-          <minimumSize width="200" height="18"/>
-          <preferredSize width="400" height="128"/>
-        </properties>
-        <border type="empty"/>
-        <children>
-          <component id="48145" class="javax.swing.JList" binding="messagelist">
-            <constraints/>
-            <properties>
-              <background color="-1"/>
-              <focusable value="false"/>
-              <minimumSize width="200" height="0"/>
-              <preferredSize width="200" height="0"/>
-            </properties>
-          </component>
-        </children>
-      </scrollpane>
       <scrollpane id="c5f7a">
         <constraints border-constraint="West"/>
         <properties>
@@ -41,7 +21,7 @@
             <constraints/>
             <properties>
               <background color="-1315859"/>
-              <doubleBuffered value="false"/>
+              <doubleBuffered value="true"/>
               <focusable value="false"/>
             </properties>
           </component>
@@ -169,6 +149,22 @@
           </grid>
         </children>
       </grid>
+      <scrollpane id="e8193">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <focusable value="false"/>
+        </properties>
+        <border type="empty"/>
+        <children>
+          <component id="4ebf8" class="javax.swing.JList" binding="messagelist">
+            <constraints/>
+            <properties>
+              <background color="-1"/>
+              <focusable value="false"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>
