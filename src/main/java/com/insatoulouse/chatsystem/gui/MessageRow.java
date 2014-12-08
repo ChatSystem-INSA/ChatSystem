@@ -10,17 +10,17 @@ import javax.swing.text.StyleConstants;
 import java.awt.*;
 
 /**
- * Created by david on 07/12/14.
+ * Format message row on JList
  */
 public class MessageRow {
 
     private JPanel panel1;
     private JTextArea textMessage;
 
-
     public JPanel getPanel() {
         return panel1;
     }
+
     public void setTextMessage(MessageNetwork m){
 
         textMessage.setText(m.getMessage());
