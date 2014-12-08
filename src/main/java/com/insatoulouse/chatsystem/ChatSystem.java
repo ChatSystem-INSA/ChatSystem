@@ -12,7 +12,6 @@ public class ChatSystem {
 
     public ChatSystem()
     {
-
         Controller c = new Controller();
         try {
             ChatNI ni = new ChatNI(c);

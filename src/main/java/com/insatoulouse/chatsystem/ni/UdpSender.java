@@ -25,7 +25,7 @@ public class UdpSender {
         try {
             DatagramSocket s = new DatagramSocket();
             s.send(this.packet);
-            l.debug("Send : " + new String(this.packet.getData()));
+            l.debug("Send : " + new String(this.packet.getData()) + " to " + this.packet.getAddress().toString()+":"+this.packet.getPort());
         } catch (SocketException e) {
             e.printStackTrace();
         } catch (IOException e) {
