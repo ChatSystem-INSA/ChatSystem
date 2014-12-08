@@ -158,7 +158,11 @@ public class Controller {
             if(u != null && u instanceof RemoteUser)
             {
                 this.chatGUI.newMessage(new MessageNetwork((RemoteUser) u, message.getMessageData()));
-                // TODO: send messageAck
+                try {
+                    this.chatNI.sendMessageAck(u, message.getMessageNumber());
+                } catch (TechnicalException e) {
+                    l.error("unable to send messageAck");
+                }
             } else {
                 l.debug("unknown user or local user : " + addr.toString());
             }
