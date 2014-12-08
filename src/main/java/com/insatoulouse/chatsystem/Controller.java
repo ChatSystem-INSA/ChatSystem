@@ -136,7 +136,7 @@ public class Controller {
         }
     }
 
-    public void processRemoteGoodBye(InetAddress addr){
+    public void processGoodBye(InetAddress addr){
         if(isConnected())
         {
             User u = getUserByAddr(addr);
