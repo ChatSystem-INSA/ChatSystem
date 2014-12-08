@@ -7,6 +7,7 @@ import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.model.*;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 import com.insatoulouse.chatsystem.ni.NetworkInvoker;
+import com.insatoulouse.chatsystem.utils.Sound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -143,7 +144,7 @@ public class Controller {
                 this.removeUser((RemoteUser) u);
             }
             else{
-                l.debug("Unknown "+addr.toString());
+                l.debug("Unknown " + addr.toString());
             }
         }
         else{
@@ -157,7 +158,8 @@ public class Controller {
             User u = getUserByAddr(addr);
             if(u != null && u instanceof RemoteUser)
             {
-                this.chatGUI.newMessage(new MessageNetwork((RemoteUser)u, message.getMessageData()));
+                Sound.playSound(Sound.URL_SOUND_MSG);
+                this.chatGUI.newMessage(new MessageNetwork((RemoteUser) u, message.getMessageData()));
                 // TODO: send messageAck
             } else {
                 l.debug("unknown user or local user : " + addr.toString());
