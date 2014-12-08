@@ -25,16 +25,28 @@ public class ChatNI {
     private TcpListener tcpListener;
     private UdpListener udpListener;
     private NetworkInvoker invoker;
+    private InetAddress broadcastAddr;
 
     private static final Logger l = LogManager.getLogger(ChatNI.class.getName());
 
-    public ChatNI(Controller c) throws TechnicalException {
+    public ChatNI(Controller c) {
         this.controller = c;
+    }
+
+    public void start(InetAddress addr) throws TechnicalException
+    {
+        this.broadcastAddr = addr;
         this.tcpListener = new TcpListener();
         this.udpListener = new UdpListener(this);
         this.udpListener.start();
         this.invoker = new NetworkInvoker();
         this.invoker.start();
+    }
+
+    public void exit() {
+        tcpListener.close();
+        udpListener.close();
+        invoker.close();
     }
 
     public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException
@@ -150,16 +162,7 @@ public class ChatNI {
 
     private void sendBroadcast(Packet p) throws TechnicalException
     {
-        try {
-            this.sendUnicast(p, InetAddress.getByName(Config.getInstance().getProperties(Config.CONFIG_ADDRESS)));
-        } catch (UnknownHostException e) {
-            throw new TechnicalException("impossible de toper l'adresse de broadcast");
-        }
+        this.sendUnicast(p, this.broadcastAddr);
     }
 
-    public void exit() {
-        tcpListener.close();
-        udpListener.close();
-        invoker.close();
-    }
 }
