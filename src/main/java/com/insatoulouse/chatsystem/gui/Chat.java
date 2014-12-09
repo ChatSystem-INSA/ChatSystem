@@ -1,6 +1,5 @@
 package com.insatoulouse.chatsystem.gui;
 
-import com.insatoulouse.chatsystem.model.Message;
 import com.insatoulouse.chatsystem.model.MessageNetwork;
 import com.insatoulouse.chatsystem.model.RemoteUser;
 import com.insatoulouse.chatsystem.model.User;
@@ -10,8 +9,6 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

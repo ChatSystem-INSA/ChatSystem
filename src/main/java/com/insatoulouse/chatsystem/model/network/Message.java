@@ -1,7 +1,8 @@
-package com.insatoulouse.chatsystem.model;
+package com.insatoulouse.chatsystem.model.network;
 
 /**
- * Created by tlk on 05/12/14.
+ * Message class
+ * Send/receive message to/from network
  */
 public class Message extends Packet {
 

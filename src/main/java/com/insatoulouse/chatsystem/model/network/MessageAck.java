@@ -1,7 +1,8 @@
-package com.insatoulouse.chatsystem.model;
+package com.insatoulouse.chatsystem.model.network;
 
 /**
- * Created by rusty on 08/12/2014.
+ * MessageAck class
+ * Send/Receive ack message
  */
 public class MessageAck extends Packet {
 

@@ -2,24 +2,19 @@ package com.insatoulouse.chatsystem;
 
 
 import com.insatoulouse.chatsystem.exception.TechnicalException;
-import com.insatoulouse.chatsystem.gui.Chat;
 import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.model.*;
+import com.insatoulouse.chatsystem.model.network.Hello;
+import com.insatoulouse.chatsystem.model.network.HelloAck;
+import com.insatoulouse.chatsystem.model.network.Message;
+import com.insatoulouse.chatsystem.model.network.MessageAck;
 import com.insatoulouse.chatsystem.ni.ChatNI;
-import com.insatoulouse.chatsystem.ni.NetworkInvoker;
 import com.insatoulouse.chatsystem.utils.Sound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.*;
-import java.lang.reflect.Array;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 public class Controller {
 

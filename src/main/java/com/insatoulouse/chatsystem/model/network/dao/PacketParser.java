@@ -1,9 +1,7 @@
-package com.insatoulouse.chatsystem.model;
+package com.insatoulouse.chatsystem.model.network.dao;
 
 import com.insatoulouse.chatsystem.exception.PacketException;
-
-import java.io.IOException;
-import java.io.OutputStream;
+import com.insatoulouse.chatsystem.model.network.Packet;
 
 public interface PacketParser {
     public Packet read(String data) throws PacketException;

@@ -1,9 +1,10 @@
-package com.insatoulouse.chatsystem.model;
+package com.insatoulouse.chatsystem.model.network;
 
 /**
- * Created by Banana on 28/11/14.
+ * Abstract class Packet
+ * Exchange network signal
  */
-public class Packet {
+abstract public class Packet {
 
     public static final String TYPE_HELLO = "hello";
     public static final String TYPE_MESSAGE = "message";

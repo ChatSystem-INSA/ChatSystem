@@ -1,4 +1,4 @@
-package com.insatoulouse.chatsystem.model;
+package com.insatoulouse.chatsystem.model.network.dao;
 
 
 public class JsonFactory extends AbstractFactory {

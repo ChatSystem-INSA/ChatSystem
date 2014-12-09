@@ -1,7 +1,10 @@
-package com.insatoulouse.chatsystem.model;
+package com.insatoulouse.chatsystem.model.network;
 
 /**
- * Created by Banana on 28/11/14.
+ * HelloAck class
+ * Signal is sent to new user
+ * Signal is received from other user when send Hello
+ * @see Hello
  */
 public class HelloAck extends Packet {
 
@@ -10,6 +13,10 @@ public class HelloAck extends Packet {
     public HelloAck(String userName) {
         super(Packet.TYPE_HELLO_ACK);
         this.userName = userName;
+    }
+
+    public HelloAck(){
+        this("");
     }
 
     public String getUserName() {

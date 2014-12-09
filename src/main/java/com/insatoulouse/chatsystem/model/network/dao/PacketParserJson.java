@@ -1,12 +1,12 @@
-package com.insatoulouse.chatsystem.model;
+package com.insatoulouse.chatsystem.model.network.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insatoulouse.chatsystem.exception.PacketException;
+import com.insatoulouse.chatsystem.model.network.*;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class PacketParserJson implements PacketParser {
     private ObjectMapper mapper = new ObjectMapper();
