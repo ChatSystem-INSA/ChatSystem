@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.insatoulouse.chatsystem.gui.Login">
-  <grid id="cbd77" binding="contentPane" layout-manager="GridBagLayout">
+  <grid id="cbd77" binding="panel" layout-manager="GridBagLayout">
     <constraints>
       <xy x="48" y="54" width="436" height="297"/>
     </constraints>
@@ -66,6 +66,8 @@
               <gridbag weightx="0.0" weighty="0.5"/>
             </constraints>
             <properties>
+              <labelFor value="725fc"/>
+              <requestFocusEnabled value="false"/>
               <text value="Username : "/>
             </properties>
           </component>
@@ -75,6 +77,8 @@
               <gridbag weightx="0.0" weighty="0.5"/>
             </constraints>
             <properties>
+              <labelFor value="635e2"/>
+              <requestFocusEnabled value="false"/>
               <text value="Interface : "/>
             </properties>
           </component>
@@ -85,14 +89,20 @@
               </grid>
               <gridbag weightx="1.0" weighty="0.5"/>
             </constraints>
-            <properties/>
+            <properties>
+              <nextFocusableComponent value="635e2"/>
+              <requestFocusEnabled value="true"/>
+            </properties>
           </component>
           <component id="635e2" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag weightx="1.0" weighty="0.5"/>
             </constraints>
-            <properties/>
+            <properties>
+              <nextFocusableComponent value="e7465"/>
+              <requestFocusEnabled value="false"/>
+            </properties>
           </component>
         </children>
       </grid>

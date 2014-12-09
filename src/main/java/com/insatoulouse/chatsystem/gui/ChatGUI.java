@@ -1,6 +1,7 @@
 package com.insatoulouse.chatsystem.gui;
 
 import com.insatoulouse.chatsystem.Controller;
+import com.insatoulouse.chatsystem.exception.ExceptionManager;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.model.*;
 import org.apache.logging.log4j.LogManager;
@@ -20,21 +21,26 @@ public class ChatGUI implements WindowListener{
     private Controller controller;
     private Chat chat;
     private Login dialog;
-    private JFrame frame;
+    private final JFrame frame;
 
     public ChatGUI(Controller controller) {
         this.controller = controller;
         controller.setChatGUI(this);
 
+        frame = new JFrame(TITLE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.addWindowListener(this);
+
         // Show dialog connection
         try {
+            l.trace("Show dialog login");
             dialog = new Login(this, controller.getNetworkBroadcastAddresses());
-            dialog.pack();
-            dialog.setTitle(TITLE);
-            dialog.setVisible(true);
+            frame.setContentPane(dialog.getPanel());
+            frame.setSize(400,150);
         } catch (TechnicalException e) {
-            e.printStackTrace();
+            ExceptionManager.manage(e);
         }
+        frame.setVisible(true);
     }
 
 
@@ -52,20 +58,20 @@ public class ChatGUI implements WindowListener{
         l.trace("Send logout");
         // Close mainframe
         controller.processDisconnect();
-        frame.dispose();
 
         // Show dialog connection
         try {
+            l.trace("Show dialog login");
             dialog = new Login(this, controller.getNetworkBroadcastAddresses());
-            dialog.pack();
-            dialog.setTitle(TITLE);
-            dialog.setVisible(true);
+            frame.setContentPane(dialog.getPanel());
+            frame.setSize(400, 150);
         } catch (TechnicalException e) {
-            e.printStackTrace();
+            ExceptionManager.manage(e);
         }
     }
 
     public void newMessage(MessageNetwork messageNetwork) {
+        l.trace("New message to GUI "+ messageNetwork.toString());
         if(chat != null){
             chat.newMessage(messageNetwork);
         }
@@ -75,16 +81,14 @@ public class ChatGUI implements WindowListener{
     }
 
     public void startChat(ArrayList<User> users) {
+        l.trace("Start chat panel");
         chat = new Chat(this,users);
-        frame = new JFrame("Chat");
         frame.setContentPane(this.chat.getPanel());
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.addWindowListener(this);
-        frame.pack();
-        frame.setVisible(true);
+        frame.setSize(700, 400);
     }
 
     public void addUser(RemoteUser u) {
+        l.trace("Add user "+u.toString());
         if(chat != null){
             chat.addUser(u);
         }
@@ -94,9 +98,9 @@ public class ChatGUI implements WindowListener{
     }
 
     public void removeUser(RemoteUser u) {
+        l.trace("Remove user "+ u );
         if(chat != null){
             chat.removeUser(u);
-            l.trace("Remove user "+ u.getName() );
         }
         else{
             l.error("Invalid state, chat panel is null.");

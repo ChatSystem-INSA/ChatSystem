@@ -73,7 +73,6 @@ public class Chat {
     private JButton logOutButton;
     private JLabel nbUser;
     private JLabel username;
-    private JScrollPane userlistScrollPane;
 
     /**
      * Initialize default view of chat panel

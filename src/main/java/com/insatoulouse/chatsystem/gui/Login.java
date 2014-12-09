@@ -8,11 +8,11 @@ import java.awt.event.*;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-public class Login extends JDialog {
+public class Login implements ActionListener{
 
     private static final Logger l = LogManager.getLogger(Login.class.getName());
 
-    private JPanel contentPane;
+    private JPanel panel;
     private JButton buttonOK;
     private JTextField textField1;
     private JComboBox<InetAddress> comboBox1;
@@ -22,28 +22,25 @@ public class Login extends JDialog {
         l.trace("Open dialog connection");
 
         this.chatGUI = chatGUI;
-        setContentPane(contentPane);
-        setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+
+        textField1.addActionListener(this);
+        buttonOK.addActionListener(this);
         DefaultComboBoxModel<InetAddress> model = new DefaultComboBoxModel<InetAddress>();
         for(InetAddress addr : networkBroadcastAddresses) {
             model.addElement(addr);
         }
         comboBox1.setModel(model);
-        this.addWindowListener(chatGUI);
+
+        textField1.requestFocusInWindow();
     }
 
-    private void onOK() {
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
         chatGUI.sendUsername(textField1.getText(), (InetAddress)comboBox1.getSelectedItem());
         l.trace("Dispose dialog connection");
-        dispose();
     }
-
-
-
 }
