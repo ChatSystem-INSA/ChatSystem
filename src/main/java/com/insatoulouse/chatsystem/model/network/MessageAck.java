@@ -3,6 +3,10 @@ package com.insatoulouse.chatsystem.model.network;
 /**
  * MessageAck class
  * Send/Receive ack message
+ * {
+ *     "type":"messageAck",
+ *     "messageNumber":3
+ * }
  */
 public class MessageAck extends Packet {
 
@@ -10,7 +14,7 @@ public class MessageAck extends Packet {
 
     public MessageAck(int messageNumber) {
         super(Packet.TYPE_MESSAGE_ACK);
-        this.messageNumber = messageNumber;
+        setMessageNumber(messageNumber);
     }
 
     public int getMessageNumber() {

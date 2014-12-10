@@ -3,6 +3,11 @@ package com.insatoulouse.chatsystem.model.network;
 /**
  * Message class
  * Send/receive message to/from network
+ * {
+ *     "type":"message",
+ *     "messageNumber":3,
+ *     "messageData":"Mon message"
+ * }
  */
 public class Message extends Packet {
 
@@ -11,8 +16,8 @@ public class Message extends Packet {
 
     public Message(int messageNumber, String messageData) {
         super(Packet.TYPE_MESSAGE);
-        this.messageNumber = messageNumber;
-        this.messageData = messageData;
+        setMessageNumber(messageNumber);
+        setMessageData(messageData);
     }
 
     public int getMessageNumber() {

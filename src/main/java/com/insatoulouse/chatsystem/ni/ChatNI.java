@@ -1,6 +1,7 @@
 package com.insatoulouse.chatsystem.ni;
 
 import com.insatoulouse.chatsystem.Controller;
+import com.insatoulouse.chatsystem.exception.LogicalException;
 import com.insatoulouse.chatsystem.exception.PacketException;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.model.*;
@@ -128,14 +129,19 @@ public class ChatNI {
 
     public void sendHello(User u) throws TechnicalException
     {
-        Packet p = new Hello(u.getName());
-        sendBroadcast(p);
+        Packet p;
+        try {
+            p = new Hello(u.getName());
+            sendBroadcast(p);
+        } catch (LogicalException e) {}
     }
 
     public void sendHelloAck(User from, User to) throws TechnicalException
     {
-        Packet p = new HelloAck(from.getName());
-        sendUnicast(p, to.getIp());
+        try {
+            Packet p = new HelloAck(from.getName());
+            sendUnicast(p, to.getIp());
+        } catch (LogicalException e) {}
     }
 
     public void sendGoodbye() throws TechnicalException
