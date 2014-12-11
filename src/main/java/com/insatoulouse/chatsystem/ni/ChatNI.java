@@ -152,15 +152,21 @@ public class ChatNI {
 
     public void sendMessage(User u, String message) throws TechnicalException
     {
-        Packet p = new Message(ChatNI.message_id, message);
-        ChatNI.message_id += 1;
-        sendUnicast(p, u.getIp());
+        Packet p = null;
+        try {
+            p = new Message(ChatNI.message_id, message);
+            ChatNI.message_id += 1;
+            sendUnicast(p, u.getIp());
+        } catch (LogicalException e) {
+        }
     }
 
     public void sendMessageAck(User u, int message_id) throws  TechnicalException
     {
-        Packet p = new MessageAck(message_id);
-        sendUnicast(p, u.getIp());
+        try {
+            Packet p = new MessageAck(message_id);
+            sendUnicast(p, u.getIp());
+        } catch (LogicalException e) {}
     }
 
     private void sendUnicast(Packet p, InetAddress addr) throws TechnicalException

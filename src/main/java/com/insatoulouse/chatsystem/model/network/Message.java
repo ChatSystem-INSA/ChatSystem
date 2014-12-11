@@ -1,5 +1,8 @@
 package com.insatoulouse.chatsystem.model.network;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.insatoulouse.chatsystem.exception.LogicalException;
+
 /**
  * Message class
  * Send/receive message to/from network
@@ -9,22 +12,24 @@ package com.insatoulouse.chatsystem.model.network;
  *     "messageData":"Mon message"
  * }
  */
-public class Message extends Packet {
+public class Message implements Packet {
 
-    private int messageNumber;
+    private Integer messageNumber;
     private String messageData;
 
-    public Message(int messageNumber, String messageData) {
-        super(Packet.TYPE_MESSAGE);
+    public Message(@JsonProperty(value = "messageNumber", required = true) Integer messageNumber,@JsonProperty(value = "messageData", required = true)  String messageData) throws LogicalException {
         setMessageNumber(messageNumber);
         setMessageData(messageData);
     }
 
-    public int getMessageNumber() {
+    public Integer getMessageNumber() {
         return messageNumber;
     }
 
-    public void setMessageNumber(int messageNumber) {
+    public void setMessageNumber(Integer messageNumber) throws LogicalException {
+        if(messageNumber == null || messageNumber<0){
+            throw new LogicalException("Bad message number");
+        }
         this.messageNumber = messageNumber;
     }
 
@@ -32,7 +37,10 @@ public class Message extends Packet {
         return messageData;
     }
 
-    public void setMessageData(String messageData) {
+    public void setMessageData(String messageData) throws LogicalException {
+        if(messageData == null || messageData.isEmpty()){
+            throw new LogicalException("Bad message data");
+        }
         this.messageData = messageData;
     }
 }

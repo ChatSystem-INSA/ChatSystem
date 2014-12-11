@@ -1,5 +1,6 @@
 package com.insatoulouse.chatsystem.model.network;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insatoulouse.chatsystem.exception.LogicalException;
 
 /**
@@ -10,12 +11,11 @@ import com.insatoulouse.chatsystem.exception.LogicalException;
  *      "userName":"test"
  * }
  */
-public class Hello extends Packet {
+public class Hello implements Packet {
 
     private String userName;
 
-    public Hello(String data) throws LogicalException {
-        super(Packet.TYPE_HELLO);
+    public Hello(@JsonProperty(value = "userName", required = true)  String data) throws LogicalException {
         setUserName(data);
     }
 
@@ -23,6 +23,7 @@ public class Hello extends Packet {
         return userName;
     }
 
+    @JsonProperty(required = true)
     public void setUserName(String userName) throws LogicalException {
         if(userName == null || userName.isEmpty()){
             throw new LogicalException("Bad userName");

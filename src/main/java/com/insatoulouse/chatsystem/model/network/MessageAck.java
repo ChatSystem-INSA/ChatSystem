@@ -1,5 +1,8 @@
 package com.insatoulouse.chatsystem.model.network;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.insatoulouse.chatsystem.exception.LogicalException;
+
 /**
  * MessageAck class
  * Send/Receive ack message
@@ -8,20 +11,22 @@ package com.insatoulouse.chatsystem.model.network;
  *     "messageNumber":3
  * }
  */
-public class MessageAck extends Packet {
+public class MessageAck implements Packet {
 
-    private int messageNumber;
+    private Integer messageNumber;
 
-    public MessageAck(int messageNumber) {
-        super(Packet.TYPE_MESSAGE_ACK);
+    public MessageAck(@JsonProperty(value = "messageNumber", required = true) Integer messageNumber) throws LogicalException {
         setMessageNumber(messageNumber);
     }
 
-    public int getMessageNumber() {
+    public Integer getMessageNumber() {
         return messageNumber;
     }
 
-    public void setMessageNumber(int messageNumber) {
+    public void setMessageNumber(Integer messageNumber) throws LogicalException {
+        if(messageNumber == null || messageNumber<0){
+            throw new LogicalException("Bad message number");
+        }
         this.messageNumber = messageNumber;
     }
 }

@@ -1,33 +1,20 @@
 package com.insatoulouse.chatsystem.model.network;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 /**
- * Abstract class Packet
+ * interface Packet
  * Exchange network signal
  */
-abstract public class Packet {
-
-    public static final String TYPE_HELLO = "hello";
-    public static final String TYPE_MESSAGE = "message";
-    public static final String TYPE_MESSAGE_ACK = "messageAck";
-    public static final String TYPE_HELLO_ACK = "helloAck";
-    public static final String TYPE_GOODBYE = "goodBye";
-
-    public static final String FIELD_USERNAME = "userName";
-    public static final String FIELD_TYPE = "type";
-    public static final String FIELD_MESSAGE_NUMBER = "messageNumber";
-    public static final String FIELD_MESSAGE_DATA = "messageData";
-
-    private String type;
-
-    public Packet(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-}
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Hello.class, name = "hello"),
+        @JsonSubTypes.Type(value = HelloAck.class, name = "helloAck"),
+        @JsonSubTypes.Type(value = Message.class, name = "message"),
+        @JsonSubTypes.Type(value = MessageAck.class, name = "messageAck"),
+        @JsonSubTypes.Type(value = Goodbye.class, name = "goodBye") })
+public interface Packet {}

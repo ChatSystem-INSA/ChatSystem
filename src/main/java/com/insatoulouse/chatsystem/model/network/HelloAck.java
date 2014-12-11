@@ -1,5 +1,6 @@
 package com.insatoulouse.chatsystem.model.network;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.insatoulouse.chatsystem.exception.LogicalException;
 
 /**
@@ -12,12 +13,11 @@ import com.insatoulouse.chatsystem.exception.LogicalException;
  * }
  * @see Hello
  */
-public class HelloAck extends Packet {
+public class HelloAck implements Packet {
 
     private String userName;
 
-    public HelloAck(String userName) throws LogicalException {
-        super(Packet.TYPE_HELLO_ACK);
+    public HelloAck(@JsonProperty(value = "userName", required = true) String userName) throws LogicalException {
         setUserName(userName);
     }
 

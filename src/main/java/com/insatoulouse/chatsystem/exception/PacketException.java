@@ -7,4 +7,7 @@ public class PacketException extends TechnicalException {
         super(str);
     }
 
+    public PacketException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
