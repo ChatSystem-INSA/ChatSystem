@@ -18,6 +18,7 @@
 
 package com.insatoulouse.chatsystem.model.network.dao;
 
+import com.insatoulouse.chatsystem.exception.LogicalException;
 import com.insatoulouse.chatsystem.exception.PacketException;
 import com.insatoulouse.chatsystem.model.network.*;
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class PacketParserJsonTest {
     private PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
 
     /*
-        Test packet
+        Test read packet
      */
     @Test(expected = PacketException.class)
     public void testReadBadPacket() throws PacketException{
@@ -54,7 +55,7 @@ public class PacketParserJsonTest {
     }
 
     /*
-        Test hello
+        Test read hello
      */
     @Test
     public void testReadCorrectHello(){
@@ -78,7 +79,7 @@ public class PacketParserJsonTest {
     }
 
     /*
-        Test hello ack
+        Test read hello ack
      */
 
     @Test
@@ -103,31 +104,23 @@ public class PacketParserJsonTest {
     }
 
     /*
-        Test goodbye
+        Test read goodbye
      */
 
     @Test
-    public void testReadCorrectGoodbye(){
-        try {
-            Packet p = parser.read("{ \"type\":\"goodBye\"}");
-            assertTrue(p instanceof Goodbye);
-        } catch (PacketException e) {
-            fail();
-        }
+    public void testReadCorrectGoodbye() throws PacketException {
+        Packet p = parser.read("{ \"type\":\"goodBye\"}");
+        assertTrue(p instanceof Goodbye);
     }
 
     /*
-        Test message
+        Test read message
      */
 
     @Test
-    public void testReadCorrectMessage(){
-        try {
-            Packet p = parser.read("{ \"type\":\"message\", \"messageData\":\"toto\", \"messageNumber\":1}");
-            assertTrue(p instanceof Message);
-        } catch (PacketException e) {
-            fail();
-        }
+    public void testReadCorrectMessage() throws PacketException {
+        Packet p = parser.read("{ \"type\":\"message\", \"messageData\":\"toto\", \"messageNumber\":1}");
+        assertTrue(p instanceof Message);
     }
 
     @Test(expected = PacketException.class)
@@ -150,4 +143,74 @@ public class PacketParserJsonTest {
          parser.read("{ \"type\":\"message\", \"messageData\":\"toto\", \"messageNumber\":\"tata\"}");
     }
 
+     /*
+        Test read messageAck
+     */
+
+    @Test
+    public void testReadCorrectMessageAck() throws PacketException {
+        Packet p = parser.read("{ \"type\":\"messageAck\", \"messageNumber\":1}");
+        assertTrue(p instanceof MessageAck);
+    }
+
+    @Test(expected = PacketException.class)
+    public void testReadBadMessageAckWithoutMessageNumber() throws PacketException{
+        parser.read("{ \"type\":\"messageAck\"}");
+    }
+
+    @Test(expected = PacketException.class)
+    public void testReadBadNumberMessageAck() throws PacketException{
+        parser.read("{ \"type\":\"message\", \"messageData\":\"toto\", \"messageNumber\":\"tata\"}");
+    }
+
+
+    /*
+        Test write hello
+     */
+    @Test
+    public void testWriteCorrectHello() throws LogicalException, PacketException {
+        String s = parser.write(new Hello("toto"));
+        assertEquals("{\"type\":\"hello\",\"userName\":\"toto\"}",s);
+    }
+
+    /*
+        Test write hello ack
+     */
+
+    @Test
+    public void testWriteCorrectHelloAck() throws LogicalException, PacketException{
+        String s = parser.write(new HelloAck("toto"));
+        assertEquals("{\"type\":\"helloAck\",\"userName\":\"toto\"}",s);
+    }
+
+
+    /*
+        Test write goodbye
+     */
+
+    @Test
+    public void testWriteCorrectGoodbye() throws PacketException {
+        String s = parser.write(new Goodbye());
+        assertEquals("{\"type\":\"goodBye\"}",s);
+    }
+
+    /*
+        Test write message
+     */
+
+    @Test
+    public void testWriteCorrectMessage() throws PacketException, LogicalException {
+        String s = parser.write(new Message(1,"toto"));
+        assertEquals("{\"type\":\"message\",\"messageNumber\":1,\"messageData\":\"toto\"}",s);
+    }
+
+    /*
+        Test write message ack
+     */
+
+    @Test
+    public void testWriteCorrectMessageAck() throws PacketException, LogicalException {
+        String s = parser.write(new MessageAck(1));
+        assertEquals("{\"type\":\"messageAck\",\"messageNumber\":1}",s);
+    }
 }
