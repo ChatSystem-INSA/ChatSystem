@@ -91,6 +91,8 @@ public class Controller {
                 chatNI.sendGoodbye();
                 users.clear();
                 localUser = null;
+                if(chatNI != null)
+                    chatNI.exit();
             } catch (TechnicalException e) {
                 ExceptionManager.manage(e);
             }
@@ -248,8 +250,6 @@ public class Controller {
     public void processExit() {
         l.trace("Process exit");
         processDisconnect();
-        if(chatNI != null)
-            chatNI.exit();
         System.exit(0);
     }
 
