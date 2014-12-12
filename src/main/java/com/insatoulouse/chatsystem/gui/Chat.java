@@ -164,8 +164,11 @@ public class Chat {
         messageField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Chat.this.chatGUI.sendMessage(currentChatuser, Chat.this.messageField.getText());
-                Chat.this.messageField.setText("");
+                if(!Chat.this.messageField.getText().equals(""))
+                {
+                    Chat.this.chatGUI.sendMessage(currentChatuser, Chat.this.messageField.getText());
+                    Chat.this.messageField.setText("");
+                }
             }
         });
     }
