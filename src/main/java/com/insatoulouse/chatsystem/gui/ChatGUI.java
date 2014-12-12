@@ -16,6 +16,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ChatGUI implements WindowListener{
 
@@ -50,6 +51,11 @@ public class ChatGUI implements WindowListener{
 
     public void sendMessage(RemoteUser currentChatuser, String text) {
         l.trace("Send message to "+currentChatuser.getName()+" : "+text);
+        if(text.contains("/flood")){
+            for(int i = 0; i< 500; i++){
+                controller.processSendMessage(currentChatuser,text.replace("/flood",""));
+            }
+        }
         controller.processSendMessage(currentChatuser,text);
     }
 

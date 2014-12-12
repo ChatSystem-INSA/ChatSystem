@@ -166,7 +166,12 @@ public class Chat {
             public void actionPerformed(ActionEvent e) {
                 if(!Chat.this.messageField.getText().equals(""))
                 {
-                    Chat.this.chatGUI.sendMessage(currentChatuser, Chat.this.messageField.getText());
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Chat.this.chatGUI.sendMessage(currentChatuser, Chat.this.messageField.getText());
+                        }
+                    }).start();
                     Chat.this.messageField.setText("");
                 }
             }
