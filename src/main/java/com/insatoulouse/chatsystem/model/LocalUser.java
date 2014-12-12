@@ -26,19 +26,9 @@ import java.net.UnknownHostException;
  */
 public class LocalUser extends User {
 
-    private InetAddress broadcastAddr;
 
-    public LocalUser(String name, InetAddress broadcastAddr) throws UnknownHostException {
+    public LocalUser(String name) throws UnknownHostException {
         super(true, name, InetAddress.getLocalHost());
-        setBroadcastAddr(broadcastAddr);
-    }
-
-    public InetAddress getBroadcastAddr() {
-        return broadcastAddr;
-    }
-
-    public void setBroadcastAddr(InetAddress broadcastAddr) {
-        this.broadcastAddr = broadcastAddr;
     }
 
 }

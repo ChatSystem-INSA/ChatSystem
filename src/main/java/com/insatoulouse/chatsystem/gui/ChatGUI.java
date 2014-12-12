@@ -54,11 +54,7 @@ public class ChatGUI implements WindowListener{
 
     public void sendUsername(String text, InetAddress addr) {
         l.trace("Send username connection : "+text);
-        try {
-            controller.processConnection(new LocalUser(text,addr));
-        } catch (UnknownHostException e) {
-            ExceptionManager.manage(new TechnicalException(e));
-        }
+        controller.processConnection(text, addr);
     }
 
     public void sendLogout() {

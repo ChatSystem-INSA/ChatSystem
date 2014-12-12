@@ -34,6 +34,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
@@ -52,14 +53,16 @@ public class Controller {
     /**
      * Process connection
      * From GUI
-     * @param user local user to connect
+     * @param username local user to connect
+     * @param bdr Broadcast address of network
      */
-    public void processConnection(LocalUser user)
+    public void processConnection(String username, InetAddress bdr)
     {
         if(!isConnected())
         {
             try {
-                chatNI.start(user.getBroadcastAddr());
+                LocalUser user = new LocalUser(username);
+                chatNI.start(bdr);
                 chatNI.sendHello(user);
                 localUser = user;
                 chatGUI.startChat(user,getUsers());
@@ -67,6 +70,8 @@ public class Controller {
                 ExceptionManager.manage(e);
             } catch (LogicalException e) {
                 ExceptionManager.manage(e);
+            } catch (UnknownHostException e) {
+                ExceptionManager.manage(new TechnicalException(e));
             }
 
         } else {
