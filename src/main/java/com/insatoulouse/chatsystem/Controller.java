@@ -134,7 +134,8 @@ public class Controller {
      * @param file file to send
      */
     public void processSendfile(RemoteUser to, File file) {
-        // Todo send file
+        l.trace("processSenfile");
+        this.chatNI.sendFile(to, file);
     }
 
 

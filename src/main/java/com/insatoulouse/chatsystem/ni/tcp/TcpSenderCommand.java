@@ -19,18 +19,41 @@
 package com.insatoulouse.chatsystem.ni.tcp;
 
 
+import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.ni.NetworkCommand;
+import com.insatoulouse.chatsystem.ni.udp.UdpSender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
 
 public class TcpSenderCommand implements NetworkCommand {
 
-    private TcpSender tcpSender;
+    private static final Logger l = LogManager.getLogger(TcpSenderCommand.class.getName());
 
-    public TcpSenderCommand(TcpSender tcpSender) {
-        this.tcpSender = tcpSender;
+    private TcpSender tcpSender;
+    private File f;
+    private InetAddress addr;
+
+    public TcpSenderCommand(File f, InetAddress addr) {
+        l.trace("Create TcpSenderCommand");
+        this.f = f;
+        this.addr = addr;
+        this.tcpSender = new TcpSender();
     }
 
     @Override
     public void execute() {
-        // TODO implement method
+        l.trace("Execute TcpSenderCommand");
+        try {
+            tcpSender.send(f, addr);
+        } catch (TechnicalException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

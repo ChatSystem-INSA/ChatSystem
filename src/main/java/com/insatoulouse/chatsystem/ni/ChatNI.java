@@ -28,6 +28,7 @@ import com.insatoulouse.chatsystem.model.network.*;
 import com.insatoulouse.chatsystem.model.network.dao.AbstractFactory;
 import com.insatoulouse.chatsystem.model.network.dao.PacketParser;
 import com.insatoulouse.chatsystem.ni.tcp.TcpListener;
+import com.insatoulouse.chatsystem.ni.tcp.TcpSenderCommand;
 import com.insatoulouse.chatsystem.ni.udp.UdpListener;
 import com.insatoulouse.chatsystem.ni.udp.UdpSenderCommand;
 import com.insatoulouse.chatsystem.utils.NetworkTools;
@@ -159,6 +160,12 @@ public class ChatNI {
     {
         Packet p = new MessageAck(messageId);
         sendUnicast(p, u.getIp());
+    }
+
+    public void sendFile(User u, File f)
+    {
+        TcpSenderCommand cmd = new TcpSenderCommand(f, u.getIp());
+        this.invoker.addCommand(cmd);
     }
 
     private void sendUnicast(Packet p, InetAddress addr) throws TechnicalException
