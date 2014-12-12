@@ -17,14 +17,12 @@ public class MessageRow {
 
     private JPanel panel1;
     private JTextArea textMessage;
-    private JButton save;
 
     public JPanel getPanel() {
         return panel1;
     }
 
     public void setTextMessage(final MessageNetwork m){
-        save.setVisible(false);
         textMessage.setText(m.getMessage());
         if(m.getType() == MessageNetwork.IN){
             textMessage.setBackground(new Color(255,153,153));

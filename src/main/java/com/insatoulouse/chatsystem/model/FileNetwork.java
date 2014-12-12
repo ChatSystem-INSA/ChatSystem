@@ -16,7 +16,7 @@ public class FileNetwork extends MessageNetwork {
         if(type == MessageNetwork.IN)
             setMessage("Envoi du fichier "+file.getName());
         else
-            setMessage("Reception du fichier "+file.getName());
+            setMessage("Reception du fichier "+file.getAbsolutePath());
 
         this.file = file;
     }
