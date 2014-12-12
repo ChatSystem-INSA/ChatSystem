@@ -19,6 +19,7 @@
 package com.insatoulouse.chatsystem.ni.tcp;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 
 /**
@@ -26,18 +27,9 @@ import java.net.ServerSocket;
  */
 public class TcpSocket extends ServerSocket {
 
-    private static TcpSocket instance;
-
-    private TcpSocket() throws IOException {
+    public TcpSocket(int port) throws IOException {
+        super(port, 10, InetAddress.getLocalHost());
     }
 
-    public static synchronized TcpSocket getInstance() throws IOException
-    {
-        if(instance == null)
-        {
-            instance = new TcpSocket();
-        }
-        return instance;
-    }
 
 }

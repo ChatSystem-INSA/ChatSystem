@@ -128,6 +128,17 @@ public class Controller {
     }
 
     /**
+     * Process send file
+     * From local user
+     * @param to remote user to send the file
+     * @param file file to send
+     */
+    public void processSendfile(RemoteUser to, File file) {
+        // Todo send file
+    }
+
+
+    /**
      * Process Hello
      * Send a helloAck with localUser username
      * From Network
@@ -228,6 +239,13 @@ public class Controller {
     public void processMessageAck(MessageAck mess, InetAddress addr)
     {
         l.debug("Message ack not implemented");
+    }
+
+
+    public void processFile(File f, InetAddress addr)
+    {
+        l.trace("process file!");
+        // TODO : display in GUI
     }
 
     /**
@@ -338,7 +356,4 @@ public class Controller {
         return localUser;
     }
 
-    public void processFile(RemoteUser to, File file) {
-        // Todo send file
-    }
 }

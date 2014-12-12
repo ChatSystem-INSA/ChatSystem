@@ -34,6 +34,7 @@ import com.insatoulouse.chatsystem.utils.NetworkTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -62,7 +63,8 @@ public class ChatNI {
         l.trace("Start ChatNI");
         this.broadcastAddr = addr;
 
-        this.tcpListener = new TcpListener();
+        this.tcpListener = new TcpListener(this);
+        this.tcpListener.start();
 
         this.udpListener = new UdpListener(this);
         this.udpListener.start();
@@ -122,6 +124,11 @@ public class ChatNI {
         } catch (PacketException e) {
             l.error("Drop invalid packet : "+data,e);
         }
+    }
+
+    public void processFile(File f, InetAddress addr)
+    {
+        this.controller.processFile(f, addr);
     }
 
     public void sendHello(User u) throws TechnicalException, LogicalException

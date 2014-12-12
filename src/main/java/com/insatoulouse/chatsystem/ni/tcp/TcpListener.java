@@ -18,21 +18,32 @@
 
 package com.insatoulouse.chatsystem.ni.tcp;
 
+import com.insatoulouse.chatsystem.exception.ExceptionManager;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
+import com.insatoulouse.chatsystem.ni.ChatNI;
+import com.insatoulouse.chatsystem.utils.Config;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
 
 /**
  * Created by tlk on 27/11/14.
  */
 public class TcpListener extends Thread {
 
-    private TcpSocket socket;
-    private Boolean isRunning;
+    private static final Logger l = LogManager.getLogger(TcpListener.class.getName());
 
-    public TcpListener() throws TechnicalException {
+    private ChatNI chatNI;
+    private TcpSocket socket;
+    private Boolean isRunning = true;
+
+    public TcpListener(ChatNI ni) throws TechnicalException {
+        l.trace("Create TCPListener");
+        this.chatNI = ni;
         try {
-            this.socket = TcpSocket.getInstance();
+            this.socket = new TcpSocket(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
         } catch (IOException e) {
             throw new TechnicalException("Impossible de démarrer le TCPListener : " + e.getMessage());
         }
@@ -40,7 +51,37 @@ public class TcpListener extends Thread {
 
     public void run()
     {
-        while(isRunning){}
+        l.trace("Start TCPListener");
+        while(isRunning){
+            Socket s = null;
+            try {
+                if((s = this.socket.accept()) != null)
+                {
+                    l.trace("receive new file");
+                    InputStream in = s.getInputStream();
+                    DataInputStream clientData = new DataInputStream(in);
+                    String filename = clientData.readUTF();
+                    long size = clientData.readLong();
+
+                    String tmppath = System.getProperty("java.io.tmpdir");
+                    filename = tmppath + "/" + filename.replace("/", "").replace("\\", "");
+                    OutputStream output = new FileOutputStream(filename);
+
+                    l.debug("filename = "+filename);
+                    l.debug("size = " + size);
+                    int bytesRead = 0;
+                    byte[] buffer = new byte[1024];
+                    while (size > 0 && (bytesRead = clientData.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
+                        l.trace("receive file data ... "+bytesRead);
+                        output.write(buffer, 0, bytesRead);
+                        size -= bytesRead;
+                    }
+                    s.close();
+                    this.chatNI.processFile(new File(filename), s.getInetAddress());
+                }
+            } catch (IOException e) {
+            }
+        }
     }
 
 
