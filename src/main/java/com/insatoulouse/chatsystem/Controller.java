@@ -1,11 +1,28 @@
+/*
+ * Chat System - P2P
+ *     Copyright (C) 2014 LIVET BOUTOILLE
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.insatoulouse.chatsystem;
 
-
+import com.insatoulouse.chatsystem.exception.ExceptionManager;
+import com.insatoulouse.chatsystem.exception.LogicalException;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.gui.ChatGUI;
 import com.insatoulouse.chatsystem.model.*;
-import com.insatoulouse.chatsystem.model.network.Hello;
-import com.insatoulouse.chatsystem.model.network.HelloAck;
 import com.insatoulouse.chatsystem.model.network.Message;
 import com.insatoulouse.chatsystem.model.network.MessageAck;
 import com.insatoulouse.chatsystem.ni.ChatNI;
@@ -16,6 +33,9 @@ import org.apache.logging.log4j.Logger;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+/**
+ * Controller class
+ */
 public class Controller {
 
     private static final Logger l = LogManager.getLogger(Controller.class.getName());
@@ -23,182 +43,233 @@ public class Controller {
     private ChatGUI chatGUI;
     private ChatNI chatNI;
 
-    private ArrayList<User> users = new ArrayList<User>();
+    private ArrayList<RemoteUser> users = new ArrayList<RemoteUser>();
+    private LocalUser localUser;
 
-    public Controller()
-    {
-    }
-
-    /*
-    * From GUI
-    * */
-    public void processConnection(String username, InetAddress addr)
+    /**
+     * Process connection
+     * From GUI
+     * @param user local user to connect
+     */
+    public void processConnection(LocalUser user)
     {
         if(!isConnected())
         {
             try {
-                this.chatNI.start(addr);
-                User local = new User(true, username, InetAddress.getLocalHost());
-                this.chatNI.sendHello(local);
-                synchronized(users){
-                    this.users.add(local);
-                }
-                chatGUI.startChat(getUsers());
-            } catch (Exception e) {
-                l.error("unable to connect", e);
-                //chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "Unable to connect ..."));
+                chatNI.start(user.getBroadcastAddr());
+                chatNI.sendHello(user);
+                localUser = user;
+                chatGUI.startChat(user,getUsers());
+            } catch (TechnicalException e) {
+                ExceptionManager.manage(e);
+            } catch (LogicalException e) {
+                ExceptionManager.manage(e);
             }
+
         } else {
-            l.debug("already connected");
-            //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're already connected"));
+            l.warn("Invalid state : already connected");
         }
 
     }
 
+    /**
+     * Process disconnect
+     * From GUI
+     */
     public void processDisconnect(){
         if(isConnected())
         {
             try {
-                this.chatNI.sendGoodbye();
-                this.flushUsers();
+                chatNI.sendGoodbye();
+                users.clear();
+                localUser = null;
             } catch (TechnicalException e) {
-                l.error("Impossible de lancer le goodbye", e);
+                ExceptionManager.manage(e);
             }
         }
         else{
-            l.debug("not already connected");
-            //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
+            l.warn("Invalid state : not already connected");
         }
     }
 
+    /**
+     * Process send message
+     * From GUI
+     * @param u user to send
+     * @param mess data to send
+     */
     public void processSendMessage(RemoteUser u, String mess) {
+        assert u != null;
         if(isConnected())
         {
-            if(u != null )
-            {
-                try {
-                    this.chatNI.sendMessage(u, mess);
-                    this.chatGUI.newMessage(new MessageNetwork(MessageNetwork.OUT, u, mess));
-                } catch (TechnicalException e) {
-                    //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "Unable to send message, please retry"));
-                }
-            } else {
-                //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "User not existing - try 'list'"));
+            try {
+                chatNI.sendMessage(u, mess);
+                chatGUI.newMessage(new MessageNetwork(MessageNetwork.OUT, u, mess));
+            } catch (TechnicalException e) {
+                ExceptionManager.manage(e);
+            } catch (LogicalException e) {
+                ExceptionManager.manage(e);
             }
+
         } else {
-            l.debug("not connected.");
-            //this.chatGUI.addMessage(new MessageSystem(MessageSystem.ERROR, "You're not connected"));
+            l.warn("Invalid state : not connected.");
         }
     }
 
-    /*
-    * From ChatNI*/
-    public void processHello(Hello messHello, InetAddress addr)
+    /**
+     * Process Hello
+     * Send a helloAck with localUser username
+     * From Network
+     * @param u new RemoteUser
+     */
+    public void processHello(RemoteUser u)
     {
         if(isConnected())
         {
-            RemoteUser u = new RemoteUser(false, messHello.getUserName(), addr);
             if(!userExists(u))
             {
-                this.addUser(u);
                 try {
                     this.chatNI.sendHelloAck(getLocalUser(), u);
+                    addUser(u);
                 } catch (TechnicalException e) {
-                    l.error("Impossible de lancer le helloAck", e);
-                }
+                    ExceptionManager.manage(e);
+                } catch (LogicalException ignored) {} // Ignored because error isn't came from localuser
             } else {
-                l.error("Un utilisateur existe déjà avec cette adresse IP : "+addr.toString() + " ou le pseudo : " + messHello.getUserName());
+                l.error("Un utilisateur existe déjà  : "+u);
             }
         } else {
-            l.debug("do nothing not connected");
+            l.warn("Invalid state : do nothing not connected");
         }
     }
 
-    public void processHelloAck(HelloAck mess, InetAddress addr)
+    /**
+     * Process HelloAck
+     * Add new user connected
+     * From Network
+     * @param n remote helloAck user
+     */
+    public void processHelloAck(RemoteUser n)
     {
         if(isConnected())
         {
-            RemoteUser n = new RemoteUser(false, mess.getUserName(), addr);
             if(!userExists(n))
             {
                 this.addUser(n);
             } else {
-                l.error("Un utilisateur existe déjà avec cette adresse IP : " + addr.toString() + " ou le pseudo : " + mess.getUserName());
-
+                l.error("Un utilisateur existe déjà : " + n);
             }
         } else {
-            l.debug("do nothing, not connected");
+            l.warn("Invalid state : do nothing, not connected");
         }
     }
 
+    /**
+     * Process GoodBye
+     * Delete user in list
+     * From Network
+     * @param addr ip
+     */
     public void processGoodBye(InetAddress addr){
         if(isConnected())
         {
-            User u = getUserByAddr(addr);
-            if(u != null && u instanceof RemoteUser){
-                this.removeUser((RemoteUser) u);
-            }
-            else{
-                l.debug("Unknown " + addr.toString());
-            }
+            RemoteUser u = getUserByAddr(addr);
+            if(u != null)
+                this.removeUser(u);
         }
         else{
-            l.debug("do nothing, not connected");
+            l.debug("Invalid state : do nothing, not connected");
         }
     }
 
+    /**
+     * Process Message
+     * From Network
+     * @param message
+     * @param addr
+     */
     public void processMessage(Message message, InetAddress addr) {
         if(isConnected())
         {
-            User u = getUserByAddr(addr);
-            if(u != null && u instanceof RemoteUser)
+            RemoteUser u = getUserByAddr(addr);
+            if(u != null)
             {
                 Sound.playSound(Sound.URL_SOUND_MSG);
-                this.chatGUI.newMessage(new MessageNetwork((RemoteUser) u, message.getMessageData()));
+                chatGUI.newMessage(new MessageNetwork(u, message.getMessageData()));
                 try {
                     this.chatNI.sendMessageAck(u, message.getMessageNumber());
                 } catch (TechnicalException e) {
-                    l.error("unable to send messageAck");
+                    ExceptionManager.manage(e);
+                } catch (LogicalException e) {
+                    ExceptionManager.manage(e);
                 }
-            } else {
-                l.debug("unknown user or local user : " + addr.toString());
             }
         } else {
-            l.debug("not connected, do nothing");
+            l.debug("Invalid state : not connected, do nothing");
         }
     }
 
+    /**
+     * Process MessageAck
+     * Not implemented
+     * @param mess MessageAck
+     * @param addr ip
+     */
     public void processMessageAck(MessageAck mess, InetAddress addr)
     {
-        l.debug("not implemented");
+        l.debug("Message ack not implemented");
     }
 
+    /**
+     * Get Network broadcast address
+     * @return Network broadcast address
+     * @throws TechnicalException
+     */
     public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException
     {
         return this.chatNI.getNetworkBroadcastAddresses();
     }
 
+    public synchronized ArrayList<RemoteUser> getUsers() {
+        return users;
+    }
+
+    /**
+     * Process exit
+     * From GUI
+     */
+    public void processExit() {
+        l.trace("Process exit");
+        processDisconnect();
+        if(chatNI != null)
+            chatNI.exit();
+        System.exit(0);
+    }
+
+    public boolean isConnected()
+    {
+        return this.getLocalUser() != null;
+    }
+
+    public void setChatNI(ChatNI chatNI) {
+        this.chatNI = chatNI;
+    }
+
+    public void setChatGUI(ChatGUI chatGUI) {
+        this.chatGUI = chatGUI;
+    }
+
     private synchronized void addUser(RemoteUser u)
     {
-        this.users.add(u);
         l.debug("New user : " + u.toString());
+        users.add(u);
         chatGUI.addUser(u);
-        //chatGUI.addMessage(new MessageSystem(u.getName() + " connected !"));
     }
 
     private synchronized void removeUser(RemoteUser u)
     {
-        this.users.remove(u);
-        chatGUI.removeUser(u);
         l.debug("Remove user : " + u.toString());
-        //chatGUI.addMessage(new MessageSystem(u.getName() + " disconnected."));
-    }
-
-    private synchronized void flushUsers()
-    {
-        //chatGUI.addMessage(new MessageSystem("You're now disconnected."));
-        //chatGUI.setLocalUser(null);
-        this.users.clear();
+        users.remove(u);
+        chatGUI.removeUser(u);
     }
 
     private boolean userExists(String username)
@@ -218,13 +289,13 @@ public class Controller {
 
     private boolean userExists(User u)
     {
-        return this.userExists(u.getName(), u.getIp());
+        return userExists(u.getName(), u.getIp());
     }
 
-    private synchronized User getUserByAddr(InetAddress addr)
+    private synchronized RemoteUser getUserByAddr(InetAddress addr)
     {
-        User ret = null;
-        for(User u: users)
+        RemoteUser ret = null;
+        for(RemoteUser u : users)
         {
             if(u.getIp().equals(addr))
             {
@@ -235,10 +306,10 @@ public class Controller {
         return ret;
     }
 
-    private synchronized User getUserByUsername(String username)
+    private synchronized RemoteUser getUserByUsername(String username)
     {
-        User ret = null;
-        for(User u: users)
+        RemoteUser ret = null;
+        for(RemoteUser u: users)
         {
             if(u.getName().equals(username))
             {
@@ -251,40 +322,6 @@ public class Controller {
 
     private synchronized User getLocalUser()
     {
-        User ret = null;
-        for(User u : users)
-        {
-            if(u.isLocalUser())
-            {
-                ret = u;
-                break;
-            }
-        }
-        return ret;
+        return localUser;
     }
-
-    public boolean isConnected()
-    {
-        return this.getLocalUser() != null;
-    }
-
-    public void setChatNI(ChatNI chatNI) {
-        this.chatNI = chatNI;
-    }
-
-    public void setChatGUI(ChatGUI chatGUI) {
-        this.chatGUI = chatGUI;
-    }
-
-    public synchronized ArrayList<User> getUsers() {
-        return users;
-    }
-
-    public void processExit() {
-        processDisconnect();
-        if(chatNI != null)
-            chatNI.exit();
-        System.exit(0);
-    }
-
 }

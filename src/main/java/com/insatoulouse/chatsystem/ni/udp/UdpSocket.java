@@ -1,4 +1,4 @@
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.ni.udp;
 
 import java.io.IOException;
 import java.net.DatagramSocket;

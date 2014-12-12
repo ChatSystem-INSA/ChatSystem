@@ -40,7 +40,21 @@ public class Login implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        chatGUI.sendUsername(textField1.getText(), (InetAddress)comboBox1.getSelectedItem());
+        textField1.setEnabled(false);
+        buttonOK.setEnabled(false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                chatGUI.sendUsername(textField1.getText(), (InetAddress)comboBox1.getSelectedItem());
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        textField1.setEnabled(true);
+                        buttonOK.setEnabled(true);
+                    }
+                });
+            }
+        }).start();
         l.trace("Dispose dialog connection");
     }
 }

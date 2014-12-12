@@ -1,5 +1,6 @@
 package com.insatoulouse.chatsystem.gui;
 
+import com.insatoulouse.chatsystem.model.LocalUser;
 import com.insatoulouse.chatsystem.model.MessageNetwork;
 import com.insatoulouse.chatsystem.model.RemoteUser;
 import com.insatoulouse.chatsystem.model.User;
@@ -77,18 +78,15 @@ public class Chat {
      * @param chatGUI facade to communicate with controller
      * @param lastusers current users
      */
-    public Chat(ChatGUI chatGUI, ArrayList<User> lastusers) {
+    public Chat(ChatGUI chatGUI,LocalUser localUser, ArrayList<RemoteUser> lastusers) {
         this.chatGUI = chatGUI;
 
         disableChat();
         setTo("");
-        for(User u : lastusers){
-            if(u instanceof RemoteUser){
-                users.addElement((RemoteUser)u);
-            }
-            else{
-                username.setText(u.getName());
-            }
+        username.setText(localUser.getName());
+
+        for(RemoteUser u : lastusers){
+            users.addElement(u);
         }
         users.addListDataListener(new ListDataListener() {
             @Override

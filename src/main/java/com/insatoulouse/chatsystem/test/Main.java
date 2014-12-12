@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] str)
     {
-        ChatSystem system = new ChatSystem();
+        new ChatSystem();
     }
 
 }

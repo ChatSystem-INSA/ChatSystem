@@ -27,12 +27,21 @@ import javax.swing.*;
 public class ExceptionManager {
     private static final Logger l = LogManager.getLogger(ExceptionManager.class.getName());
 
-    public static void manage(final Exception e){
+    public static void manage(final TechnicalException e){
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 l.trace("Show exception error dialog",e);
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Une erreur est survenue", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+    public static void manage(final LogicalException e){
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                l.trace("Show exception error dialog",e);
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Une erreur est survenue", JOptionPane.WARNING_MESSAGE);
             }
         });
     }

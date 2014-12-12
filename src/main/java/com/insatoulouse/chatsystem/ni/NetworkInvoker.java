@@ -1,5 +1,6 @@
 package com.insatoulouse.chatsystem.ni;
 
+import com.insatoulouse.chatsystem.exception.TechnicalException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,8 +15,7 @@ public class NetworkInvoker extends Thread {
     private LinkedBlockingQueue<NetworkCommand> commands = new LinkedBlockingQueue<NetworkCommand>();
     private Boolean isRunning = true;
 
-    public NetworkInvoker() {
-    }
+    public NetworkInvoker() {}
 
     public void run()
     {
@@ -34,7 +34,11 @@ public class NetworkInvoker extends Thread {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                cmd.execute();
+                                try {
+                                    cmd.execute();
+                                } catch (TechnicalException e) {
+                                    e.printStackTrace();
+                                }
                                 NetworkInvoker.this.endOfCommand();
                             }
                         }).start();

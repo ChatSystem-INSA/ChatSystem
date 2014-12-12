@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class ChatGUI implements WindowListener{
@@ -51,7 +52,11 @@ public class ChatGUI implements WindowListener{
 
     public void sendUsername(String text, InetAddress addr) {
         l.trace("Send username connection : "+text);
-        controller.processConnection(text,addr);
+        try {
+            controller.processConnection(new LocalUser(text,addr));
+        } catch (UnknownHostException e) {
+            ExceptionManager.manage(new TechnicalException(e));
+        }
     }
 
     public void sendLogout() {
@@ -80,9 +85,9 @@ public class ChatGUI implements WindowListener{
         }
     }
 
-    public void startChat(ArrayList<User> users) {
+    public void startChat(LocalUser u, ArrayList<RemoteUser> users) {
         l.trace("Start chat panel");
-        chat = new Chat(this,users);
+        chat = new Chat(this,u, users);
         frame.setContentPane(this.chat.getPanel());
         frame.setSize(700, 400);
     }

@@ -13,8 +13,8 @@ public class RemoteUser extends User {
 
     private Boolean isConnected = true;
 
-    public RemoteUser(boolean isLocalUser, String name, InetAddress ip) {
-        super(isLocalUser, name, ip);
+    public RemoteUser( String name, InetAddress ip) {
+        super(false, name, ip);
     }
 
     public void addMessage(MessageNetwork message){

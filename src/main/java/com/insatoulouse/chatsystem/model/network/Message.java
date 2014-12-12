@@ -32,6 +32,8 @@ import com.insatoulouse.chatsystem.exception.LogicalException;
  */
 public class Message implements Packet {
 
+    private static int countMessage = 0;
+
     /**
      * messageNumber
      * Must be not null and greater than 0
@@ -47,6 +49,11 @@ public class Message implements Packet {
     public Message(@JsonProperty(value = "messageNumber", required = true) Integer messageNumber, @JsonProperty(value = "messageData", required = true) String messageData) throws LogicalException {
         setMessageNumber(messageNumber);
         setMessageData(messageData);
+        Message.countMessage++;
+    }
+
+    public static int getCountMessage() {
+        return countMessage;
     }
 
     public Integer getMessageNumber() {
