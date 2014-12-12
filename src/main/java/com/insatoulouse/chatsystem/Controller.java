@@ -22,10 +22,7 @@ import com.insatoulouse.chatsystem.exception.ExceptionManager;
 import com.insatoulouse.chatsystem.exception.LogicalException;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.gui.ChatGUI;
-import com.insatoulouse.chatsystem.model.LocalUser;
-import com.insatoulouse.chatsystem.model.MessageNetwork;
-import com.insatoulouse.chatsystem.model.RemoteUser;
-import com.insatoulouse.chatsystem.model.User;
+import com.insatoulouse.chatsystem.model.*;
 import com.insatoulouse.chatsystem.model.network.Message;
 import com.insatoulouse.chatsystem.model.network.MessageAck;
 import com.insatoulouse.chatsystem.ni.ChatNI;
@@ -66,7 +63,7 @@ public class Controller {
                 chatNI.start(bdr);
                 chatNI.sendHello(user);
                 localUser = user;
-                chatGUI.startChat(user,getUsers());
+                chatGUI.startChat(user);
             } catch (TechnicalException e) {
                 ExceptionManager.manage(e);
             } catch (LogicalException e) {
@@ -136,6 +133,7 @@ public class Controller {
     public void processSendfile(RemoteUser to, File file) {
         l.trace("processSenfile");
         this.chatNI.sendFile(to, file);
+        chatGUI.newMessage(new FileNetwork(MessageNetwork.IN, to, file));
     }
 
 
@@ -245,8 +243,18 @@ public class Controller {
 
     public void processFile(File f, InetAddress addr)
     {
-        l.trace("process file!");
-        // TODO : display in GUI
+        l.trace("Process file!");
+        if(isConnected())
+        {
+            RemoteUser u = getUserByAddr(addr);
+            if(u != null)
+            {
+                Sound.playSound(Sound.URL_SOUND_MSG);
+                chatGUI.newMessage(new FileNetwork(u, f));
+            }
+        } else {
+            l.debug("Invalid state : not connected, do nothing");
+        }
     }
 
     /**

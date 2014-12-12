@@ -1,10 +1,14 @@
 package com.insatoulouse.chatsystem.gui;
 
+import com.insatoulouse.chatsystem.model.FileNetwork;
 import com.insatoulouse.chatsystem.model.MessageNetwork;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Format message row on JList
@@ -13,13 +17,14 @@ public class MessageRow {
 
     private JPanel panel1;
     private JTextArea textMessage;
+    private JButton save;
 
     public JPanel getPanel() {
         return panel1;
     }
 
-    public void setTextMessage(MessageNetwork m){
-
+    public void setTextMessage(final MessageNetwork m){
+        save.setVisible(false);
         textMessage.setText(m.getMessage());
         if(m.getType() == MessageNetwork.IN){
             textMessage.setBackground(new Color(255,153,153));

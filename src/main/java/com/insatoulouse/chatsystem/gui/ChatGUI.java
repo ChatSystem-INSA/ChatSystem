@@ -84,7 +84,7 @@ public class ChatGUI implements WindowListener{
         }
     }
 
-    public void startChat(LocalUser u, ArrayList<RemoteUser> users) {
+    public void startChat(LocalUser u) {
         l.trace("Start chat panel");
         chat = new Chat(this,u);
         frame.setContentPane(this.chat.getPanel());
