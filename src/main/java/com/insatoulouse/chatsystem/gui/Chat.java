@@ -203,6 +203,7 @@ public class Chat {
     private void switchCurrentChatUser(RemoteUser u){
         if(!u.equals(currentChatuser)){
             synchronized (MUTEX){
+                send.setEnabled(true);
                 messageField.setEnabled(true);
                 l.trace("Switch chat to "+u.getName());
 
@@ -224,6 +225,7 @@ public class Chat {
     private void disableChat(){
         currentChatuser = null;
         messageField.setEnabled(false);
+        send.setEnabled(false);
         setTo("");
         messages.removeAllElements();
     }
