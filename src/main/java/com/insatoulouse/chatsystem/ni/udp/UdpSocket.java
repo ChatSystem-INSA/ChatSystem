@@ -2,8 +2,6 @@ package com.insatoulouse.chatsystem.ni.udp;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
-import java.net.MulticastSocket;
-import java.net.SocketException;
 
 /**
  * Created by tlk on 27/11/14.

@@ -22,22 +22,22 @@ import com.insatoulouse.chatsystem.Controller;
 import com.insatoulouse.chatsystem.exception.LogicalException;
 import com.insatoulouse.chatsystem.exception.PacketException;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
-import com.insatoulouse.chatsystem.model.*;
+import com.insatoulouse.chatsystem.model.RemoteUser;
+import com.insatoulouse.chatsystem.model.User;
 import com.insatoulouse.chatsystem.model.network.*;
 import com.insatoulouse.chatsystem.model.network.dao.AbstractFactory;
 import com.insatoulouse.chatsystem.model.network.dao.PacketParser;
 import com.insatoulouse.chatsystem.ni.tcp.TcpListener;
 import com.insatoulouse.chatsystem.ni.udp.UdpListener;
 import com.insatoulouse.chatsystem.ni.udp.UdpSenderCommand;
-import com.insatoulouse.chatsystem.utils.Config;
 import com.insatoulouse.chatsystem.utils.NetworkTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
 
 /**
  * ChatNI class

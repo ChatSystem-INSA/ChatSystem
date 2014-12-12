@@ -3,7 +3,9 @@ package com.insatoulouse.chatsystem.gui;
 import com.insatoulouse.chatsystem.Controller;
 import com.insatoulouse.chatsystem.exception.ExceptionManager;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
-import com.insatoulouse.chatsystem.model.*;
+import com.insatoulouse.chatsystem.model.LocalUser;
+import com.insatoulouse.chatsystem.model.MessageNetwork;
+import com.insatoulouse.chatsystem.model.RemoteUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

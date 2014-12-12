@@ -24,7 +24,6 @@ import java.net.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 public class NetworkTools {
     public static String getString(DatagramPacket packet){
