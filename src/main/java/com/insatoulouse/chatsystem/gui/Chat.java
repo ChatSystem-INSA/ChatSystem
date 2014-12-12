@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -70,6 +71,7 @@ public class Chat {
     private JButton logOutButton;
     private JLabel nbUser;
     private JLabel username;
+    private JButton send;
 
     /**
      * Initialize default view of chat panel
@@ -168,6 +170,23 @@ public class Chat {
                 {
                     Chat.this.chatGUI.sendMessage(currentChatuser, Chat.this.messageField.getText());
                     Chat.this.messageField.setText("");
+                }
+            }
+        });
+        send.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                final JFileChooser chooser = new JFileChooser();
+                chooser.setCurrentDirectory(new File("."));
+
+                int r = chooser.showOpenDialog(new JFrame());
+                if (r == JFileChooser.APPROVE_OPTION) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Chat.this.chatGUI.sendFile(currentChatuser, chooser.getSelectedFile());
+                        }
+                    }).start();
                 }
             }
         });

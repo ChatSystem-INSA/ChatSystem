@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -143,5 +144,10 @@ public class ChatGUI implements WindowListener{
     @Override
     public void windowDeactivated(WindowEvent e) {
 
+    }
+
+    public void sendFile(RemoteUser u, File file) {
+        l.trace("Send file "+file);
+        controller.processFile(u,file);
     }
 }

@@ -33,6 +33,7 @@ import com.insatoulouse.chatsystem.utils.Sound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -145,7 +146,7 @@ public class Controller {
                     ExceptionManager.manage(e);
                 } catch (LogicalException ignored) {} // Ignored because error isn't came from localuser
             } else {
-                l.error("Un utilisateur existe déjà  : "+u);
+                l.error("Un utilisateur existe déjà  : " + u);
             }
         } else {
             l.warn("Invalid state : do nothing not connected");
@@ -335,5 +336,9 @@ public class Controller {
     private synchronized User getLocalUser()
     {
         return localUser;
+    }
+
+    public void processFile(RemoteUser to, File file) {
+        // Todo send file
     }
 }
