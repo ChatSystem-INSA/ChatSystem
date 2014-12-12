@@ -73,22 +73,20 @@ public class Chat {
     private JLabel username;
     private JButton send;
 
+    private final Object MUTEX = new Object();
+
     /**
      * Initialize default view of chat panel
      *
      * @param chatGUI facade to communicate with controller
-     * @param lastusers current users
      */
-    public Chat(ChatGUI chatGUI,LocalUser localUser, ArrayList<RemoteUser> lastusers) {
+    public Chat(ChatGUI chatGUI, LocalUser localUser) {
         this.chatGUI = chatGUI;
 
         disableChat();
         setTo("");
         username.setText(localUser.getName());
 
-        for(RemoteUser u : lastusers){
-            users.addElement(u);
-        }
         users.addListDataListener(new ListDataListener() {
             @Override
             public void intervalAdded(ListDataEvent e) {
@@ -190,6 +188,10 @@ public class Chat {
                 }
             }
         });
+
+        for(RemoteUser u : chatGUI.getRemoteUser()){
+            addUser(u);
+        }
     }
 
     /**
@@ -200,16 +202,18 @@ public class Chat {
      */
     private void switchCurrentChatUser(RemoteUser u){
         if(!u.equals(currentChatuser)){
-            messageField.setEnabled(true);
-            l.trace("Switch chat to "+u.getName());
+            synchronized (MUTEX){
+                messageField.setEnabled(true);
+                l.trace("Switch chat to "+u.getName());
 
-            currentChatuser = u;
-            messages.removeAllElements();
-            for(MessageNetwork m : u.getMessages()){
-                messages.addElement(m);
+                currentChatuser = u;
+                messages.removeAllElements();
+                for(MessageNetwork m : u.getMessages()){
+                    messages.addElement(m);
+                }
+                setTo(u.getName());
+                userlist.setSelectedValue(u, true);
             }
-            setTo(u.getName());
-            userlist.setSelectedValue(u, true);
         }
 
     }
@@ -256,8 +260,10 @@ public class Chat {
      * @param u user deleted
      */
     public void removeUser(RemoteUser u){
-        users.removeElement(u);
-        if(!users.isEmpty()){
+        synchronized (MUTEX) {
+            users.removeElement(u);
+        }
+        if(!users.isEmpty() && u.equals(currentChatuser)){
             switchCurrentChatUser(users.get(0));
         }
         else{

@@ -15,6 +15,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatGUI implements WindowListener{
 
@@ -85,7 +86,7 @@ public class ChatGUI implements WindowListener{
 
     public void startChat(LocalUser u, ArrayList<RemoteUser> users) {
         l.trace("Start chat panel");
-        chat = new Chat(this,u, users);
+        chat = new Chat(this,u);
         frame.setContentPane(this.chat.getPanel());
         frame.setSize(700, 400);
     }
@@ -148,5 +149,9 @@ public class ChatGUI implements WindowListener{
     public void sendFile(RemoteUser u, File file) {
         l.trace("Send file "+file);
         controller.processSendfile(u, file);
+    }
+
+    public List<RemoteUser> getRemoteUser(){
+        return controller.getUsers();
     }
 }
