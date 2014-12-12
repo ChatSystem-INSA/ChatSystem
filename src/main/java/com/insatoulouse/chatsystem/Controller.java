@@ -280,24 +280,28 @@ public class Controller {
         chatGUI.removeUser(u);
     }
 
-    private boolean userExists(String username)
-    {
-        return getUserByUsername(username) != null;
-    }
-
-    private boolean userExists(InetAddress addr)
-    {
-        return getUserByAddr(addr) != null;
-    }
-
-    private boolean userExists(String username, InetAddress addr)
-    {
-        return getUserByAddr(addr) != null || getUserByUsername(username) != null;
-    }
-
     private boolean userExists(User u)
     {
-        return userExists(u.getName(), u.getIp());
+        if(getUserByAddr(u.getIp()) != null)
+        {
+            return true;
+        }
+
+        if(getUserByUsername(u.getName()) != null)
+        {
+            return true;
+        }
+
+        if(getLocalUser().getIp().equals(u.getIp()))
+        {
+            return true;
+        }
+
+        if(getLocalUser().getName().equals(u.getName()))
+        {
+            return true;
+        }
+        return false;
     }
 
     private synchronized RemoteUser getUserByAddr(InetAddress addr)
