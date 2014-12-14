@@ -126,7 +126,7 @@ public class Controller {
 
     /**
      * Process send file
-     * From local user
+     * From GUI
      * @param to remote user to send the file
      * @param file file to send
      */
@@ -188,7 +188,7 @@ public class Controller {
      * Process GoodBye
      * Delete user in list
      * From Network
-     * @param addr ip
+     * @param addr ip address of remote goodbye
      */
     public void processGoodBye(InetAddress addr){
         if(isConnected())
@@ -205,8 +205,8 @@ public class Controller {
     /**
      * Process Message
      * From Network
-     * @param message
-     * @param addr
+     * @param message message received from network
+     * @param addr ip address of remote entity
      */
     public void processMessage(Message message, InetAddress addr) {
         if(isConnected())
@@ -240,7 +240,12 @@ public class Controller {
         l.debug("Message ack not implemented");
     }
 
-
+    /**
+     * Process file
+     * From network
+     * @param f file received
+     * @param addr address of remote user
+     */
     public void processFile(File f, InetAddress addr)
     {
         l.trace("Process file!");
@@ -267,6 +272,10 @@ public class Controller {
         return this.chatNI.getNetworkBroadcastAddresses();
     }
 
+    /**
+     * Get list of users
+     * @return list of users
+     */
     public synchronized ArrayList<RemoteUser> getUsers() {
         return users;
     }
@@ -281,10 +290,15 @@ public class Controller {
         System.exit(0);
     }
 
+    /**
+     * is userlocal connected
+     * @return true or false if user is connected or not
+     */
     public boolean isConnected()
     {
         return this.getLocalUser() != null;
     }
+
 
     public void setChatNI(ChatNI chatNI) {
         this.chatNI = chatNI;
@@ -294,6 +308,10 @@ public class Controller {
         this.chatGUI = chatGUI;
     }
 
+    /**
+     * add remote user to userlist
+     * @param u user to add
+     */
     private synchronized void addUser(RemoteUser u)
     {
         l.debug("New user : " + u.toString());
@@ -301,6 +319,10 @@ public class Controller {
         chatGUI.addUser(u);
     }
 
+    /**
+     * remove user to userlist
+     * @param u user to remove
+     */
     private synchronized void removeUser(RemoteUser u)
     {
         l.debug("Remove user : " + u.toString());
@@ -308,6 +330,11 @@ public class Controller {
         chatGUI.removeUser(u);
     }
 
+    /**
+     * say if User exists
+     * @param u user to test if exists
+     * @return true or false
+     */
     private boolean userExists(User u)
     {
         if(getUserByAddr(u.getIp()) != null)
@@ -332,6 +359,11 @@ public class Controller {
         return false;
     }
 
+    /**
+     * return RemoteUser based on InetAddress
+     * @param addr ip address to test
+     * @return remote user
+     */
     private synchronized RemoteUser getUserByAddr(InetAddress addr)
     {
         RemoteUser ret = null;
@@ -346,6 +378,11 @@ public class Controller {
         return ret;
     }
 
+    /**
+     * return RemoteUser based on username
+     * @param username username to test
+     * @return remote user
+     */
     private synchronized RemoteUser getUserByUsername(String username)
     {
         RemoteUser ret = null;
@@ -360,6 +397,10 @@ public class Controller {
         return ret;
     }
 
+    /**
+     * get local user
+     * @return local user
+     */
     private synchronized User getLocalUser()
     {
         return localUser;
