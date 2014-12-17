@@ -28,7 +28,7 @@ import java.net.ServerSocket;
 public class TcpSocket extends ServerSocket {
 
     public TcpSocket(int port) throws IOException {
-        super(port, 10, InetAddress.getLocalHost());
+        super(port, 5, InetAddress.getByName("0.0.0.0"));
     }
 
 
