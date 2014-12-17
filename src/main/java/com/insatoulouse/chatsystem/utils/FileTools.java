@@ -9,7 +9,7 @@ import java.io.OutputStream;
  */
 public class FileTools {
 
-    public static OutputStream getTempOutputstream(String filename) throws FileNotFoundException
+    public static OutputStream getTempOutputStream(String filename) throws FileNotFoundException
     {
         String tmppath = System.getProperty("java.io.tmpdir");
         filename = tmppath + "/" + filename.replace("/", "").replace("\\", "");

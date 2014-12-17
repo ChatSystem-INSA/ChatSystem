@@ -20,6 +20,9 @@ package com.insatoulouse.chatsystem.utils;
 
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -62,4 +65,10 @@ public class NetworkTools {
         }
         return ret;
     }
+
+    public static DataInputStream getDataInputStreamFromSocket(Socket s) throws IOException {
+        InputStream in = s.getInputStream();
+        return new DataInputStream(in);
+    }
+
 }

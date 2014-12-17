@@ -23,6 +23,7 @@ import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 import com.insatoulouse.chatsystem.utils.Config;
 import com.insatoulouse.chatsystem.utils.FileTools;
+import com.insatoulouse.chatsystem.utils.NetworkTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,12 +60,11 @@ public class TcpListener extends Thread {
                 if((s = this.socket.accept()) != null)
                 {
                     l.trace("receive new file");
-                    InputStream in = s.getInputStream();
-                    DataInputStream clientData = new DataInputStream(in);
+                    DataInputStream clientData = NetworkTools.getDataInputStreamFromSocket(s);
                     String filename = clientData.readUTF();
                     long size = clientData.readLong();
 
-                    OutputStream output = FileTools.getTempOutputstream(filename);
+                    OutputStream output = FileTools.getTempOutputStream(filename);
 
                     l.debug("filename = "+filename);
                     l.debug("size = " + size);
