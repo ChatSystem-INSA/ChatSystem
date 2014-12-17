@@ -18,7 +18,6 @@
 
 package com.insatoulouse.chatsystem.ni.tcp;
 
-import com.insatoulouse.chatsystem.exception.ExceptionManager;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 import com.insatoulouse.chatsystem.utils.Config;
@@ -27,7 +26,10 @@ import com.insatoulouse.chatsystem.utils.NetworkTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 
 /**
@@ -64,6 +66,7 @@ public class TcpListener extends Thread {
                     String filename = clientData.readUTF();
                     long size = clientData.readLong();
 
+                    filename = FileTools.getTempFilename(filename);
                     OutputStream output = FileTools.getTempOutputStream(filename);
 
                     l.debug("filename = "+filename);

@@ -10,9 +10,11 @@ public class FileNetwork extends MessageNetwork {
     public FileNetwork(int type, RemoteUser u, File file) {
         super(type, u, "");
         if(type == MessageNetwork.OUT)
+        {
             setMessage("Envoi du fichier "+file.getName());
-        else
-            setMessage("Reception d'un fichier. Enregisté : "+file.getAbsolutePath());
+        } else {
+            setMessage("Reception d'un fichier. Enregisté : " + file.getAbsolutePath());
+        }
 
         this.file = file;
     }

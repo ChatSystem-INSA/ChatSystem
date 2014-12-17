@@ -9,10 +9,14 @@ import java.io.OutputStream;
  */
 public class FileTools {
 
-    public static OutputStream getTempOutputStream(String filename) throws FileNotFoundException
+    public static String getTempFilename(String filename)
     {
         String tmppath = System.getProperty("java.io.tmpdir");
-        filename = tmppath + "/" + filename.replace("/", "").replace("\\", "");
+        return tmppath + "/" + filename.replace("/", "").replace("\\", "");
+    }
+
+    public static OutputStream getTempOutputStream(String filename) throws FileNotFoundException
+    {
         return  new FileOutputStream(filename);
     }
 
