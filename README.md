@@ -1,6 +1,11 @@
 # ChatSystem
 ChatSystem is just a little p2p chat. It's a part of COO course at INSA Toulouse
 
+# Using git & github
+https://help.github.com/
+http://git-scm.com/docs/gittutorial
+Or just download source code at the right of this message.
+
 # Release
 All release can be found in this page : https://github.com/ChatSystem-INSA/ChatSystem/releases
 Each release contains .jar which can be downloaded.
