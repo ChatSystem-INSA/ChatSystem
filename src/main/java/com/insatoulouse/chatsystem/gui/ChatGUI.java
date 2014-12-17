@@ -55,8 +55,9 @@ public class ChatGUI implements WindowListener{
             for(int i = 0; i< 500; i++){
                 controller.processSendMessage(currentChatuser,text.replace("/flood",""));
             }
+        } else {
+            controller.processSendMessage(currentChatuser,text);
         }
-        controller.processSendMessage(currentChatuser,text);
     }
 
     public void sendUsername(String text, InetAddress addr) {
