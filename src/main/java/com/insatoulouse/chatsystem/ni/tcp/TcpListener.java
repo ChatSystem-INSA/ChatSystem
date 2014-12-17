@@ -22,6 +22,7 @@ import com.insatoulouse.chatsystem.exception.ExceptionManager;
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.ni.ChatNI;
 import com.insatoulouse.chatsystem.utils.Config;
+import com.insatoulouse.chatsystem.utils.FileTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,16 +64,13 @@ public class TcpListener extends Thread {
                     String filename = clientData.readUTF();
                     long size = clientData.readLong();
 
-                    String tmppath = System.getProperty("java.io.tmpdir");
-                    filename = tmppath + "/" + filename.replace("/", "").replace("\\", "");
-                    OutputStream output = new FileOutputStream(filename);
+                    OutputStream output = FileTools.getTempOutputstream(filename);
 
                     l.debug("filename = "+filename);
                     l.debug("size = " + size);
                     int bytesRead = 0;
                     byte[] buffer = new byte[1024];
                     while (size > 0 && (bytesRead = clientData.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
-                        l.trace("receive file data ... "+bytesRead);
                         output.write(buffer, 0, bytesRead);
                         size -= bytesRead;
                     }
@@ -80,6 +78,7 @@ public class TcpListener extends Thread {
                     this.chatNI.processFile(new File(filename), s.getInetAddress());
                 }
             } catch (IOException e) {
+                l.warn(e);
             }
         }
     }
