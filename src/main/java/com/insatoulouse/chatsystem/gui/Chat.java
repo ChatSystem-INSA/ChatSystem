@@ -166,10 +166,12 @@ public class Chat {
             public void actionPerformed(ActionEvent e) {
                 if(!Chat.this.messageField.getText().equals(""))
                 {
+                    final String text = Chat.this.messageField.getText();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            Chat.this.chatGUI.sendMessage(currentChatuser, Chat.this.messageField.getText());
+                            l.trace("messageField : "+text);
+                            Chat.this.chatGUI.sendMessage(currentChatuser, text);
                         }
                     }).start();
                     Chat.this.messageField.setText("");

@@ -133,7 +133,7 @@ public class Controller {
     public void processSendfile(RemoteUser to, File file) {
         l.trace("processSenfile");
         this.chatNI.sendFile(to, file);
-        chatGUI.newMessage(new FileNetwork(MessageNetwork.IN, to, file));
+        chatGUI.newMessage(new FileNetwork(MessageNetwork.OUT, to, file));
     }
 
 
@@ -255,7 +255,7 @@ public class Controller {
             if(u != null)
             {
                 Sound.playSound(Sound.URL_SOUND_MSG);
-                chatGUI.newMessage(new FileNetwork(u, f));
+                chatGUI.newMessage(new FileNetwork(MessageNetwork.IN, u, f));
             }
         } else {
             l.debug("Invalid state : not connected, do nothing");
