@@ -34,7 +34,8 @@ public class NetworkTools {
     }
 
     public static DatagramPacket getDatagramPacket(String data, InetAddress addr) throws TechnicalException {
-        DatagramPacket dp = new DatagramPacket(data.getBytes(Charset.defaultCharset()), data.length());
+        byte[] bytes = data.getBytes(Charset.defaultCharset());
+        DatagramPacket dp = new DatagramPacket(bytes, bytes.length);
         dp.setAddress(addr);
         dp.setPort(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
         return dp;
