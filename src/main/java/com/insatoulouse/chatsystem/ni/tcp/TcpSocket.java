@@ -23,7 +23,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 
 /**
- * Created by tlk on 27/11/14.
+ * TcpSocket class
  */
 public class TcpSocket extends ServerSocket {
 

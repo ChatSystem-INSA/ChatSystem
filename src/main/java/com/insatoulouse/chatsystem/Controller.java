@@ -37,27 +37,25 @@ import java.util.ArrayList;
 
 /**
  * Controller class
+ * Connection between gui and network
  */
 public class Controller {
 
     private static final Logger l = LogManager.getLogger(Controller.class.getName());
-
+    private final ArrayList<RemoteUser> users = new ArrayList<RemoteUser>();
     private ChatGUI chatGUI;
     private ChatNI chatNI;
-
-    private ArrayList<RemoteUser> users = new ArrayList<RemoteUser>();
     private LocalUser localUser;
 
     /**
      * Process connection
      * From GUI
+     *
      * @param username local user to connect
-     * @param bdr Broadcast address of network
+     * @param bdr      Broadcast address of network
      */
-    public void processConnection(String username, InetAddress bdr)
-    {
-        if(!isConnected())
-        {
+    public void processConnection(String username, InetAddress bdr) {
+        if (!isConnected()) {
             try {
                 LocalUser user = new LocalUser(username);
                 chatNI.start(bdr);
@@ -82,20 +80,18 @@ public class Controller {
      * Process disconnect
      * From GUI
      */
-    public void processDisconnect(){
-        if(isConnected())
-        {
+    public void processDisconnect() {
+        if (isConnected()) {
             try {
                 chatNI.sendGoodbye();
                 users.clear();
                 localUser = null;
-                if(chatNI != null)
+                if (chatNI != null)
                     chatNI.exit();
             } catch (TechnicalException e) {
                 ExceptionManager.manage(e);
             }
-        }
-        else{
+        } else {
             l.warn("Invalid state : not already connected");
         }
     }
@@ -103,13 +99,13 @@ public class Controller {
     /**
      * Process send message
      * From GUI
-     * @param u user to send
+     *
+     * @param u    user to send
      * @param mess data to send
      */
     public void processSendMessage(RemoteUser u, String mess) {
         assert u != null;
-        if(isConnected())
-        {
+        if (isConnected()) {
             try {
                 chatNI.sendMessage(u, mess);
                 chatGUI.newMessage(new MessageNetwork(MessageNetwork.OUT, u, mess));
@@ -127,7 +123,8 @@ public class Controller {
     /**
      * Process send file
      * From GUI
-     * @param to remote user to send the file
+     *
+     * @param to   remote user to send the file
      * @param file file to send
      */
     public void processSendfile(RemoteUser to, File file) {
@@ -141,20 +138,19 @@ public class Controller {
      * Process Hello
      * Send a helloAck with localUser username
      * From Network
+     *
      * @param u new RemoteUser
      */
-    public void processHello(RemoteUser u)
-    {
-        if(isConnected())
-        {
-            if(!userExists(u))
-            {
+    public void processHello(RemoteUser u) {
+        if (isConnected()) {
+            if (userNotExists(u)) {
                 try {
                     this.chatNI.sendHelloAck(getLocalUser(), u);
                     addUser(u);
                 } catch (TechnicalException e) {
                     ExceptionManager.manage(e);
-                } catch (LogicalException ignored) {} // Ignored because error isn't came from localuser
+                } catch (LogicalException ignored) {
+                } // Ignored because error isn't came from localuser
             } else {
                 l.error("Un utilisateur existe déjà  : " + u);
             }
@@ -167,14 +163,12 @@ public class Controller {
      * Process HelloAck
      * Add new user connected
      * From Network
+     *
      * @param n remote helloAck user
      */
-    public void processHelloAck(RemoteUser n)
-    {
-        if(isConnected())
-        {
-            if(!userExists(n))
-            {
+    public void processHelloAck(RemoteUser n) {
+        if (isConnected()) {
+            if (userNotExists(n)) {
                 this.addUser(n);
             } else {
                 l.error("Un utilisateur existe déjà : " + n);
@@ -188,16 +182,15 @@ public class Controller {
      * Process GoodBye
      * Delete user in list
      * From Network
+     *
      * @param addr ip address of remote goodbye
      */
-    public void processGoodBye(InetAddress addr){
-        if(isConnected())
-        {
+    public void processGoodBye(InetAddress addr) {
+        if (isConnected()) {
             RemoteUser u = getUserByAddr(addr);
-            if(u != null)
+            if (u != null)
                 this.removeUser(u);
-        }
-        else{
+        } else {
             l.debug("Invalid state : do nothing, not connected");
         }
     }
@@ -205,15 +198,14 @@ public class Controller {
     /**
      * Process Message
      * From Network
+     *
      * @param message message received from network
-     * @param addr ip address of remote entity
+     * @param addr    ip address of remote entity
      */
     public void processMessage(Message message, InetAddress addr) {
-        if(isConnected())
-        {
+        if (isConnected()) {
             RemoteUser u = getUserByAddr(addr);
-            if(u != null)
-            {
+            if (u != null) {
                 Sound.playSound(Sound.URL_SOUND_MSG);
                 chatGUI.newMessage(new MessageNetwork(u, message.getMessageData()));
                 try {
@@ -232,28 +224,27 @@ public class Controller {
     /**
      * Process MessageAck
      * Not implemented
+     *
      * @param mess MessageAck
      * @param addr ip
      */
-    public void processMessageAck(MessageAck mess, InetAddress addr)
-    {
+    public void processMessageAck(MessageAck mess, InetAddress addr) {
         l.debug("Message ack not implemented");
+        // TODO implements message ack
     }
 
     /**
      * Process file
      * From network
-     * @param f file received
+     *
+     * @param f    file received
      * @param addr address of remote user
      */
-    public void processFile(File f, InetAddress addr)
-    {
+    public void processFile(File f, InetAddress addr) {
         l.trace("Process file!");
-        if(isConnected())
-        {
+        if (isConnected()) {
             RemoteUser u = getUserByAddr(addr);
-            if(u != null)
-            {
+            if (u != null) {
                 Sound.playSound(Sound.URL_SOUND_MSG);
                 chatGUI.newMessage(new FileNetwork(MessageNetwork.IN, u, f));
             }
@@ -264,16 +255,17 @@ public class Controller {
 
     /**
      * Get Network broadcast address
+     *
      * @return Network broadcast address
      * @throws TechnicalException
      */
-    public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException
-    {
+    public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException {
         return this.chatNI.getNetworkBroadcastAddresses();
     }
 
     /**
      * Get list of users
+     *
      * @return list of users
      */
     public synchronized ArrayList<RemoteUser> getUsers() {
@@ -292,10 +284,10 @@ public class Controller {
 
     /**
      * is userlocal connected
+     *
      * @return true or false if user is connected or not
      */
-    public boolean isConnected()
-    {
+    public boolean isConnected() {
         return this.getLocalUser() != null;
     }
 
@@ -310,10 +302,10 @@ public class Controller {
 
     /**
      * add remote user to userlist
+     *
      * @param u user to add
      */
-    private synchronized void addUser(RemoteUser u)
-    {
+    private synchronized void addUser(RemoteUser u) {
         l.debug("New user : " + u.toString());
         users.add(u);
         chatGUI.addUser(u);
@@ -321,10 +313,10 @@ public class Controller {
 
     /**
      * remove user to userlist
+     *
      * @param u user to remove
      */
-    private synchronized void removeUser(RemoteUser u)
-    {
+    private synchronized void removeUser(RemoteUser u) {
         l.debug("Remove user : " + u.toString());
         users.remove(u);
         chatGUI.removeUser(u);
@@ -332,45 +324,25 @@ public class Controller {
 
     /**
      * say if User exists
+     *
      * @param u user to test if exists
      * @return true or false
      */
-    private boolean userExists(User u)
-    {
-        if(getUserByAddr(u.getIp()) != null)
-        {
-            return true;
-        }
+    private boolean userNotExists(User u) {
+        return getUserByAddr(u.getIp()) == null && getUserByUsername(u.getName()) == null && !getLocalUser().getIp().equals(u.getIp()) && !getLocalUser().getName().equals(u.getName());
 
-        if(getUserByUsername(u.getName()) != null)
-        {
-            return true;
-        }
-
-        if(getLocalUser().getIp().equals(u.getIp()))
-        {
-            return true;
-        }
-
-        if(getLocalUser().getName().equals(u.getName()))
-        {
-            return true;
-        }
-        return false;
     }
 
     /**
      * return RemoteUser based on InetAddress
+     *
      * @param addr ip address to test
      * @return remote user
      */
-    private synchronized RemoteUser getUserByAddr(InetAddress addr)
-    {
+    private synchronized RemoteUser getUserByAddr(InetAddress addr) {
         RemoteUser ret = null;
-        for(RemoteUser u : users)
-        {
-            if(u.getIp().equals(addr))
-            {
+        for (RemoteUser u : users) {
+            if (u.getIp().equals(addr)) {
                 ret = u;
                 break;
             }
@@ -380,16 +352,14 @@ public class Controller {
 
     /**
      * return RemoteUser based on username
+     *
      * @param username username to test
      * @return remote user
      */
-    private synchronized RemoteUser getUserByUsername(String username)
-    {
+    private synchronized RemoteUser getUserByUsername(String username) {
         RemoteUser ret = null;
-        for(RemoteUser u: users)
-        {
-            if(u.getName().equals(username))
-            {
+        for (RemoteUser u : users) {
+            if (u.getName().equals(username)) {
                 ret = u;
                 break;
             }
@@ -399,10 +369,10 @@ public class Controller {
 
     /**
      * get local user
+     *
      * @return local user
      */
-    private synchronized User getLocalUser()
-    {
+    private synchronized User getLocalUser() {
         return localUser;
     }
 

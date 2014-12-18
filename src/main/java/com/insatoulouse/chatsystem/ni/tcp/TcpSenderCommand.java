@@ -21,22 +21,23 @@ package com.insatoulouse.chatsystem.ni.tcp;
 
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.ni.NetworkCommand;
-import com.insatoulouse.chatsystem.ni.udp.UdpSender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.net.InetAddress;
 
+/**
+ * TcpSenderCommand class
+ */
 public class TcpSenderCommand implements NetworkCommand {
 
     private static final Logger l = LogManager.getLogger(TcpSenderCommand.class.getName());
 
-    private TcpSender tcpSender;
-    private File f;
-    private InetAddress addr;
+    private final TcpSender tcpSender;
+    private final File f;
+    private final InetAddress addr;
 
     public TcpSenderCommand(File f, InetAddress addr) {
         l.trace("Create TcpSenderCommand");

@@ -42,7 +42,7 @@ public class PacketParserJson implements PacketParser {
     /**
      * ObjectMapper is useful to serialize (and deserialize) an Packet in JSON
      */
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public PacketParserJson() {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

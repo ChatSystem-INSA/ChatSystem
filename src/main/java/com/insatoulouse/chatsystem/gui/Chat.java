@@ -1,3 +1,21 @@
+/*
+ * Chat System - P2P
+ *     Copyright (C) 2014 LIVET BOUTOILLE
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.insatoulouse.chatsystem.gui;
 
 import com.insatoulouse.chatsystem.model.LocalUser;
@@ -15,10 +33,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
 
 /**
- * Main chat panel
+ * Main chat view
  */
 public class Chat {
 
@@ -26,54 +43,46 @@ public class Chat {
      * Logger
      */
     private static final Logger l = LogManager.getLogger(Chat.class.getName());
-
+    private final Object MUTEX = new Object();
     /**
      * Facade to communicate with controller
      */
-    private ChatGUI chatGUI;
-
+    private final ChatGUI chatGUI;
+    /**
+     * ListModel of messagelist
+     *
+     * @see this.messagelist
+     */
+    private final DefaultListModel<MessageNetwork> messages = new DefaultListModel<MessageNetwork>();
+    /**
+     * ListModel of userlist
+     *
+     * @see this.userlist
+     */
+    private final DefaultListModel<RemoteUser> users = new DefaultListModel<RemoteUser>();
     /**
      * Current conversation user
      * Can be null
      */
     private RemoteUser currentChatuser;
-
     /**
      * Main panel
      */
     private JPanel panel1;
-
     /**
      * On right side : message list
      */
     private JList<MessageNetwork> messagelist;
-
-    /**
-     * ListModel of messagelist
-     * @see this.messagelist
-     */
-    private DefaultListModel<MessageNetwork> messages = new DefaultListModel<MessageNetwork>();
-
     private JTextField messageField;
     private JLabel to;
-
     /**
      * On left side : user list
      */
     private JList<RemoteUser> userlist;
-
-    /**
-     * ListModel of userlist
-     * @see this.userlist
-     */
-    private DefaultListModel<RemoteUser> users = new DefaultListModel<RemoteUser>();
-
     private JButton logOutButton;
     private JLabel nbUser;
     private JLabel username;
     private JButton send;
-
-    private final Object MUTEX = new Object();
 
     /**
      * Initialize default view of chat panel
@@ -85,8 +94,11 @@ public class Chat {
 
         disableChat();
         setTo("");
+
+        // Init localuser
         username.setText(localUser.getName());
 
+        // Init user list
         users.addListDataListener(new ListDataListener() {
             @Override
             public void intervalAdded(ListDataEvent e) {
@@ -105,20 +117,20 @@ public class Chat {
         });
         userlist.setModel(users);
         userlist.setCellRenderer(new ListCellRenderer<RemoteUser>() {
-            private UserRow row = new UserRow();
+            private final UserRow row = new UserRow();
+
             @Override
             public Component getListCellRendererComponent(JList list, RemoteUser value, int index, boolean isSelected, boolean cellHasFocus) {
-                if(value.getIp() != null){
+                if (value.getIp() != null) {
                     row.setIp(value.getIp().toString());
-                }
-                else
+                } else
                     row.setIp("");
                 row.isSelected(isSelected);
                 MessageNetwork m = value.getLastMessage();
-                row.setLastMessage((m !=null) ? m.getMessage() : "");
+                row.setLastMessage((m != null) ? m.getMessage() : "");
                 row.setName(value.getName());
 
-                if(isSelected){
+                if (isSelected) {
                     switchCurrentChatUser(value);
                 }
 
@@ -131,6 +143,7 @@ public class Chat {
         logOutButton.addMouseListener(new MouseAdapter() {
             public final Color NORMAL = new Color(235, 235, 237);
             public final Color HOVER = new Color(213, 213, 215);
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
@@ -152,7 +165,7 @@ public class Chat {
 
         messagelist.setModel(messages);
         messagelist.setCellRenderer(new ListCellRenderer<MessageNetwork>() {
-            private MessageRow row = new MessageRow();
+            private final MessageRow row = new MessageRow();
 
             @Override
             public Component getListCellRendererComponent(JList<? extends MessageNetwork> list, MessageNetwork value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -164,13 +177,12 @@ public class Chat {
         messageField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!Chat.this.messageField.getText().equals(""))
-                {
+                if (!Chat.this.messageField.getText().equals("")) {
                     final String text = Chat.this.messageField.getText();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            l.trace("messageField : "+text);
+                            l.trace("messageField : " + text);
                             Chat.this.chatGUI.sendMessage(currentChatuser, text);
                         }
                     }).start();
@@ -178,6 +190,7 @@ public class Chat {
                 }
             }
         });
+
         send.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -196,7 +209,8 @@ public class Chat {
             }
         });
 
-        for(RemoteUser u : chatGUI.getRemoteUser()){
+        // Add current remote user to list
+        for (RemoteUser u : chatGUI.getRemoteUser()) {
             addUser(u);
         }
     }
@@ -204,19 +218,19 @@ public class Chat {
     /**
      * To switch message in messagelist when currentChatuser change
      *
-     * @see this.currentChatuser
      * @param u new user
+     * @see this.currentChatuser
      */
-    private void switchCurrentChatUser(RemoteUser u){
-        if(!u.equals(currentChatuser)){
-            synchronized (MUTEX){
+    private void switchCurrentChatUser(RemoteUser u) {
+        if (!u.equals(currentChatuser)) {
+            synchronized (MUTEX) {
                 send.setEnabled(true);
                 messageField.setEnabled(true);
-                l.trace("Switch chat to "+u.getName());
+                l.trace("Switch chat to " + u.getName());
 
                 currentChatuser = u;
                 messages.removeAllElements();
-                for(MessageNetwork m : u.getMessages()){
+                for (MessageNetwork m : u.getMessages()) {
                     messages.addElement(m);
                 }
                 setTo(u.getName());
@@ -229,7 +243,7 @@ public class Chat {
     /**
      * Disable chat when we have no remote user
      */
-    private void disableChat(){
+    private void disableChat() {
         currentChatuser = null;
         messageField.setEnabled(false);
         send.setEnabled(false);
@@ -240,52 +254,55 @@ public class Chat {
     /**
      * Actualize number of connected user
      */
-    private void refreshNbUser(){
-        nbUser.setText(users.getSize()+" users connected");
+    private void refreshNbUser() {
+        nbUser.setText(users.getSize() + " users connected");
     }
 
     /**
      * Format string for JLabel To
-     * @see this.to
+     *
      * @param u string
+     * @see this.to
      */
-    private void setTo(String u ){
-        to.setText("To: "+u);
+    private void setTo(String u) {
+        to.setText("To: " + u);
     }
 
     /**
      * New user in userlist
+     *
      * @param u user added
      */
-    public void addUser(RemoteUser u){
+    public void addUser(RemoteUser u) {
         users.addElement(u);
-        if(currentChatuser == null){
+        if (currentChatuser == null) {
             switchCurrentChatUser(u);
         }
     }
 
     /**
      * Remove user in userlist
+     *
      * @param u user deleted
      */
-    public void removeUser(RemoteUser u){
+    public void removeUser(RemoteUser u) {
         synchronized (MUTEX) {
             users.removeElement(u);
         }
-        if(!users.isEmpty() && u.equals(currentChatuser)){
+        if (!users.isEmpty() && u.equals(currentChatuser)) {
             switchCurrentChatUser(users.get(0));
-        }
-        else{
+        } else {
             disableChat();
         }
     }
 
     /**
      * New incoming message
+     *
      * @param m incoming message
      */
-    public void newMessage(MessageNetwork m ){
-        if(m.getUser().equals(currentChatuser)){
+    public void newMessage(MessageNetwork m) {
+        if (m.getUser().equals(currentChatuser)) {
             messages.addElement(m);
         }
         userlist.repaint();
@@ -297,6 +314,7 @@ public class Chat {
 
     /**
      * Get MainPanel
+     *
      * @return JPanel
      */
     public JPanel getPanel() {

@@ -36,6 +36,7 @@ public class UdpSender {
 
     /**
      * Send a Packet with UDP
+     *
      * @throws TechnicalException
      */
     public void send(DatagramPacket packet) throws TechnicalException {
@@ -44,11 +45,11 @@ public class UdpSender {
             DatagramSocket s = new DatagramSocket();
             s.send(packet);
         } catch (SocketException e) {
-            l.error("Fail to send Udp packet",e);
-            throw new TechnicalException("Fail to send Udp packet",e);
+            l.error("Fail to send Udp packet", e);
+            throw new TechnicalException("Fail to send Udp packet", e);
         } catch (IOException e) {
-            l.error("Fail to send Udp packet",e);
-            throw new TechnicalException("Fail to send Udp packet",e);
+            l.error("Fail to send Udp packet", e);
+            throw new TechnicalException("Fail to send Udp packet", e);
         }
     }
 

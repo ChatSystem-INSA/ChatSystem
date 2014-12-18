@@ -24,23 +24,40 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 
+/**
+ * ExceptionManager class
+ * For exception managing : show a dialog
+ */
 public class ExceptionManager {
     private static final Logger l = LogManager.getLogger(ExceptionManager.class.getName());
 
-    public static void manage(final TechnicalException e){
+    /**
+     * Manage Technical Exception
+     *
+     * @param e exception
+     * @see com.insatoulouse.chatsystem.exception.TechnicalException
+     */
+    public static void manage(final TechnicalException e) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                l.trace("Show exception error dialog",e);
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Une erreur est survenue", JOptionPane.ERROR_MESSAGE);
+                l.trace("Show exception error dialog", e);
+                JOptionPane.showMessageDialog(null, "(" + e.getMessage() + ")", "Une erreur est survenue", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
-    public static void manage(final LogicalException e){
+
+    /**
+     * Manage Logicial Exception
+     *
+     * @param e exception
+     * @see com.insatoulouse.chatsystem.exception.LogicalException
+     */
+    public static void manage(final LogicalException e) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                l.trace("Show exception error dialog",e);
+                l.trace("Show exception error dialog", e);
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Une erreur est survenue", JOptionPane.WARNING_MESSAGE);
             }
         });

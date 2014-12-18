@@ -20,7 +20,6 @@ package com.insatoulouse.chatsystem.ni.tcp;
 
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.ni.ChatNI;
-import com.insatoulouse.chatsystem.utils.Config;
 import com.insatoulouse.chatsystem.utils.FileTools;
 import com.insatoulouse.chatsystem.utils.NetworkTools;
 import org.apache.logging.log4j.LogManager;
@@ -33,13 +32,13 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 /**
- * Created by tlk on 27/11/14.
+ * TcpListener class
  */
 public class TcpListener extends Thread {
 
     private static final Logger l = LogManager.getLogger(TcpListener.class.getName());
 
-    private ChatNI chatNI;
+    private final ChatNI chatNI;
     private TcpSocket socket;
     private Boolean isRunning = true;
 
@@ -47,20 +46,18 @@ public class TcpListener extends Thread {
         l.trace("Create TCPListener");
         this.chatNI = ni;
         try {
-            this.socket = new TcpSocket(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
+            this.socket = new TcpSocket(NetworkTools.getPort());
         } catch (IOException e) {
             throw new TechnicalException("Impossible de démarrer le TCPListener : " + e.getMessage());
         }
     }
 
-    public void run()
-    {
+    public void run() {
         l.trace("Start TCPListener");
-        while(isRunning){
-            Socket s = null;
+        while (isRunning) {
+            Socket s;
             try {
-                if((s = this.socket.accept()) != null)
-                {
+                if ((s = this.socket.accept()) != null) {
                     l.trace("receive new file");
                     DataInputStream clientData = NetworkTools.getDataInputStreamFromSocket(s);
                     String filename = clientData.readUTF();
@@ -69,9 +66,9 @@ public class TcpListener extends Thread {
                     filename = FileTools.getTempFilename(filename);
                     OutputStream output = FileTools.getTempOutputStream(filename);
 
-                    l.debug("filename = "+filename);
+                    l.debug("filename = " + filename);
                     l.debug("size = " + size);
-                    int bytesRead = 0;
+                    int bytesRead;
                     byte[] buffer = new byte[1024];
                     while (size > 0 && (bytesRead = clientData.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
                         output.write(buffer, 0, bytesRead);
@@ -92,6 +89,7 @@ public class TcpListener extends Thread {
         this.interrupt();
         try {
             this.socket.close();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 }

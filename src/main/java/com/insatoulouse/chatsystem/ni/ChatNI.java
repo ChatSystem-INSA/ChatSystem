@@ -46,21 +46,19 @@ import java.util.ArrayList;
  */
 public class ChatNI {
 
-    private Controller controller;
+    private static final Logger l = LogManager.getLogger(ChatNI.class.getName());
+    private final PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
+    private final Controller controller;
     private TcpListener tcpListener;
     private UdpListener udpListener;
     private NetworkInvoker invoker;
     private InetAddress broadcastAddr;
 
-    private static final Logger l = LogManager.getLogger(ChatNI.class.getName());
-    private final PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
-
     public ChatNI(Controller c) {
         this.controller = c;
     }
 
-    public void start(InetAddress addr) throws TechnicalException
-    {
+    public void start(InetAddress addr) throws TechnicalException {
         l.trace("Start ChatNI");
         this.broadcastAddr = addr;
 
@@ -76,27 +74,27 @@ public class ChatNI {
 
     public void exit() {
         l.trace("Close ChatNI");
-        if(tcpListener != null)
+        if (tcpListener != null)
             tcpListener.close();
-        if(udpListener != null)
+        if (udpListener != null)
             udpListener.close();
-        if(udpListener != null)
+        if (udpListener != null)
             invoker.close();
     }
 
-    public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException
-    {
+    public ArrayList<InetAddress> getNetworkBroadcastAddresses() throws TechnicalException {
         try {
             return NetworkTools.getBroadcastAddr();
         } catch (SocketException e) {
-            l.error("Impossible de récuperer la liste des interfaces",e);
-            throw new TechnicalException("Impossible de récuperer la liste des interfaces",e);
+            l.error("Impossible de récuperer la liste des interfaces", e);
+            throw new TechnicalException("Impossible de récuperer la liste des interfaces", e);
         }
     }
 
     /**
      * Execute controller method when received packet
      * Invalid packet are dropped
+     *
      * @param packet incoming
      */
     public void processPacket(DatagramPacket packet) {
@@ -106,75 +104,61 @@ public class ChatNI {
 
         try {
             Packet message = parser.read(data);
-            if(message instanceof Hello)
-            {
+            if (message instanceof Hello) {
                 this.controller.processHello(new RemoteUser(((Hello) message).getUserName(), packet.getAddress()));
-            } else if(message instanceof HelloAck)
-            {
+            } else if (message instanceof HelloAck) {
                 this.controller.processHelloAck(new RemoteUser(((HelloAck) message).getUserName(), packet.getAddress()));
-            }else if(message instanceof Goodbye)
-            {
+            } else if (message instanceof Goodbye) {
                 this.controller.processGoodBye(packet.getAddress());
-            } else if(message instanceof Message)
-            {
+            } else if (message instanceof Message) {
                 this.controller.processMessage((Message) message, packet.getAddress());
-            } else if(message instanceof MessageAck)
-            {
+            } else if (message instanceof MessageAck) {
                 this.controller.processMessageAck((MessageAck) message, packet.getAddress());
             }
         } catch (PacketException e) {
-            l.error("Drop invalid packet : "+data,e);
+            l.error("Drop invalid packet : " + data, e);
         }
     }
 
-    public void processFile(File f, InetAddress addr)
-    {
+    public void processFile(File f, InetAddress addr) {
         this.controller.processFile(f, addr);
     }
 
-    public void sendHello(User u) throws TechnicalException, LogicalException
-    {
+    public void sendHello(User u) throws TechnicalException, LogicalException {
         Packet p = new Hello(u.getName());
         sendBroadcast(p);
     }
 
-    public void sendHelloAck(User from, User to) throws TechnicalException, LogicalException
-    {
+    public void sendHelloAck(User from, User to) throws TechnicalException, LogicalException {
         Packet p = new HelloAck(from.getName());
         sendUnicast(p, to.getIp());
     }
 
-    public void sendGoodbye() throws TechnicalException
-    {
+    public void sendGoodbye() throws TechnicalException {
         Packet p = new Goodbye();
         sendBroadcast(p);
     }
 
-    public void sendMessage(User u, String message) throws TechnicalException, LogicalException
-    {
-        Packet p = new Message(Message.getCountMessage(),message);
+    public void sendMessage(User u, String message) throws TechnicalException, LogicalException {
+        Packet p = new Message(Message.getCountMessage(), message);
         sendUnicast(p, u.getIp());
     }
 
-    public void sendMessageAck(User u, int messageId) throws TechnicalException, LogicalException
-    {
+    public void sendMessageAck(User u, int messageId) throws TechnicalException, LogicalException {
         Packet p = new MessageAck(messageId);
         sendUnicast(p, u.getIp());
     }
 
-    public void sendFile(User u, File f)
-    {
+    public void sendFile(User u, File f) {
         TcpSenderCommand cmd = new TcpSenderCommand(f, u.getIp());
         this.invoker.addCommand(cmd);
     }
 
-    private void sendUnicast(Packet p, InetAddress addr) throws TechnicalException
-    {
-        l.trace("Send packet "+p+" to "+addr);
+    private void sendUnicast(Packet p, InetAddress addr) throws TechnicalException {
+        l.trace("Send packet " + p + " to " + addr);
         String data = parser.write(p);
-        if(data != null)
-        {
-            UdpSenderCommand cmd = new UdpSenderCommand(NetworkTools.getDatagramPacket(data,addr));
+        if (data != null) {
+            UdpSenderCommand cmd = new UdpSenderCommand(NetworkTools.getDatagramPacket(data, addr));
             this.invoker.addCommand(cmd);
         } else {
             l.error("Impossible de générer le JSON : " + p);
@@ -182,8 +166,7 @@ public class ChatNI {
         }
     }
 
-    private void sendBroadcast(Packet p) throws TechnicalException
-    {
+    private void sendBroadcast(Packet p) throws TechnicalException {
         this.sendUnicast(p, broadcastAddr);
     }
 

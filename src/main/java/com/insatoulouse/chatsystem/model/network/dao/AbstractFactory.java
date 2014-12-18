@@ -26,12 +26,11 @@ public abstract class AbstractFactory {
     /**
      * Return concrete factory
      *
-     * @param choice of parser support
      * @return Concrete factory
      * @see com.insatoulouse.chatsystem.model.network.dao.AbstractFactory.Type
      */
-    public static AbstractFactory getFactory(Type choice) {
-        switch (choice) {
+    public static AbstractFactory getFactory(Type type) {
+        switch (type) {
             case JSON:
                 return JsonFactory.getInstance();
             default:

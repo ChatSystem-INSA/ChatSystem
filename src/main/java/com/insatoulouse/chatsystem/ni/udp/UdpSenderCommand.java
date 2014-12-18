@@ -35,8 +35,8 @@ public class UdpSenderCommand implements NetworkCommand {
 
     private static final Logger l = LogManager.getLogger(UdpSenderCommand.class.getName());
 
-    private UdpSender udpSender;
-    private DatagramPacket p;
+    private final UdpSender udpSender;
+    private final DatagramPacket p;
 
     public UdpSenderCommand(DatagramPacket p) {
         l.trace("Create UdpSenderCommand");

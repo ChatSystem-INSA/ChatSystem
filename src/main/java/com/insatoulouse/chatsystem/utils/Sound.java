@@ -22,9 +22,18 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+/**
+ * Sound class
+ * To play sound
+ */
 public class Sound {
     public static final String URL_SOUND_MSG = "/message.wav";
 
+    /**
+     * Play sound method
+     *
+     * @param url path of sound
+     */
     public static synchronized void playSound(final String url) {
         new Thread(new Runnable() {
             // The wrapper thread is unnecessary, unless it blocks on the
@@ -33,7 +42,7 @@ public class Sound {
                 try {
                     Clip clip = AudioSystem.getClip();
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                            getClass().getResourceAsStream( url));
+                            getClass().getResourceAsStream(url));
                     clip.open(inputStream);
                     clip.start();
                 } catch (Exception e) {

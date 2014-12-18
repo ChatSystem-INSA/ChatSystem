@@ -29,28 +29,28 @@ import static org.junit.Assert.*;
  * Test class of json packet parser
  */
 public class PacketParserJsonTest {
-    private PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
+    private final PacketParser parser = AbstractFactory.getFactory().getPacketParser();
 
     /*
         Test read packet
      */
     @Test(expected = PacketException.class)
-    public void testReadBadPacket() throws PacketException{
+    public void testReadBadPacket() throws PacketException {
         parser.read("{ \"type\":\"hello\" ");
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadPacket2() throws PacketException{
+    public void testReadBadPacket2() throws PacketException {
         parser.read("[{ \"type\":\"hello\" }]");
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadPacketWithoutType() throws PacketException{
+    public void testReadBadPacketWithoutType() throws PacketException {
         parser.read("{ }");
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadPacketBadType() throws PacketException{
+    public void testReadBadPacketBadType() throws PacketException {
         parser.read("{ \"type\":null }");
     }
 
@@ -58,7 +58,7 @@ public class PacketParserJsonTest {
         Test read hello
      */
     @Test
-    public void testReadCorrectHello(){
+    public void testReadCorrectHello() {
         try {
             Packet p = parser.read("{ \"type\":\"hello\", \"userName\":\"toto\"}");
             assertTrue(p instanceof Hello);
@@ -68,13 +68,13 @@ public class PacketParserJsonTest {
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadHelloWithoutUserName() throws PacketException{
+    public void testReadBadHelloWithoutUserName() throws PacketException {
         parser.read("{ \"type\":\"hello\"}");
     }
 
 
     @Test(expected = PacketException.class)
-          public void testReadBadHelloEmptyUserName() throws PacketException{
+    public void testReadBadHelloEmptyUserName() throws PacketException {
         parser.read("{ \"type\":\"hello\", \"userName\":\"\"}");
     }
 
@@ -83,7 +83,7 @@ public class PacketParserJsonTest {
      */
 
     @Test
-    public void testReadCorrectHelloAck(){
+    public void testReadCorrectHelloAck() {
         try {
             Packet p = parser.read("{ \"type\":\"helloAck\", \"userName\":\"toto\"}");
             assertTrue(p instanceof HelloAck);
@@ -93,13 +93,13 @@ public class PacketParserJsonTest {
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadHelloAckWithoutUserName() throws PacketException{
+    public void testReadBadHelloAckWithoutUserName() throws PacketException {
         parser.read("{ \"type\":\"helloAck\"}");
     }
 
 
     @Test(expected = PacketException.class)
-    public void testReadBadHelloAckEmptyUserName() throws PacketException{
+    public void testReadBadHelloAckEmptyUserName() throws PacketException {
         parser.read("{ \"type\":\"helloAck\", \"userName\":\"\"}");
     }
 
@@ -124,23 +124,23 @@ public class PacketParserJsonTest {
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadMessageWithoutMessageData() throws PacketException{
+    public void testReadBadMessageWithoutMessageData() throws PacketException {
         parser.read("{ \"type\":\"message\", \"messageNumber\":1}");
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadMessageWithoutMessageNumber() throws PacketException{
+    public void testReadBadMessageWithoutMessageNumber() throws PacketException {
         parser.read("{ \"type\":\"message\", \"messageData\":\"toto\"}");
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadMessageWithoutNothing() throws PacketException{
+    public void testReadBadMessageWithoutNothing() throws PacketException {
         parser.read("{ \"type\":\"message\" }");
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadNumberMessage() throws PacketException{
-         parser.read("{ \"type\":\"message\", \"messageData\":\"toto\", \"messageNumber\":\"tata\"}");
+    public void testReadBadNumberMessage() throws PacketException {
+        parser.read("{ \"type\":\"message\", \"messageData\":\"toto\", \"messageNumber\":\"tata\"}");
     }
 
      /*
@@ -154,12 +154,12 @@ public class PacketParserJsonTest {
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadMessageAckWithoutMessageNumber() throws PacketException{
+    public void testReadBadMessageAckWithoutMessageNumber() throws PacketException {
         parser.read("{ \"type\":\"messageAck\"}");
     }
 
     @Test(expected = PacketException.class)
-    public void testReadBadNumberMessageAck() throws PacketException{
+    public void testReadBadNumberMessageAck() throws PacketException {
         parser.read("{ \"type\":\"message\", \"messageData\":\"toto\", \"messageNumber\":\"tata\"}");
     }
 
@@ -170,7 +170,7 @@ public class PacketParserJsonTest {
     @Test
     public void testWriteCorrectHello() throws LogicalException, PacketException {
         String s = parser.write(new Hello("toto"));
-        assertEquals("{\"type\":\"hello\",\"userName\":\"toto\"}",s);
+        assertEquals("{\"type\":\"hello\",\"userName\":\"toto\"}", s);
     }
 
     /*
@@ -178,9 +178,9 @@ public class PacketParserJsonTest {
      */
 
     @Test
-    public void testWriteCorrectHelloAck() throws LogicalException, PacketException{
+    public void testWriteCorrectHelloAck() throws LogicalException, PacketException {
         String s = parser.write(new HelloAck("toto"));
-        assertEquals("{\"type\":\"helloAck\",\"userName\":\"toto\"}",s);
+        assertEquals("{\"type\":\"helloAck\",\"userName\":\"toto\"}", s);
     }
 
 
@@ -191,7 +191,7 @@ public class PacketParserJsonTest {
     @Test
     public void testWriteCorrectGoodbye() throws PacketException {
         String s = parser.write(new Goodbye());
-        assertEquals("{\"type\":\"goodBye\"}",s);
+        assertEquals("{\"type\":\"goodBye\"}", s);
     }
 
     /*
@@ -200,8 +200,8 @@ public class PacketParserJsonTest {
 
     @Test
     public void testWriteCorrectMessage() throws PacketException, LogicalException {
-        String s = parser.write(new Message(1,"toto"));
-        assertEquals("{\"type\":\"message\",\"messageNumber\":1,\"messageData\":\"toto\"}",s);
+        String s = parser.write(new Message(1, "toto"));
+        assertEquals("{\"type\":\"message\",\"messageNumber\":1,\"messageData\":\"toto\"}", s);
     }
 
     /*
@@ -211,6 +211,6 @@ public class PacketParserJsonTest {
     @Test
     public void testWriteCorrectMessageAck() throws PacketException, LogicalException {
         String s = parser.write(new MessageAck(1));
-        assertEquals("{\"type\":\"messageAck\",\"messageNumber\":1}",s);
+        assertEquals("{\"type\":\"messageAck\",\"messageNumber\":1}", s);
     }
 }

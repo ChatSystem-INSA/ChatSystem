@@ -20,7 +20,7 @@ package com.insatoulouse.chatsystem.ni.udp;
 
 import com.insatoulouse.chatsystem.exception.TechnicalException;
 import com.insatoulouse.chatsystem.ni.ChatNI;
-import com.insatoulouse.chatsystem.utils.Config;
+import com.insatoulouse.chatsystem.utils.NetworkTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,7 +38,7 @@ public class UdpListener extends Thread {
 
     private static final Logger l = LogManager.getLogger(UdpListener.class.getName());
 
-    private ChatNI chatNI;
+    private final ChatNI chatNI;
     private UdpSocket socket;
     private Boolean isRunning = true;
 
@@ -46,19 +46,18 @@ public class UdpListener extends Thread {
         l.trace("Create UdpListener");
         this.chatNI = chatNI;
         try {
-            this.socket = new UdpSocket(Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
+            this.socket = new UdpSocket(NetworkTools.getPort());
         } catch (IOException e) {
-            l.error("Fail to launch UdpListener",e);
-            throw new TechnicalException("Impossible de lancer le UDPListener.",e);
+            l.error("Fail to launch UdpListener", e);
+            throw new TechnicalException("Impossible de lancer le UDPListener.", e);
         }
     }
 
-    public void run()
-    {
+    public void run() {
         l.trace("Start UdpListener");
         byte buffer[] = new byte[4096];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-        while(isRunning){
+        while (isRunning) {
             try {
                 this.socket.receive(packet);
                 chatNI.processPacket(packet);

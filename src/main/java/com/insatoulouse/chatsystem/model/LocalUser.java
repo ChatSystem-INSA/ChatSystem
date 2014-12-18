@@ -22,13 +22,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Created by david on 11/12/14.
+ * LocalUser class
  */
 public class LocalUser extends User {
 
-
     public LocalUser(String name) throws UnknownHostException {
-        super(true, name, InetAddress.getLocalHost());
+        super(name, InetAddress.getLocalHost());
     }
 
 }

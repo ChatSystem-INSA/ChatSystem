@@ -19,7 +19,7 @@
 package com.insatoulouse.chatsystem.ni.tcp;
 
 import com.insatoulouse.chatsystem.exception.TechnicalException;
-import com.insatoulouse.chatsystem.utils.Config;
+import com.insatoulouse.chatsystem.utils.NetworkTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,13 +27,16 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 
+/**
+ * TcpSender class
+ */
 public class TcpSender {
 
     private static final Logger l = LogManager.getLogger(TcpSender.class.getName());
 
     public void send(File f, InetAddress addr) throws TechnicalException, IOException {
         l.trace("send");
-        Socket s = new Socket(addr, Integer.parseInt(Config.getInstance().getProperties(Config.CONFIG_PORT)));
+        Socket s = new Socket(addr, NetworkTools.getPort());
         byte[] fileBytes = new byte[(int) f.length()];
         FileInputStream fileInputStream = new FileInputStream(f);
         // getting informations about the file to send
