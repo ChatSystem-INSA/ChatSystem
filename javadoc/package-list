@@ -1,0 +1,11 @@
+com.insatoulouse.chatsystem
+com.insatoulouse.chatsystem.exception
+com.insatoulouse.chatsystem.gui
+com.insatoulouse.chatsystem.model
+com.insatoulouse.chatsystem.model.network
+com.insatoulouse.chatsystem.model.network.dao
+com.insatoulouse.chatsystem.ni
+com.insatoulouse.chatsystem.ni.tcp
+com.insatoulouse.chatsystem.ni.udp
+com.insatoulouse.chatsystem.test
+com.insatoulouse.chatsystem.utils
