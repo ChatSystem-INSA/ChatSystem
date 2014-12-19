@@ -38,6 +38,10 @@ public class NetworkInvoker extends Thread {
     public NetworkInvoker() {
     }
 
+    /**
+     * Main process of NetworkInvoker. It's run on a Thread
+     * and execute NetworkCommand into LinkedBlockingQueue sequensly.
+     */
     public void run() {
         while (isRunning) {
             try {

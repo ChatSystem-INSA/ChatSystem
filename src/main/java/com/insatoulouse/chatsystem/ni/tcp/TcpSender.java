@@ -34,6 +34,13 @@ public class TcpSender {
 
     private static final Logger l = LogManager.getLogger(TcpSender.class.getName());
 
+    /**
+     * Send file f to addr
+     * @param f file to send
+     * @param addr remote address
+     * @throws TechnicalException
+     * @throws IOException
+     */
     public void send(File f, InetAddress addr) throws TechnicalException, IOException {
         l.trace("send");
         Socket s = new Socket(addr, NetworkTools.getPort());

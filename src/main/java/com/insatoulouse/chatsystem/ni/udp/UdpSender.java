@@ -35,8 +35,8 @@ public class UdpSender {
     private static final Logger l = LogManager.getLogger(UdpSender.class.getName());
 
     /**
-     * Send a Packet with UDP
-     *
+     * Send an UdpPacket
+     * @param packet DatagramPacket to send
      * @throws TechnicalException
      */
     public void send(DatagramPacket packet) throws TechnicalException {

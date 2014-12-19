@@ -26,7 +26,6 @@ import java.net.DatagramSocket;
  */
 public class UdpSocket extends DatagramSocket {
 
-
     public UdpSocket(int port) throws IOException {
         super(port);
     }
