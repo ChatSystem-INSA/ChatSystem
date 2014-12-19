@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.insatoulouse.chatsystem.gui.Chat">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties>
+      <minimumSize width="400" height="300"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <scrollpane id="c5f7a">
+        <constraints border-constraint="West"/>
+        <properties>
+          <focusable value="false"/>
+          <preferredSize width="250" height="128"/>
+        </properties>
+        <border type="empty"/>
+        <children>
+          <component id="8056d" class="javax.swing.JList" binding="userlist">
+            <constraints/>
+            <properties>
+              <background color="-1315859"/>
+              <doubleBuffered value="true"/>
+              <focusable value="false"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <grid id="3491b" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="530eb" layout-manager="GridBagLayout">
+            <constraints border-constraint="West"/>
+            <properties>
+              <alignmentX value="0.0"/>
+              <alignmentY value="0.0"/>
+              <autoscrolls value="false"/>
+              <background color="-1315859"/>
+              <focusable value="false"/>
+              <minimumSize width="250" height="50"/>
+              <preferredSize width="250" height="55"/>
+              <requestFocusEnabled value="true"/>
+            </properties>
+            <border type="empty">
+              <size top="5" left="10" bottom="5" right="5"/>
+            </border>
+            <children>
+              <component id="269fa" class="javax.swing.JButton" binding="logOutButton" default-binding="true">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag top="2" left="2" bottom="2" right="0" weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <background color="-1315859"/>
+                  <borderPainted value="false"/>
+                  <font size="10"/>
+                  <hideActionText value="false"/>
+                  <horizontalAlignment value="2"/>
+                  <horizontalTextPosition value="2"/>
+                  <margin top="0" left="0" bottom="0" right="0"/>
+                  <minimumSize width="50" height="29"/>
+                  <opaque value="true"/>
+                  <rolloverEnabled value="false"/>
+                  <text value="Log out"/>
+                </properties>
+              </component>
+              <component id="b2369" class="javax.swing.JLabel" binding="username">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <text value="Toto"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="cd3bd" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <autoscrolls value="false"/>
+              <background color="-328966"/>
+              <enabled value="true"/>
+              <focusable value="false"/>
+              <minimumSize width="0" height="50"/>
+              <preferredSize width="34" height="55"/>
+            </properties>
+            <border type="empty">
+              <title-color color="-16777216"/>
+              <size top="6" left="10" bottom="6" right="10"/>
+            </border>
+            <children>
+              <component id="a6410" class="javax.swing.JTextField" binding="messageField">
+                <constraints border-constraint="Center"/>
+                <properties/>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="a20a7" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="4dee" layout-manager="GridBagLayout">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <background color="-328966"/>
+              <minimumSize width="0" height="40"/>
+              <preferredSize width="40" height="40"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="8ebc9" class="javax.swing.JLabel" binding="to">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag top="2" left="10" bottom="5" right="10" weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <text value="To:"/>
+                </properties>
+              </component>
+              <component id="e7008" class="javax.swing.JButton" binding="send">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <background color="-328966"/>
+                  <borderPainted value="false"/>
+                  <icon value="ic_attachment_black.png"/>
+                  <selected value="false"/>
+                  <text value=""/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="3eb67" layout-manager="GridBagLayout">
+            <constraints border-constraint="West"/>
+            <properties>
+              <background color="-1315859"/>
+              <minimumSize width="250" height="40"/>
+              <preferredSize width="250" height="40"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="80883" class="javax.swing.JLabel" binding="nbUser">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag top="2" left="10" bottom="5" right="10" weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <text value="5 users connected"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <scrollpane id="e8193">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <focusable value="false"/>
+          <preferredSize width="356" height="128"/>
+        </properties>
+        <border type="empty"/>
+        <children>
+          <component id="4ebf8" class="javax.swing.JList" binding="messagelist">
+            <constraints/>
+            <properties>
+              <background color="-1"/>
+              <focusable value="false"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
+  </grid>
+</form>

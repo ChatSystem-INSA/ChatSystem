@@ -16,12 +16,19 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.model.network;
 
+/**
+ * Goodbye class
+ * Signal send/receive to/from user when want disconnected
+ * {
+ * "type":"goodBye"
+ * }
+ */
+public class Goodbye implements Packet {
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+    public Goodbye() {
+        super();
+    }
 
-public interface NetworkCommand {
-
-    public void execute() throws TechnicalException;
 }

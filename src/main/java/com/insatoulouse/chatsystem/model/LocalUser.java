@@ -16,12 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.model;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+/**
+ * LocalUser class
+ */
+public class LocalUser extends User {
 
-public interface NetworkCommand {
+    public LocalUser(String name) throws UnknownHostException {
+        super(name, InetAddress.getLocalHost());
+    }
 
-    public void execute() throws TechnicalException;
 }

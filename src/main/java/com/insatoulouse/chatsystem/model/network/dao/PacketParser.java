@@ -16,12 +16,31 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.model.network.dao;
 
+import com.insatoulouse.chatsystem.exception.PacketException;
+import com.insatoulouse.chatsystem.model.network.Packet;
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+/**
+ * PacketParser interface
+ */
+public interface PacketParser {
 
-public interface NetworkCommand {
+    /**
+     * Get a Packet from a String data input
+     *
+     * @param data String input
+     * @return corresponding Packet
+     * @throws PacketException
+     */
+    public Packet read(String data) throws PacketException;
 
-    public void execute() throws TechnicalException;
+    /**
+     * Get string from Packet
+     *
+     * @param data Packet to serialize
+     * @return corresponding string
+     * @throws PacketException
+     */
+    public String write(Packet data) throws PacketException;
 }

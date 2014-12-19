@@ -16,12 +16,27 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.model.network.dao;
 
+/**
+ * JsonFactory singleton class
+ * Is a concrete factory
+ *
+ * @see com.insatoulouse.chatsystem.model.network.dao.AbstractFactory
+ */
+public class JsonFactory extends AbstractFactory {
+    private static JsonFactory instance = null;
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+    private JsonFactory() {
+    } // Pattern Singleton
 
-public interface NetworkCommand {
+    public static synchronized JsonFactory getInstance() {
+        if (instance == null) instance = new JsonFactory();
+        return instance;
+    }
 
-    public void execute() throws TechnicalException;
+    @Override
+    public PacketParser getPacketParser() {
+        return new PacketParserJson();
+    }
 }

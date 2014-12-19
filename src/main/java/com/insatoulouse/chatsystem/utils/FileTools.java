@@ -16,12 +16,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.utils;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+/**
+ * File tools class
+ */
+public class FileTools {
 
-public interface NetworkCommand {
+    /**
+     * Get temp directory
+     *
+     * @param filename file to save
+     * @return absolute path with file
+     */
+    public static String getTempFilename(String filename) {
+        String tmppath = System.getProperty("java.io.tmpdir");
+        return tmppath + "/" + filename.replace("/", "").replace("\\", "");
+    }
 
-    public void execute() throws TechnicalException;
+    public static OutputStream getTempOutputStream(String filename) throws FileNotFoundException {
+        return new FileOutputStream(filename);
+    }
+
 }

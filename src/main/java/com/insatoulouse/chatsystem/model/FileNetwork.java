@@ -16,12 +16,38 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.model;
 
+import java.io.File;
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+/**
+ * FileNetwork class
+ * Specific MessageNetwork when receiving or sending a file
+ */
+public class FileNetwork extends MessageNetwork {
 
-public interface NetworkCommand {
+    /**
+     * File
+     */
+    private File file;
 
-    public void execute() throws TechnicalException;
+    public FileNetwork(int type, RemoteUser u, File file) {
+        super(type, u, "");
+        if (type == MessageNetwork.OUT) {
+            setMessage("Envoi du fichier " + file.getName());
+        } else {
+            setMessage("Reception d'un fichier. Enregisté : " + file.getAbsolutePath());
+        }
+
+        this.file = file;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
 }

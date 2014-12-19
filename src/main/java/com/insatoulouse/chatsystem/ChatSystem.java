@@ -16,12 +16,22 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem;
+
+import com.insatoulouse.chatsystem.gui.ChatGUI;
+import com.insatoulouse.chatsystem.ni.ChatNI;
+
+/**
+ * THE ChatSystem class
+ */
+public class ChatSystem {
 
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+    public ChatSystem() {
+        Controller c = new Controller();
+        ChatNI ni = new ChatNI(c);
+        c.setChatNI(ni);
+        new ChatGUI(c);
+    }
 
-public interface NetworkCommand {
-
-    public void execute() throws TechnicalException;
 }

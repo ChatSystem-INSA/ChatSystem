@@ -16,12 +16,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.model.network;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
-
-public interface NetworkCommand {
-
-    public void execute() throws TechnicalException;
+/**
+ * Packet interface
+ * Exchange network signal
+ */
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Hello.class, name = "hello"),
+        @JsonSubTypes.Type(value = HelloAck.class, name = "helloAck"),
+        @JsonSubTypes.Type(value = Message.class, name = "message"),
+        @JsonSubTypes.Type(value = MessageAck.class, name = "messageAck"),
+        @JsonSubTypes.Type(value = Goodbye.class, name = "goodBye")})
+public interface Packet {
 }

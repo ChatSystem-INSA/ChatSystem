@@ -16,12 +16,19 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.ni.tcp;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+/**
+ * TcpSocket class
+ */
+public class TcpSocket extends ServerSocket {
 
-public interface NetworkCommand {
+    public TcpSocket(int port) throws IOException {
+        super(port, 5, InetAddress.getByName("0.0.0.0"));
+    }
 
-    public void execute() throws TechnicalException;
 }

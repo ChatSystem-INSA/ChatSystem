@@ -16,12 +16,34 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.model.network.dao;
 
+/**
+ * AbstractFactory class
+ */
+public abstract class AbstractFactory {
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+    /**
+     * Return concrete factory
+     *
+     * @return Concrete factory
+     * @see com.insatoulouse.chatsystem.model.network.dao.AbstractFactory.Type
+     */
+    public static AbstractFactory getFactory(Type type) {
+        switch (type) {
+            case JSON:
+                return JsonFactory.getInstance();
+            default:
+                return null;
+        }
+    }
 
-public interface NetworkCommand {
+    public abstract PacketParser getPacketParser();
 
-    public void execute() throws TechnicalException;
+    /**
+     * Type available for Packet parser
+     */
+    public enum Type {
+        JSON
+    }
 }

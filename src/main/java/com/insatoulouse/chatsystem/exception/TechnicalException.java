@@ -16,12 +16,25 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.exception;
 
+/**
+ * TechnicalException class
+ * Exception when system have an technical error
+ */
+public class TechnicalException extends Exception {
+    public TechnicalException() {
+    }
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+    public TechnicalException(String message) {
+        super(message);
+    }
 
-public interface NetworkCommand {
+    public TechnicalException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-    public void execute() throws TechnicalException;
+    public TechnicalException(Throwable cause) {
+        super(cause);
+    }
 }

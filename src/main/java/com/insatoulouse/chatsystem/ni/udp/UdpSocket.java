@@ -16,12 +16,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.insatoulouse.chatsystem.ni;
+package com.insatoulouse.chatsystem.ni.udp;
 
+import java.io.IOException;
+import java.net.DatagramSocket;
 
-import com.insatoulouse.chatsystem.exception.TechnicalException;
+/**
+ * UdpSocket class
+ */
+public class UdpSocket extends DatagramSocket {
 
-public interface NetworkCommand {
-
-    public void execute() throws TechnicalException;
+    public UdpSocket(int port) throws IOException {
+        super(port);
+    }
 }
