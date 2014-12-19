@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  * Test class of json packet parser
  */
 public class PacketParserJsonTest {
-    private final PacketParser parser = AbstractFactory.getFactory().getPacketParser();
+    private final PacketParser parser = AbstractFactory.getFactory(AbstractFactory.Type.JSON).getPacketParser();
 
     /*
         Test read packet
