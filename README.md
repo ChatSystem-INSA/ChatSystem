@@ -17,6 +17,9 @@ Please provide stack traces in your submissions.
 ### Pull requests
 Please follow this tutorial in order to do pull requests : https://help.github.com/articles/using-pull-requests/
 
+### Javadoc
+Javadoc is hosted here : http://chatsystem-insa.github.io/ChatSystem/javadoc/index.html
+
 ### SRS & SDD
 Everything is here : ...
 
