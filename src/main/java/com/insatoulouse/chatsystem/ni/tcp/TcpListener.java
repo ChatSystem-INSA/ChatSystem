@@ -52,6 +52,10 @@ public class TcpListener extends Thread {
         }
     }
 
+    /**
+     * Main function of TcpListener.
+     * Each new TCP connection is processed as a new file transmission.
+     */
     public void run() {
         l.trace("Start TCPListener");
         while (isRunning) {
@@ -83,7 +87,9 @@ public class TcpListener extends Thread {
         }
     }
 
-
+    /**
+     * Called to stop TcpListener. Clean all tcp opened connections.
+     */
     public synchronized void close() {
         isRunning = false;
         this.interrupt();
