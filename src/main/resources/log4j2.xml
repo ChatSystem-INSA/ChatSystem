@@ -24,8 +24,8 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="org.apache.log4j.xml" level="info"/>
-        <Root level="trace">
+        <Logger name="org.apache.log4j.xml" level="warn"/>
+        <Root level="warn">
             <AppenderRef ref="STDOUT"/>
         </Root>
     </Loggers>

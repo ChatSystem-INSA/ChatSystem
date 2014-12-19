@@ -9,6 +9,8 @@ Or just download source code at the right of this message.
 ### Release
 All release can be found in this page : https://github.com/ChatSystem-INSA/ChatSystem/releases
 Each release contains .jar which can be downloaded.
+To generate an artifacts with maven :
+``` mvn clean compile ideauidesigner:javac2 assembly:single ``
 
 ### Issues
 Issues must be submitted here : https://github.com/ChatSystem-INSA/ChatSystem/issues
