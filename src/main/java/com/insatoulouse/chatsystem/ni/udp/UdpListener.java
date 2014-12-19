@@ -53,6 +53,9 @@ public class UdpListener extends Thread {
         }
     }
 
+    /**
+     * Listen for each UDP packet on network and give the packet to the ChatNI.
+     */
     public void run() {
         l.trace("Start UdpListener");
         byte buffer[] = new byte[4096];
@@ -67,6 +70,9 @@ public class UdpListener extends Thread {
         }
     }
 
+    /**
+     * Close properly the UdpListener
+     */
     public synchronized void close() {
         l.trace("Close UdpListener");
         isRunning = false;

@@ -46,6 +46,9 @@ public class TcpSenderCommand implements NetworkCommand {
         this.tcpSender = new TcpSender();
     }
 
+    /**
+     * Called to exec the command
+     */
     @Override
     public void execute() {
         l.trace("Execute TcpSenderCommand");

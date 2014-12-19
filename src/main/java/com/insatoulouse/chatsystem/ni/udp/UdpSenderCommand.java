@@ -44,6 +44,10 @@ public class UdpSenderCommand implements NetworkCommand {
         this.udpSender = new UdpSender();
     }
 
+    /**
+     * Execute the command
+     * @throws TechnicalException
+     */
     @Override
     public void execute() throws TechnicalException {
         l.trace("Execute command");

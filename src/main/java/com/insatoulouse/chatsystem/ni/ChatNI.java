@@ -95,7 +95,7 @@ public class ChatNI {
      * Execute controller method when received packet
      * Invalid packet are dropped
      *
-     * @param packet incoming
+     * @param packet incoming packet
      */
     public void processPacket(DatagramPacket packet) {
 
@@ -120,35 +120,76 @@ public class ChatNI {
         }
     }
 
+    /**
+     * Process remote file
+     * @param f remote file
+     * @param addr remote entity
+     */
     public void processFile(File f, InetAddress addr) {
         this.controller.processFile(f, addr);
     }
 
+    /**
+     * Send packet Hello to user u
+     * @param u remote entity
+     * @throws TechnicalException
+     * @throws LogicalException
+     */
     public void sendHello(User u) throws TechnicalException, LogicalException {
         Packet p = new Hello(u.getName());
         sendBroadcast(p);
     }
 
+    /**
+     * Send packet HelloAck to User to
+     * @param from local entity
+     * @param to remote entity
+     * @throws TechnicalException
+     * @throws LogicalException
+     */
     public void sendHelloAck(User from, User to) throws TechnicalException, LogicalException {
         Packet p = new HelloAck(from.getName());
         sendUnicast(p, to.getIp());
     }
 
+    /**
+     * Send packet Goodbye on broadcast
+     * @throws TechnicalException
+     */
     public void sendGoodbye() throws TechnicalException {
         Packet p = new Goodbye();
         sendBroadcast(p);
     }
 
+    /**
+     * Send message to user u
+     * @param u remote entity
+     * @param message message to send
+     * @throws TechnicalException
+     * @throws LogicalException
+     */
     public void sendMessage(User u, String message) throws TechnicalException, LogicalException {
         Packet p = new Message(Message.getCountMessage(), message);
         sendUnicast(p, u.getIp());
     }
 
+    /**
+     * send packet MessageAck to user u
+     * @param u remote entity
+     * @param messageId message id to ack
+     * @throws TechnicalException
+     * @throws LogicalException
+     */
     public void sendMessageAck(User u, int messageId) throws TechnicalException, LogicalException {
         Packet p = new MessageAck(messageId);
         sendUnicast(p, u.getIp());
     }
 
+    /**
+     * send file f to user u
+     * @param u remote entity
+     * @param f local file to send
+     */
     public void sendFile(User u, File f) {
         TcpSenderCommand cmd = new TcpSenderCommand(f, u.getIp());
         this.invoker.addCommand(cmd);
