@@ -27,7 +27,8 @@ Please follow this tutorial in order to do pull requests : https://help.github.c
 Javadoc is hosted here : http://chatsystem-insa.github.io/ChatSystem/javadoc/index.html
 
 ### SRS & SDD
-Everything is here : ...
+Everything is here : https://github.com/ChatSystem-INSA/ChatSystem/wiki/Requirements-Specification
+and here : https://github.com/ChatSystem-INSA/ChatSystem/wiki/Software-Design-Document
 
 ### Wiki
 You can find all useful informations into the project wiki : https://github.com/ChatSystem-INSA/ChatSystem/wiki
